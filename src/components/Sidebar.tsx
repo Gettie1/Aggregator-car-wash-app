@@ -10,14 +10,17 @@ import {
 
 } from 'lucide-react'
 import { authStore } from '@/store/authStore'
-import { Role } from '@/types/login'
+import { Role } from '@/types/auth'
 
 export function DashboardSidebar() {
   const activeRoute = useRouterState({ select: (s) => s.location.pathname })
 
   // ✅ Get logged-in user role
   const { user } = authStore.state
-
+  // if (!user) {
+  //   return <div className="text-red-500">User not logged in</div>
+  // }
+  // console.log('role', user.role)
   const linkClass = (path: string) =>
     `flex items-center gap-2 px-4 py-2 rounded hover:bg-gray-200 ${
       activeRoute.startsWith(path) ? 'bg-gray-300 font-semibold' : ''
@@ -25,20 +28,19 @@ export function DashboardSidebar() {
 
   return (
     <aside className="w-64 bg-gray-100 p-4 space-y-2">
-      <Link to="/dashboard/dashboard/overview" className={linkClass('/dashboard/overview')}>
+       <Link to="/dashboard/dashboard/overview" className={linkClass('/dashboard/overview')}>
         <LayoutDashboard className="h-5 w-5" />
         Overview
-      </Link>
-
-      {/* Show to all roles (admin, vendor, user) */}
-      <Link to="/dashboard/dashboard/profile" className={linkClass('/dashboard/profile')}>
+      </Link> 
+      Show to all roles (admin, vendor, user) 
+     <Link to="/dashboard/dashboard/profile" className={linkClass('/dashboard/profile')}>
         <User className="h-5 w-5" />
         Profile
       </Link>
       <Link to="/dashboard/dashboard/settings" className={linkClass('/dashboard/settings')}>
         <Settings className="h-5 w-5" />
         Settings
-      </Link>
+      </Link> 
 
       {/* 👤 ADMIN ONLY */}
     {user.role===Role.ADMIN && (

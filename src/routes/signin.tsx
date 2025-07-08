@@ -7,7 +7,7 @@ import { z } from 'zod'
 import { FaEnvelope, FaLock, FaSignInAlt } from 'react-icons/fa'
 import { toast } from 'react-hot-toast'
 import { authActions } from '../store/authStore' // <-- Update this path based on your actual file structure
-import { uselogin } from '@/hooks/login'
+import { uselogin } from '@/hooks/auth'
 // import { authActions } from '@/store/auth' // <-- Add this import, adjust the path as needed
 // import { authActions } from '@store/authStore' // <-- Adjust the path as needed based on your project structure
 

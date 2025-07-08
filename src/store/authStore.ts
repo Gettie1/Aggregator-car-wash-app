@@ -1,21 +1,21 @@
 import {Store} from '@tanstack/store'
-import type { LoginResponse } from '@/types/login'
-import { Role } from '@/types/login'
+import type { LoginResponse } from '@/types/auth'
 
 const initialState: LoginResponse = {
   isVerified: false,
-  user: {
-    id: '',
-    role: Role.CUSTOMER, // Default role set to CUSTOMER
-    email: '',
-    firstname: '',
-    lastname: '',
-  },
+  user:{
+        id: '',
+        role: '', // Default role, can be changed after login
+        email: '',
+        firstname: '',
+        lastname: '',
+  }, // Initially undefined, will be set after login
     accessToken: '',
     refreshToken: '',
+    // hydrated: false, // Indicates whether the state has been initialized from localStorage
 }
 
-export const authStore = new Store<LoginResponse>(initialState)
+export const authStore: Store<LoginResponse> = new Store<LoginResponse>(initialState)
 export const authActions = {
     setUser: (data: LoginResponse) => {
         authStore.setState(data)

@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query"
-import type { LoginData, LoginResponse } from "@/types/login"
-import { login } from "@/api/loginApi"
+import type { LoginData, LoginResponse, registerData, registerResponse } from "@/types/auth"
+import { login, register } from "@/api/AuthApi"
 import { authActions } from "@/store/authStore"
 
 export const uselogin = () => {
@@ -28,4 +28,19 @@ export const uselogin = () => {
             console.error('Login failed:', error)
         }
     })
+}
+export const useRegister = () => {
+    return useMutation<registerResponse, Error, registerData>({
+        mutationKey: ['signup'],
+        mutationFn: register,
+         onSuccess: (data) => {
+                console.log('Account Created successfully', data)
+                // Optionally handle success, e.g., redirect to login or show a success message
+            },
+            onError: (error) => {
+                console.error('Registration failed:', error)
+                // Optionally handle error, e.g., show an error message
+            }
+        }
+    )
 }

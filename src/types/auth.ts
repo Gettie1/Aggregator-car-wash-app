@@ -6,13 +6,14 @@ export interface LoginResponse {
   isVerified: boolean;
     user: {
         id: string;
-        role: Role;
+        role: Role | string;
         email: string;
         firstname: string;
         lastname: string;
     };
     accessToken: string;
     refreshToken: string;
+  // hydrated?: boolean; // Indicates whether the state has been initialized from localStorage
 }
 export enum Role {
   CUSTOMER = 'customer',
@@ -21,8 +22,8 @@ export enum Role {
 }
 
 export interface registerData {
-  firstname: string;
-  lastname: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   role: Role;
@@ -35,8 +36,6 @@ export interface registerResponse {
     firstname: string;
     lastname: string;
   };
-  accessToken: string;
-  refreshToken: string;
 }
 export interface User {
   id: string;

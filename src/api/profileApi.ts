@@ -1,9 +1,9 @@
-import type { registerData } from "@/types/login";
+import type { registerData } from "@/types/auth";
 
 const url = 'http://localhost:4001/profile';
 
 // create a new profile
-export const createProfile = async (data: registerData) => {
+export const SignUp = async (data: registerData) => {
   const response = await fetch(url, {
     method: 'POST',
     headers: {

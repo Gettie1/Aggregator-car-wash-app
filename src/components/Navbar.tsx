@@ -19,10 +19,10 @@ export default function Navbar() {
         <div className="px-2 font-bold *:hover:text-blue-600 active:text-blue-800">
         <Link to="/about">About</Link>
         </div>
-        <button className="px-2 font-bold border rounded-full bg-blue-300 hover:bg-blue-600 active:text-blue-800">
+        <button className="px-2 font-bold border rounded-full bg-blue-300 hover:bg-blue-400 active:text-blue-700">
         <Link to="/signin">Sign In</Link>
         </button>
-        <button className="px-2 font-bold hover:bg-blue-600 active:text-blue-800 border rounded-full bg-blue-300">
+        <button className="px-2 font-bold hover:bg-blue-400 active:text-blue-800 border rounded-full bg-blue-300">
         <Link to="/register">Register</Link>
         </button>
       </div>
