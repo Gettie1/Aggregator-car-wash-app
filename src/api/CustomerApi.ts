@@ -1,33 +1,33 @@
-const url = 'http://localhost:4001';
+const url = 'http://localhost:4001/customer';
 
-export const getVendors = async () => {
-    const response = await fetch(`${url}/vendors`, {
+export const getCustomers = async () => {
+    const response = await fetch(`${url}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
         },
     });
     if (!response.ok) {
-        throw new Error('Failed to fetch vendors');
-    }
-    const jsonData = await response.json();
-    return jsonData;
-}
-export const getVendor = async (id: string) => {
-    const response = await fetch(`${url}/vendors/${id}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    });
-    if (!response.ok) {
-        throw new Error('Failed to fetch vendor');
+        throw new Error('Failed to fetch customers');
     }
     const jsonData = await response.json();
     return jsonData;
 };
-export const createVendor = async (data: any) => {
-    const response = await fetch(`${url}/vendors`, {
+export const getCustomer = async (id: string) => {
+    const response = await fetch(`${url}/${id}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    if (!response.ok) {
+        throw new Error('Failed to fetch customer');
+    }
+    const jsonData = await response.json();
+    return jsonData;
+};
+export const createCustomer = async (data: any) => {
+    const response = await fetch(`${url}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -35,13 +35,13 @@ export const createVendor = async (data: any) => {
         body: JSON.stringify(data),
     });
     if (!response.ok) {
-        throw new Error('Failed to create vendor');
+        throw new Error('Failed to create customer');
     }
     const jsonData = await response.json();
     return jsonData;
 };
-export const updateVendor = async (id: string, data: any) => {
-    const response = await fetch(`${url}/vendors/${id}`, {
+export const updateCustomer = async (id: string, data: any) => {
+    const response = await fetch(`${url}/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -49,20 +49,20 @@ export const updateVendor = async (id: string, data: any) => {
         body: JSON.stringify(data),
     });
     if (!response.ok) {
-        throw new Error('Failed to update vendor');
+        throw new Error('Failed to update customer');
     }
     const jsonData = await response.json();
     return jsonData;
 };
-export const deleteVendor = async (id: string) => {
-    const response = await fetch(`${url}/vendors/${id}`, {
+export const deleteCustomer = async (id: string) => {
+    const response = await fetch(`${url}/${id}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
         },
     });
     if (!response.ok) {
-        throw new Error('Failed to delete vendor');
+        throw new Error('Failed to delete customer');
     }
-    return { message: 'Vendor deleted successfully' };
+    return { message: 'Customer deleted successfully' };
 };

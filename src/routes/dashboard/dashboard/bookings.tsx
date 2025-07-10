@@ -7,8 +7,8 @@ export const Route = createFileRoute('/dashboard/dashboard/bookings')({
 
 function RouteComponent() {
   return <div>
-    <h1 className="text-2xl font-bold mb-4">Bookings</h1>
-    <p>Manage your bookings here.</p>
+    {/* <h1 className="text-2xl font-bold mb-4">Bookings</h1>
+    <p>Manage your bookings here.</p> */}
     <UserDashboardOverview />
   </div>
 }

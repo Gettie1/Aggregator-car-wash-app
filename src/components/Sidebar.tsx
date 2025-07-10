@@ -1,105 +1,77 @@
+import { useEffect, useState } from 'react'
 import { Link, useRouterState } from '@tanstack/react-router'
-import {
-  Building2,
-  CalendarCheck,
-  LayoutDashboard,
-  Settings,
-  Star,
-  User,
-  Wrench,
-
-} from 'lucide-react'
+import { Menu, Settings, User } from 'lucide-react'
 import { authStore } from '@/store/authStore'
 import { Role } from '@/types/auth'
+import { checkRole } from '@/lib/roles'
 
 export function DashboardSidebar() {
-  const activeRoute = useRouterState({ select: (s) => s.location.pathname })
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
-  // ✅ Get logged-in user role
+  // 🧠 Optional: Close sidebar on route change
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setSidebarOpen(true) // Always open on desktop
+      }
+    }
+
+    handleResize() // Initial check
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  const activeRoute = useRouterState({ select: (s) => s.location.pathname })
   const { user } = authStore.state
-  // if (!user) {
-  //   return <div className="text-red-500">User not logged in</div>
-  // }
-  // console.log('role', user.role)
+  const userRole = user.role as Role
+  const navs = checkRole(userRole)
+
   const linkClass = (path: string) =>
     `flex items-center gap-2 px-4 py-2 rounded hover:bg-gray-200 ${
-      activeRoute.startsWith(path) ? 'bg-gray-300 font-semibold' : ''
+      activeRoute === path ? 'bg-gray-300 font-semibold' : ''
     }`
 
   return (
-    <aside className="w-64 bg-gray-100 p-4 space-y-2">
-       <Link to="/dashboard/dashboard/overview" className={linkClass('/dashboard/overview')}>
-        <LayoutDashboard className="h-5 w-5" />
-        Overview
-      </Link> 
-      Show to all roles (admin, vendor, user) 
-     <Link to="/dashboard/dashboard/profile" className={linkClass('/dashboard/profile')}>
-        <User className="h-5 w-5" />
-        Profile
-      </Link>
-      <Link to="/dashboard/dashboard/settings" className={linkClass('/dashboard/settings')}>
-        <Settings className="h-5 w-5" />
-        Settings
-      </Link> 
+    <aside className="md:w-64 bg-white border-r shadow-md md:block">
+      {/* Mobile toggle button */}
+      <div className="md:hidden p-2 border-b flex justify-between items-center">
+        {/* <h2 className="text-lg font-bold">Menu</h2> */}
+        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 rounded hover:bg-gray-100">
+          <Menu size={20} />
+        </button>
+      </div>
 
-      {/* 👤 ADMIN ONLY */}
-    {user.role===Role.ADMIN && (
-        <>
-          <Link to="/dashboard/dashboard/bookings" className={linkClass('/dashboard/bookings')}>
-            <CalendarCheck className="h-5 w-5" />
-            Bookings
-          </Link>
-          <Link to="/dashboard/dashboard/vendors" className={linkClass('/dashboard/vendors')}>
-            <Building2 className="h-5 w-5" />
-            Vendors
-          </Link>
-          <Link to="/dashboard/dashboard/customers" className={linkClass('/dashboard/users')}>
-            <User className="h-5 w-5" />
-            Customers
-          </Link>
-          <Link  to="/dashboard/dashboard/reviews" className={linkClass('/dashboard/reviews')}>
-          <Star className="h-5 w-5" />
-            Reviews
-          </Link>
-        </>
-      )}
+      {/* Sidebar content */}
+      <div className={`${sidebarOpen ? 'block' : 'hidden'} md:block p-4 space-y-2`}>
+        {navs.map((nav) => (
+          <div key={nav.label} className="space-y-2">
+            <h3 className="text-lg font-semibold">{nav.label}</h3>
+            {nav.links.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className={linkClass(link.to)}
+                onClick={() => setSidebarOpen(false)} // ✅ Close sidebar on click (mobile)
+              >
+                <link.icon className="h-5 w-5" />
+                {link.title}
+              </Link>
+            ))}
+          </div>
+        ))}
 
-      {/* 🛠 VENDOR ONLY */}
-      {user.role === Role.VENDOR && (
-        <>
-        <Link to="/dashboard/dashboard/services" className={linkClass('/dashboard/services')}>
-          <Wrench className="h-5 w-5" />
-          Services
-        </Link>
-        <Link to="/dashboard/dashboard/customers" className={linkClass('/dashboard/customers')} >
-        <User className="h-5 w-5" />
-        Customers
-        </Link>
-        <Link to="/dashboard/dashboard/reviews" className={linkClass('/dashboard/reviews')}>
-          <Star className="h-5 w-5" />
-          Reviews
-        </Link>
-        </>
-      )}
-
-      {/* ⭐ USER ONLY */}
-      {user.role === Role.CUSTOMER && (
-        <>
-        <Link to="/dashboard/dashboard/bookings" className={linkClass('/dashboard/bookings')}>
-          <CalendarCheck className="h-5 w-5" />
-          My Bookings
-        </Link>
-        <Link to="/dashboard/dashboard/vehicles" className={linkClass('/dashboard/vehicles')}>
+        {/* Always shown to all users */}
+        <Link to="/dashboard/dashboard/profile" className={linkClass('/dashboard/dashboard/profile')}>
           <User className="h-5 w-5" />
-          Vehicles
+          Profile
         </Link>
-        <Link to="/dashboard/dashboard/reviews" className={linkClass('/dashboard/reviews')}>
-          <Star className="h-5 w-5" />
-          Reviews
+        <Link to="/dashboard/dashboard/settings" className={linkClass('/dashboard/dashboard/settings')}>
+          <Settings className="h-5 w-5" />
+          Settings
         </Link>
-        </>
-      )}
+      </div>
     </aside>
   )
 }
+
 export default DashboardSidebar

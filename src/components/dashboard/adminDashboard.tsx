@@ -4,7 +4,7 @@ import StatCard from "@/components/statCard"
 // import { User } from "@/types/auth"
 import { authStore } from "@/store/authStore"
 
-function AdminDashboardOverview() {
+function adminDashboardOverview() {
   const { user } = useStore(authStore)
 
   return (

@@ -1,0 +1,81 @@
+const url = 'http://localhost:3000/services';
+
+export const getServices = async () => {
+    const response = await fetch(`${url}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    if (!response.ok) {
+        throw new Error('Failed to fetch services');
+    }
+    const jsonData = await response.json();
+    return jsonData;
+};
+export const getService = async (id: string) => {
+    const response = await fetch(`${url}/${id}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    if (!response.ok) {
+        throw new Error('Failed to fetch service');
+    }
+    const jsonData = await response.json();
+    return jsonData;
+};
+export const createService = async (data: any) => {
+    const response = await fetch(`${url}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+        throw new Error('Failed to create service');
+    }
+    const jsonData = await response.json();
+    return jsonData;
+};
+export const updateService = async (id: string, data: any) => {
+    const response = await fetch(`${url}/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+        throw new Error('Failed to update service');
+    }
+    const jsonData = await response.json();
+    return jsonData;
+};
+export const deleteService = async (id: string) => {
+    const response = await fetch(`${url}/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    if (!response.ok) {
+        throw new Error('Failed to delete service');
+    }
+    return { message: 'Service deleted successfully' };
+};
+export const getServiceByVendor = async (vendorId: string) => {
+    const response = await fetch(`${url}/vendor/${vendorId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    if (!response.ok) {
+        throw new Error('Failed to fetch services by vendor');
+    }
+    const jsonData = await response.json();
+    return jsonData;
+};

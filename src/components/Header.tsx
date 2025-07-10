@@ -3,8 +3,11 @@ import React from 'react';
 import { Bell, Menu, Search, User } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 import { useDashboardStore } from '@/store/dashboardStore';
+// import { useStore } from '@tanstack/react-form';
+// import { authStore } from '@/store/authStore';
 
 export const Header: React.FC = () => {
+
   const { toggleSidebar, currentPage } = useDashboardStore();
 
   const getPageTitle = () => {
@@ -24,25 +27,24 @@ export const Header: React.FC = () => {
         case 'reviews':
             return 'Reviews';
         default:
-            return 'Dashboard';
+            return '';
     }
   };
 
   return (
     <header className="bg-white shadow-sm border-b px-6 py-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <button 
-            onClick={toggleSidebar}
-            className="lg:hidden p-2 rounded-md hover:bg-gray-100"
-          >
-            <Menu size={20} />
-          </button>
-          <h1 className="text-2xl font-bold text-gray-800">{getPageTitle()}</h1>
-        </div>
-        <Link to='/' className="hidden lg:block text-blue-600 hover:underline">
+      <div className="flex items-center justify-between"> 
+        <div className="flex items-center justify-between gap-7">
+          <h1 className="text-2xl font-extrabold flex items-center gap-2 mr-6">
+            <span className="text-blue-500">🚗</span>
+            <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-600 bg-clip-text text-transparent drop-shadow">
+              CleanRide
+            </span>
+          </h1>
+        <Link to='/' className="bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-600 bg-clip-text text-transparent drop-shadow font-bold text-lg hover:underline">
           Home
         </Link>
+      </div>
         <div className="flex items-center space-x-4">
           {/* Search */}
           <div className="hidden md:flex items-center space-x-2 bg-gray-100 rounded-lg px-3 py-2">

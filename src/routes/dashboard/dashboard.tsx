@@ -4,6 +4,7 @@ import type { QueryClient } from '@tanstack/react-query';
 import Sidebar from '@/components/Sidebar'; // Sidebar component
 import { Header } from '@/components/Header';
 import { authStore } from '@/store/authStore';
+import Footer from '@/components/Footer';
 
 type DashboardRouteContext = {
   queryClient: QueryClient;
@@ -44,6 +45,7 @@ function DashboardLayout() {
           <Outlet />
         </main>
       </div>
+        <Footer />
     </div>
   );
 }

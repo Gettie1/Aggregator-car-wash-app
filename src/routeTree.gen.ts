@@ -15,6 +15,7 @@ import { Route as ReadmoreRouteImport } from './routes/readmore'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardDashboardRouteImport } from './routes/dashboard/dashboard'
+import { Route as DashboardDashboardIndexRouteImport } from './routes/dashboard/dashboard/index'
 import { Route as DashboardDashboardVendorsRouteImport } from './routes/dashboard/dashboard/vendors'
 import { Route as DashboardDashboardVehiclesRouteImport } from './routes/dashboard/dashboard/vehicles'
 import { Route as DashboardDashboardSettingsRouteImport } from './routes/dashboard/dashboard/settings'
@@ -24,6 +25,8 @@ import { Route as DashboardDashboardProfileRouteImport } from './routes/dashboar
 import { Route as DashboardDashboardOverviewRouteImport } from './routes/dashboard/dashboard/overview'
 import { Route as DashboardDashboardCustomersRouteImport } from './routes/dashboard/dashboard/customers'
 import { Route as DashboardDashboardBookingsRouteImport } from './routes/dashboard/dashboard/bookings'
+import { Route as DashboardDashboardAllReviewsRouteImport } from './routes/dashboard/dashboard/AllReviews'
+import { Route as DashboardDashboardAllBookingsRouteImport } from './routes/dashboard/dashboard/AllBookings'
 
 const SigninRoute = SigninRouteImport.update({
   id: '/signin',
@@ -54,6 +57,11 @@ const DashboardDashboardRoute = DashboardDashboardRouteImport.update({
   id: '/dashboard/dashboard',
   path: '/dashboard/dashboard',
   getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardDashboardIndexRoute = DashboardDashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardDashboardRoute,
 } as any)
 const DashboardDashboardVendorsRoute =
   DashboardDashboardVendorsRouteImport.update({
@@ -109,6 +117,18 @@ const DashboardDashboardBookingsRoute =
     path: '/bookings',
     getParentRoute: () => DashboardDashboardRoute,
   } as any)
+const DashboardDashboardAllReviewsRoute =
+  DashboardDashboardAllReviewsRouteImport.update({
+    id: '/AllReviews',
+    path: '/AllReviews',
+    getParentRoute: () => DashboardDashboardRoute,
+  } as any)
+const DashboardDashboardAllBookingsRoute =
+  DashboardDashboardAllBookingsRouteImport.update({
+    id: '/AllBookings',
+    path: '/AllBookings',
+    getParentRoute: () => DashboardDashboardRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -117,6 +137,8 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/signin': typeof SigninRoute
   '/dashboard/dashboard': typeof DashboardDashboardRouteWithChildren
+  '/dashboard/dashboard/AllBookings': typeof DashboardDashboardAllBookingsRoute
+  '/dashboard/dashboard/AllReviews': typeof DashboardDashboardAllReviewsRoute
   '/dashboard/dashboard/bookings': typeof DashboardDashboardBookingsRoute
   '/dashboard/dashboard/customers': typeof DashboardDashboardCustomersRoute
   '/dashboard/dashboard/overview': typeof DashboardDashboardOverviewRoute
@@ -126,6 +148,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/dashboard/settings': typeof DashboardDashboardSettingsRoute
   '/dashboard/dashboard/vehicles': typeof DashboardDashboardVehiclesRoute
   '/dashboard/dashboard/vendors': typeof DashboardDashboardVendorsRoute
+  '/dashboard/dashboard/': typeof DashboardDashboardIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -133,7 +156,8 @@ export interface FileRoutesByTo {
   '/readmore': typeof ReadmoreRoute
   '/register': typeof RegisterRoute
   '/signin': typeof SigninRoute
-  '/dashboard/dashboard': typeof DashboardDashboardRouteWithChildren
+  '/dashboard/dashboard/AllBookings': typeof DashboardDashboardAllBookingsRoute
+  '/dashboard/dashboard/AllReviews': typeof DashboardDashboardAllReviewsRoute
   '/dashboard/dashboard/bookings': typeof DashboardDashboardBookingsRoute
   '/dashboard/dashboard/customers': typeof DashboardDashboardCustomersRoute
   '/dashboard/dashboard/overview': typeof DashboardDashboardOverviewRoute
@@ -143,6 +167,7 @@ export interface FileRoutesByTo {
   '/dashboard/dashboard/settings': typeof DashboardDashboardSettingsRoute
   '/dashboard/dashboard/vehicles': typeof DashboardDashboardVehiclesRoute
   '/dashboard/dashboard/vendors': typeof DashboardDashboardVendorsRoute
+  '/dashboard/dashboard': typeof DashboardDashboardIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -152,6 +177,8 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/signin': typeof SigninRoute
   '/dashboard/dashboard': typeof DashboardDashboardRouteWithChildren
+  '/dashboard/dashboard/AllBookings': typeof DashboardDashboardAllBookingsRoute
+  '/dashboard/dashboard/AllReviews': typeof DashboardDashboardAllReviewsRoute
   '/dashboard/dashboard/bookings': typeof DashboardDashboardBookingsRoute
   '/dashboard/dashboard/customers': typeof DashboardDashboardCustomersRoute
   '/dashboard/dashboard/overview': typeof DashboardDashboardOverviewRoute
@@ -161,6 +188,7 @@ export interface FileRoutesById {
   '/dashboard/dashboard/settings': typeof DashboardDashboardSettingsRoute
   '/dashboard/dashboard/vehicles': typeof DashboardDashboardVehiclesRoute
   '/dashboard/dashboard/vendors': typeof DashboardDashboardVendorsRoute
+  '/dashboard/dashboard/': typeof DashboardDashboardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -171,6 +199,8 @@ export interface FileRouteTypes {
     | '/register'
     | '/signin'
     | '/dashboard/dashboard'
+    | '/dashboard/dashboard/AllBookings'
+    | '/dashboard/dashboard/AllReviews'
     | '/dashboard/dashboard/bookings'
     | '/dashboard/dashboard/customers'
     | '/dashboard/dashboard/overview'
@@ -180,6 +210,7 @@ export interface FileRouteTypes {
     | '/dashboard/dashboard/settings'
     | '/dashboard/dashboard/vehicles'
     | '/dashboard/dashboard/vendors'
+    | '/dashboard/dashboard/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -187,7 +218,8 @@ export interface FileRouteTypes {
     | '/readmore'
     | '/register'
     | '/signin'
-    | '/dashboard/dashboard'
+    | '/dashboard/dashboard/AllBookings'
+    | '/dashboard/dashboard/AllReviews'
     | '/dashboard/dashboard/bookings'
     | '/dashboard/dashboard/customers'
     | '/dashboard/dashboard/overview'
@@ -197,6 +229,7 @@ export interface FileRouteTypes {
     | '/dashboard/dashboard/settings'
     | '/dashboard/dashboard/vehicles'
     | '/dashboard/dashboard/vendors'
+    | '/dashboard/dashboard'
   id:
     | '__root__'
     | '/'
@@ -205,6 +238,8 @@ export interface FileRouteTypes {
     | '/register'
     | '/signin'
     | '/dashboard/dashboard'
+    | '/dashboard/dashboard/AllBookings'
+    | '/dashboard/dashboard/AllReviews'
     | '/dashboard/dashboard/bookings'
     | '/dashboard/dashboard/customers'
     | '/dashboard/dashboard/overview'
@@ -214,6 +249,7 @@ export interface FileRouteTypes {
     | '/dashboard/dashboard/settings'
     | '/dashboard/dashboard/vehicles'
     | '/dashboard/dashboard/vendors'
+    | '/dashboard/dashboard/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -268,6 +304,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/dashboard'
       preLoaderRoute: typeof DashboardDashboardRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/dashboard/': {
+      id: '/dashboard/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/dashboard/'
+      preLoaderRoute: typeof DashboardDashboardIndexRouteImport
+      parentRoute: typeof DashboardDashboardRoute
     }
     '/dashboard/dashboard/vendors': {
       id: '/dashboard/dashboard/vendors'
@@ -332,10 +375,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardDashboardBookingsRouteImport
       parentRoute: typeof DashboardDashboardRoute
     }
+    '/dashboard/dashboard/AllReviews': {
+      id: '/dashboard/dashboard/AllReviews'
+      path: '/AllReviews'
+      fullPath: '/dashboard/dashboard/AllReviews'
+      preLoaderRoute: typeof DashboardDashboardAllReviewsRouteImport
+      parentRoute: typeof DashboardDashboardRoute
+    }
+    '/dashboard/dashboard/AllBookings': {
+      id: '/dashboard/dashboard/AllBookings'
+      path: '/AllBookings'
+      fullPath: '/dashboard/dashboard/AllBookings'
+      preLoaderRoute: typeof DashboardDashboardAllBookingsRouteImport
+      parentRoute: typeof DashboardDashboardRoute
+    }
   }
 }
 
 interface DashboardDashboardRouteChildren {
+  DashboardDashboardAllBookingsRoute: typeof DashboardDashboardAllBookingsRoute
+  DashboardDashboardAllReviewsRoute: typeof DashboardDashboardAllReviewsRoute
   DashboardDashboardBookingsRoute: typeof DashboardDashboardBookingsRoute
   DashboardDashboardCustomersRoute: typeof DashboardDashboardCustomersRoute
   DashboardDashboardOverviewRoute: typeof DashboardDashboardOverviewRoute
@@ -345,9 +404,12 @@ interface DashboardDashboardRouteChildren {
   DashboardDashboardSettingsRoute: typeof DashboardDashboardSettingsRoute
   DashboardDashboardVehiclesRoute: typeof DashboardDashboardVehiclesRoute
   DashboardDashboardVendorsRoute: typeof DashboardDashboardVendorsRoute
+  DashboardDashboardIndexRoute: typeof DashboardDashboardIndexRoute
 }
 
 const DashboardDashboardRouteChildren: DashboardDashboardRouteChildren = {
+  DashboardDashboardAllBookingsRoute: DashboardDashboardAllBookingsRoute,
+  DashboardDashboardAllReviewsRoute: DashboardDashboardAllReviewsRoute,
   DashboardDashboardBookingsRoute: DashboardDashboardBookingsRoute,
   DashboardDashboardCustomersRoute: DashboardDashboardCustomersRoute,
   DashboardDashboardOverviewRoute: DashboardDashboardOverviewRoute,
@@ -357,6 +419,7 @@ const DashboardDashboardRouteChildren: DashboardDashboardRouteChildren = {
   DashboardDashboardSettingsRoute: DashboardDashboardSettingsRoute,
   DashboardDashboardVehiclesRoute: DashboardDashboardVehiclesRoute,
   DashboardDashboardVendorsRoute: DashboardDashboardVendorsRoute,
+  DashboardDashboardIndexRoute: DashboardDashboardIndexRoute,
 }
 
 const DashboardDashboardRouteWithChildren =

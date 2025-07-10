@@ -25,13 +25,6 @@ export const authActions = {
         authStore.setState(initialState)
         localStorage.removeItem('auth')
     },
-    // updateUser: (user: Partial<LoginResponse>) => {
-    //     authStore.setState((prev) => ({
-    //     ...prev,
-    //     ...user,
-    //     }))
-        //     localStorage.setItem('auth_user', JSON.stringify(authStore.setState()))
-        // },
         initializeUser: () => {
             const storedUser = localStorage.getItem('auth')
             if (storedUser) {
@@ -42,3 +35,6 @@ export const authActions = {
             }
         },
     }
+
+
+    authActions.initializeUser() // Initialize user state from localStorage on app start
