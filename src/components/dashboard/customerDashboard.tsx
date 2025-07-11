@@ -28,26 +28,39 @@ function CustomerDashboardOverview() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-        <StatCard icon="🚗" title="Vehicles Linked" value={vehicles? vehicles.length : 0}/>
+        <StatCard icon="🚗" title="Vehicles Linked" value={vehicles ? vehicles.length : 0} />
         <StatCard
           icon="📅"
           title="Upcoming Booking"
           value={
-            bookings && bookings.length > 0
-              ? (() => {
-            const pendingBooking = bookings.find(
-              (b: any) => b.status === "pending"
-            )
-            return pendingBooking
-              ? new Date(pendingBooking.time).toLocaleString()
-              : "None"
-          })()
-              : "None"
+        bookings && bookings.length > 0
+          ? (() => {
+          const now = new Date();
+          const upcoming = bookings.find(
+            (b: any) =>
+              b.scheduled_at &&
+              new Date(b.scheduled_at) > now &&
+              b.status !== "completed" &&
+              b.status !== "cancelled"
+          );
+          return upcoming
+            ? new Date(upcoming.scheduled_at).toLocaleString()
+            : "None";
+            })()
+          : "None"
           }
         />
-        <StatCard icon="✅" title="Last Booking" value="Completed" />
-        <StatCard icon="⭐" title="Reviews Submitted" value={reviews? reviews.length: 0} />
-            </div>
+        <StatCard
+          icon="✅"
+          title="Completed Bookings"
+          value={
+        bookings
+          ? bookings.filter((b: any) => b.status === "completed").length
+          : 0
+          }
+        />
+        <StatCard icon="⭐" title="Reviews Submitted" value={reviews ? reviews.length : 0} />
+      </div>
 
       {/* Next Booking Details */}
       <div className="bg-white p-6 rounded shadow">

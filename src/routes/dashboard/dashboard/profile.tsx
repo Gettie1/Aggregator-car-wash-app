@@ -2,7 +2,9 @@ import React from 'react';
 import { createFileRoute } from '@tanstack/react-router'
 import { useStore } from '@tanstack/react-form';
 import { authStore } from '@/store/authStore';
-import { useCustomer } from '@/hooks/customers';
+// import { useCustomer } from '@/hooks/customers';
+// import your updateUserProfile mutation/hook here
+// import { useUpdateUserProfile } from '@/hooks/useUpdateUserProfile';
 
 export const Route = createFileRoute('/dashboard/dashboard/profile')({
   component: RouteComponent,
@@ -10,17 +12,41 @@ export const Route = createFileRoute('/dashboard/dashboard/profile')({
 
 function RouteComponent() {
   const {user} = useStore(authStore);
-  const {data: customer} = useCustomer(user.id);
+  // const {data: customer} = useCustomer(user.id);
+  // const updateUserProfile = useUpdateUserProfile(); // example mutation hook
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isEditing, setIsEditing] = React.useState(false);
+
+  const [formState, setFormState] = React.useState({
+    firstname: user.firstname,
+    lastname: user.lastname,
+    email: user.email,
+    phone: user.phone,
+  });
+
+  const handleEdit = () => setIsEditing(true);
+  const handleCancel = () => {
+    setIsEditing(false);
+    setFormState({
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+      phone: user.phone,
+    });
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormState({ ...formState, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
-    const formData = new FormData(event.currentTarget);
-    const data = Object.fromEntries(formData.entries());
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      console.log('Profile data submitted:', data);
+      await 
+      setIsEditing(false);
+      // Optionally update authStore here if needed
+      console.log('Profile data submitted and updated in the db:', formState);
     } catch (error) {
       console.error('Error submitting profile data:', error);
     } finally {
@@ -46,7 +72,9 @@ function RouteComponent() {
             <input
               type="text"
               name="firstname"
-              defaultValue={user.firstname}
+              value={formState.firstname}
+              onChange={handleChange}
+              disabled={!isEditing}
               className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 px-3 py-2 transition"
               required
             />
@@ -56,7 +84,9 @@ function RouteComponent() {
             <input
               type="text"
               name="lastname"
-              defaultValue={user.lastname}
+              value={formState.lastname}
+              onChange={handleChange}
+              disabled={!isEditing}
               className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 px-3 py-2 transition"
               required
             />
@@ -66,7 +96,9 @@ function RouteComponent() {
             <input
               type="email"
               name="email"
-              defaultValue={user.email}
+              value={formState.email}
+              onChange={handleChange}
+              disabled={!isEditing}
               className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 px-3 py-2 transition"
               required
             />
@@ -76,22 +108,36 @@ function RouteComponent() {
             <input
               type="tel"
               name="phone"
-              defaultValue={customer?.profile?.phone}
+              value={formState.phone}
+              onChange={handleChange}
+              disabled={!isEditing}
               className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 px-3 py-2 transition"
               required
             />
           </div>
           <div className="flex gap-4 pt-2">
-            <button
-              type="button"
-              className="w-1/2 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition font-semibold"
-            >
-              Edit Profile
-            </button>
+            {!isEditing ? (
+              <button
+                type="button"
+                className="w-1/2 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition font-semibold"
+                onClick={handleEdit}
+              >
+                Edit Profile
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="w-1/2 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition font-semibold"
+                onClick={handleCancel}
+                disabled={isLoading}
+              >
+                Cancel
+              </button>
+            )}
             <button
               type="submit"
-              disabled={isLoading}
-              className={`w-1/2 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition font-semibold ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={!isEditing || isLoading}
+              className={`w-1/2 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition font-semibold ${(!isEditing || isLoading) ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               {isLoading ? 'Saving...' : 'Save Profile'}
             </button>

@@ -2,30 +2,38 @@ import { Link } from '@tanstack/react-router'
 
 export default function Navbar() {
   return (
-    <header className="p-2 flex bg-white text-black justify-between">
-      <nav className="flex flex-row items-center w-full">
-      <div className="px-2 font-bold">
-        <h1 className="text-2xl font-extrabold flex items-center gap-2">
-          <span className="text-blue-500">🚗</span>
-          <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-600 bg-clip-text text-transparent drop-shadow">
+    <header className="shadow-md sticky top-0 z-50 bg-white text-black">
+      <nav className="flex items-center justify-between max-w-6xl mx-auto px-4 py-3">
+        <div className="flex items-center gap-2">
+          <span className="text-3xl text-blue-500">🚗</span>
+          <span className="text-2xl font-extrabold bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-600 bg-clip-text text-transparent drop-shadow">
             CleanRide
           </span>
-        </h1>
-      </div>
-      <div className="flex flex-row gap-2 ml-auto">
-        <div className="px-2 font-bold hover:text-blue-600 active:text-blue-800">
-        <Link to="/">Home</Link>
         </div>
-        <div className="px-2 font-bold *:hover:text-blue-600 active:text-blue-800">
-        <Link to="/about">About</Link>
+        <div className="flex items-center gap-4">
+          <Link
+            to="/"
+            className="px-3 py-1 font-semibold rounded hover:text-blue-600 transition-colors"
+          >
+            Home
+          </Link>
+          <Link
+            to="/about"
+            className="px-3 py-1 font-semibold rounded hover:text-blue-600 transition-colors"
+          >
+            About
+          </Link>
+          <Link to="/signin">
+            <button className="px-4 py-1 font-semibold rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-colors shadow">
+              Sign In
+            </button>
+          </Link>
+          <Link to="/register">
+            <button className="px-4 py-1 font-semibold rounded-full bg-cyan-500 text-white hover:bg-cyan-600 transition-colors shadow">
+              Register
+            </button>
+          </Link>
         </div>
-        <button className="px-2 font-bold border rounded-full bg-blue-300 hover:bg-blue-400 active:text-blue-700">
-        <Link to="/signin">Sign In</Link>
-        </button>
-        <button className="px-2 font-bold hover:bg-blue-400 active:text-blue-800 border rounded-full bg-blue-300">
-        <Link to="/register">Register</Link>
-        </button>
-      </div>
       </nav>
     </header>
   )

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useStore } from '@tanstack/react-form'
 // import type { Services, Vendor } from '@/types/users'
 import type { Vendor } from '@/types/users'
-import { useCreateVendor, useVendors } from '@/hooks/vendors'
+import { useCreateVendor, useDeleteVendor, useVendors } from '@/hooks/vendors'
 import { authStore } from '@/store/authStore'
 // import { useServiceByVendorId, useServices } from '@/hooks/services'
 import { VendorCard } from '@/components/VendorCard'
@@ -31,7 +31,7 @@ function RouteComponent() {
     businessAddress: '',
     taxId: '',
   })
-  const deleteVendorMutation = useCreateVendor()
+  const deleteVendorMutation = useDeleteVendor()
   const handleDeleteVendor = (vendorId:string) => {
     if (confirm('Are you sure you want to delete the vendor?')) {
       deleteVendorMutation.mutate(vendorId.toString())

@@ -10,6 +10,9 @@ export interface LoginResponse {
         email: string;
         firstname: string;
         lastname: string;
+        phone?: string; // Optional, can be added later
+        customerId?: string; // Optional, can be added later
+        vendorId?: string; // Optional, can be added later
     };
     accessToken: string;
     refreshToken: string;

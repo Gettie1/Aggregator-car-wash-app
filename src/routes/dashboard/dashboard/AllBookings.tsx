@@ -15,7 +15,7 @@ function RouteComponent() {
   // const pagination = usePagination()
 
   return <div>
-    <h2 className='font-bold text-xl'>Bookings</h2>
+    <h2 className='font-bold text-2xl'>Bookings</h2>
     <h3 className="text-xl font-semi-bold mb-3">You can manage all Bookings</h3>
     {/* implement filtering */}
 

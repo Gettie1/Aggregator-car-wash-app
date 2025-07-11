@@ -1,7 +1,9 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
+import type { Customer } from "@/types/users";
+import type { UseQueryResult } from "@tanstack/react-query";
 import { createCustomer, deleteCustomer, getCustomer, getCustomers, updateCustomer } from "@/api/CustomerApi";
 
-export const useCustomers = () => {
+export const useCustomers = (): UseQueryResult<Array<Customer>> => {
     return useQuery({
         queryKey: ['customers'],
         queryFn: () => getCustomers(),

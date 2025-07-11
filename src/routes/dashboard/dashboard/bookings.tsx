@@ -16,6 +16,8 @@ function VendorBookingsSection() {
   if (!bookings || bookings.length === 0) return <p>No bookings yet.</p>
 
   return (
+    <div className="container mx-auto p-4">
+      <h1 className='text-2xl font-bold mb-4'>Bookings</h1>
     <div className="bg-white p-6 mt-8 rounded shadow">
       <h2 className="text-lg font-bold mb-4">Manage Bookings</h2>
 
@@ -69,6 +71,12 @@ function VendorBookingsSection() {
           </tbody>
         </table>
       </div>
+    </div>
+    <div className="mt-6 flex items-center justify-end">
+      <span className="inline-block bg-blue-100 text-blue-800 text-sm font-semibold px-4 py-2 rounded-lg shadow-sm">
+        Total Bookings: <span className="font-bold">{bookings.length}</span>
+      </span>
+    </div>
     </div>
   )
 }
