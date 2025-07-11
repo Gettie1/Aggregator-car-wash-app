@@ -22,7 +22,6 @@ import { Route as DashboardDashboardSettingsRouteImport } from './routes/dashboa
 import { Route as DashboardDashboardServicesRouteImport } from './routes/dashboard/dashboard/services'
 import { Route as DashboardDashboardReviewsRouteImport } from './routes/dashboard/dashboard/reviews'
 import { Route as DashboardDashboardProfileRouteImport } from './routes/dashboard/dashboard/profile'
-import { Route as DashboardDashboardOverviewRouteImport } from './routes/dashboard/dashboard/overview'
 import { Route as DashboardDashboardCustomersRouteImport } from './routes/dashboard/dashboard/customers'
 import { Route as DashboardDashboardBookingsRouteImport } from './routes/dashboard/dashboard/bookings'
 import { Route as DashboardDashboardAllReviewsRouteImport } from './routes/dashboard/dashboard/AllReviews'
@@ -99,12 +98,6 @@ const DashboardDashboardProfileRoute =
     path: '/profile',
     getParentRoute: () => DashboardDashboardRoute,
   } as any)
-const DashboardDashboardOverviewRoute =
-  DashboardDashboardOverviewRouteImport.update({
-    id: '/overview',
-    path: '/overview',
-    getParentRoute: () => DashboardDashboardRoute,
-  } as any)
 const DashboardDashboardCustomersRoute =
   DashboardDashboardCustomersRouteImport.update({
     id: '/customers',
@@ -141,7 +134,6 @@ export interface FileRoutesByFullPath {
   '/dashboard/dashboard/AllReviews': typeof DashboardDashboardAllReviewsRoute
   '/dashboard/dashboard/bookings': typeof DashboardDashboardBookingsRoute
   '/dashboard/dashboard/customers': typeof DashboardDashboardCustomersRoute
-  '/dashboard/dashboard/overview': typeof DashboardDashboardOverviewRoute
   '/dashboard/dashboard/profile': typeof DashboardDashboardProfileRoute
   '/dashboard/dashboard/reviews': typeof DashboardDashboardReviewsRoute
   '/dashboard/dashboard/services': typeof DashboardDashboardServicesRoute
@@ -160,7 +152,6 @@ export interface FileRoutesByTo {
   '/dashboard/dashboard/AllReviews': typeof DashboardDashboardAllReviewsRoute
   '/dashboard/dashboard/bookings': typeof DashboardDashboardBookingsRoute
   '/dashboard/dashboard/customers': typeof DashboardDashboardCustomersRoute
-  '/dashboard/dashboard/overview': typeof DashboardDashboardOverviewRoute
   '/dashboard/dashboard/profile': typeof DashboardDashboardProfileRoute
   '/dashboard/dashboard/reviews': typeof DashboardDashboardReviewsRoute
   '/dashboard/dashboard/services': typeof DashboardDashboardServicesRoute
@@ -181,7 +172,6 @@ export interface FileRoutesById {
   '/dashboard/dashboard/AllReviews': typeof DashboardDashboardAllReviewsRoute
   '/dashboard/dashboard/bookings': typeof DashboardDashboardBookingsRoute
   '/dashboard/dashboard/customers': typeof DashboardDashboardCustomersRoute
-  '/dashboard/dashboard/overview': typeof DashboardDashboardOverviewRoute
   '/dashboard/dashboard/profile': typeof DashboardDashboardProfileRoute
   '/dashboard/dashboard/reviews': typeof DashboardDashboardReviewsRoute
   '/dashboard/dashboard/services': typeof DashboardDashboardServicesRoute
@@ -203,7 +193,6 @@ export interface FileRouteTypes {
     | '/dashboard/dashboard/AllReviews'
     | '/dashboard/dashboard/bookings'
     | '/dashboard/dashboard/customers'
-    | '/dashboard/dashboard/overview'
     | '/dashboard/dashboard/profile'
     | '/dashboard/dashboard/reviews'
     | '/dashboard/dashboard/services'
@@ -222,7 +211,6 @@ export interface FileRouteTypes {
     | '/dashboard/dashboard/AllReviews'
     | '/dashboard/dashboard/bookings'
     | '/dashboard/dashboard/customers'
-    | '/dashboard/dashboard/overview'
     | '/dashboard/dashboard/profile'
     | '/dashboard/dashboard/reviews'
     | '/dashboard/dashboard/services'
@@ -242,7 +230,6 @@ export interface FileRouteTypes {
     | '/dashboard/dashboard/AllReviews'
     | '/dashboard/dashboard/bookings'
     | '/dashboard/dashboard/customers'
-    | '/dashboard/dashboard/overview'
     | '/dashboard/dashboard/profile'
     | '/dashboard/dashboard/reviews'
     | '/dashboard/dashboard/services'
@@ -354,13 +341,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardDashboardProfileRouteImport
       parentRoute: typeof DashboardDashboardRoute
     }
-    '/dashboard/dashboard/overview': {
-      id: '/dashboard/dashboard/overview'
-      path: '/overview'
-      fullPath: '/dashboard/dashboard/overview'
-      preLoaderRoute: typeof DashboardDashboardOverviewRouteImport
-      parentRoute: typeof DashboardDashboardRoute
-    }
     '/dashboard/dashboard/customers': {
       id: '/dashboard/dashboard/customers'
       path: '/customers'
@@ -397,7 +377,6 @@ interface DashboardDashboardRouteChildren {
   DashboardDashboardAllReviewsRoute: typeof DashboardDashboardAllReviewsRoute
   DashboardDashboardBookingsRoute: typeof DashboardDashboardBookingsRoute
   DashboardDashboardCustomersRoute: typeof DashboardDashboardCustomersRoute
-  DashboardDashboardOverviewRoute: typeof DashboardDashboardOverviewRoute
   DashboardDashboardProfileRoute: typeof DashboardDashboardProfileRoute
   DashboardDashboardReviewsRoute: typeof DashboardDashboardReviewsRoute
   DashboardDashboardServicesRoute: typeof DashboardDashboardServicesRoute
@@ -412,7 +391,6 @@ const DashboardDashboardRouteChildren: DashboardDashboardRouteChildren = {
   DashboardDashboardAllReviewsRoute: DashboardDashboardAllReviewsRoute,
   DashboardDashboardBookingsRoute: DashboardDashboardBookingsRoute,
   DashboardDashboardCustomersRoute: DashboardDashboardCustomersRoute,
-  DashboardDashboardOverviewRoute: DashboardDashboardOverviewRoute,
   DashboardDashboardProfileRoute: DashboardDashboardProfileRoute,
   DashboardDashboardReviewsRoute: DashboardDashboardReviewsRoute,
   DashboardDashboardServicesRoute: DashboardDashboardServicesRoute,

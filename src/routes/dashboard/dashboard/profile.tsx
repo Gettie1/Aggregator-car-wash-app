@@ -34,7 +34,7 @@ function RouteComponent() {
         <div className="flex flex-col items-center mb-6">
           <div className="w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center mb-4">
             <span className="text-4xl font-bold text-blue-600">
-              {user.firstname?.[0]}
+              {user.firstname[0]}
             </span>
           </div>
           <h1 className="text-2xl font-bold mb-1">Welcome, {user.firstname} 👋</h1>
@@ -56,7 +56,7 @@ function RouteComponent() {
             <input
               type="text"
               name="lastname"
-              defaultValue={customer?.profile?.lastname}
+              defaultValue={user.lastname}
               className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 px-3 py-2 transition"
               required
             />

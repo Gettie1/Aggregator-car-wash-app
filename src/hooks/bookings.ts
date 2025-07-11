@@ -31,3 +31,10 @@ export const useDeleteBooking = () => {
         mutationFn: (id: string) => createBooking(id),
     });
 }
+export const useBookingsByVendorId = (vendorId: string) => {
+    return useQuery({
+        queryKey: ['bookings', vendorId],
+        queryFn: () => getBookings(), // Adjust this to fetch bookings by vendor ID if your API supports it
+        enabled: !!vendorId, // Only run the query if vendorId is truthy
+    });
+}

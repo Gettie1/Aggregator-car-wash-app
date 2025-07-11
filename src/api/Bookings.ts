@@ -79,3 +79,16 @@ export const getBookingsByCustomerId = async (customerId: string) => {
     const jsonData = await response.json();
     return jsonData;
 };
+export const getBookingsByVendorId = async (vendorId: string) => {
+    const response = await fetch(`${url}/vendor/${vendorId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    if (!response.ok) {
+        throw new Error('Failed to fetch bookings for vendor');
+    }
+    const jsonData = await response.json();
+    return jsonData;
+};

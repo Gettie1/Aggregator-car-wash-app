@@ -1,31 +1,26 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useStore } from '@tanstack/react-form'
+// import type { Services, Vendor } from '@/types/users'
 import type { Vendor } from '@/types/users'
 import { useCreateVendor, useVendors } from '@/hooks/vendors'
 import { authStore } from '@/store/authStore'
+// import { useServiceByVendorId, useServices } from '@/hooks/services'
+import { VendorCard } from '@/components/VendorCard'
 
 export const Route = createFileRoute('/dashboard/dashboard/vendors')({
   component: RouteComponent,
 })
 
-export interface VendorModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-function VendorModal({ isOpen, onClose}: VendorModalProps) {
-  const {data: vendors} = useVendors();
-  const { user: authUser } = useStore(authStore);
-  if (!isOpen) {
-    return null;
-  }
-  
-}
 
 function RouteComponent() {
   const [ showModal, setShowModal ] = useState(false)
   const { user } = useStore(authStore)
   const { data: vendors } = useVendors()
+  // const { data: vendor} = useVendor(user.id)
+  // const { data: services} = useServices() 
+  
+  // const { data: vendorServices } = useServiceByVendorId(vendor.vendor.id)
   const addVendorMutation = useCreateVendor()
   const [formData, setFormData] = useState({
     firstName: '',
@@ -36,6 +31,20 @@ function RouteComponent() {
     businessAddress: '',
     taxId: '',
   })
+  const deleteVendorMutation = useCreateVendor()
+  const handleDeleteVendor = (vendorId:string) => {
+    if (confirm('Are you sure you want to delete the vendor?')) {
+      deleteVendorMutation.mutate(vendorId.toString())
+    }
+  }
+  if (!vendors) {
+    return <div>Loading vendors...</div>
+  }
+  if (vendors.length === 0) {
+    return <div>No vendors found. Please add a vendor.</div>
+  }
+  // setShowModal(false)
+  
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -47,15 +56,7 @@ function RouteComponent() {
       ...formData,
       userId: user.id, // or let backend extract from JWT
     })
-    setShowModal(false)
   }
-  const deleteVendorMutation = useCreateVendor()
-  const handleDeleteVendor = (vendorId:string) => {
-    if (confirm('Are you sure you want to delete the vendor?')) {
-      deleteVendorMutation.mutate(vendorId.toString())
-    }
-  }
-
   return <div>
     <h1 className="text-2xl font-bold">Vendors</h1>
     {/* <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={onclose}></div> */}
@@ -207,5 +208,16 @@ function RouteComponent() {
     >
       Add New Vendor
     </button>
+    {/* fetch and display servces using vendor  vendor name/id */}
+    <div className="mt-8">
+      <h2 className="text-xl font-semibold mb-4">Services by Vendor</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {vendors?.map((vendor: Vendor) => (
+  <VendorCard key={vendor.vendor.id} vendor={vendor} />
+))}
+      
+      </div>
+    </div>
   </div>
+
 }

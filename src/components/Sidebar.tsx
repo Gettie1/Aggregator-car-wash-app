@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link, useRouterState } from '@tanstack/react-router'
 import { Menu, Settings, User } from 'lucide-react'
+import type { Role } from '@/types/auth'
 import { authStore } from '@/store/authStore'
-import { Role } from '@/types/auth'
 import { checkRole } from '@/lib/roles'
 
 export function DashboardSidebar() {

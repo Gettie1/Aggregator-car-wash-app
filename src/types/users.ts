@@ -90,4 +90,13 @@ export type Bookings = {
   vehicle: string
   
 }
+export type Services = {
+  id: number  
+  name: string
+  description: string 
+  price: number
+  duration: number
+  created_at: string
+  updated_at: string
+}
   

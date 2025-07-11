@@ -42,8 +42,8 @@ function RouteComponent() {
           >
             <div className="flex items-center gap-3 mb-2">
               <div className="bg-blue-500 text-white rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold shadow">
-                {customer.firstName?.[0]}
-                {customer.lastName?.[0]}
+                {customer.firstName[0]}
+                {customer.lastName[0]}
               </div>
               <div>
                 <div className="font-semibold text-lg text-blue-800">

@@ -3,6 +3,7 @@ import { useStore } from '@tanstack/react-form'
 import AdminDashboardOverview from '@/components/dashboard/adminDashboard'
 import CustomerDashboardOverview from '@/components/dashboard/customerDashboard'
 import { authStore } from '@/store/authStore'
+import VendorDashboardOverview from '@/components/dashboard/vendorDashboard'
 
 export const Route = createFileRoute('/dashboard/dashboard/')({
   component: RouteComponent,
@@ -14,9 +15,13 @@ function RouteComponent() {
   if (user.role === 'customer') {
     return <CustomerDashboardOverview />
   }
-  if (user.role === 'admin') {
+  else if (user.role === 'admin') {
     return <AdminDashboardOverview />
   }
+  else if (user.role === 'vendor') {
+    return <VendorDashboardOverview />
+  }
+
 
   return <div>
 
