@@ -10,18 +10,21 @@ export const uselogin = () => {
         onSuccess: (data) => {
             // Handle successful login, e.g., store token, redirect, etc.
             console.log('Login successful:', data)
-            authActions.setUser({
-                user: { 
-                    id: data.user.id,
-                    role: data.user.role,
-                    email: data.user.email,
-                    firstname: data.user.firstname,
-                    lastname: data.user.lastname
-                },
-                accessToken: data.accessToken,
-                refreshToken: data.refreshToken
-            } as LoginResponse
-                )
+            authActions.setUser(data)
+            //     user: { 
+            //         id: data.user.id,
+            //         role: data.user.role,
+            //         email: data.user.email,
+            //         firstname: data.user.firstname,
+            //         lastname: data.user.lastname,
+            //         phone: data.user.phone, // Optional, can be added later
+            //         customerId: data.user.customerId, // Optional, can be added later
+            //         vendorId: data.user.vendorId, // Optional, can be added later
+            //     },
+            //     accessToken: data.accessToken,
+            //     refreshToken: data.refreshToken
+            // } as LoginResponse
+            //     )
         },
         onError: (error) => {
             // Handle login error, e.g., show error message

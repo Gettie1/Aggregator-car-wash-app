@@ -10,8 +10,8 @@ const initialState: LoginResponse = {
         firstname: '',
         lastname: '',
         phone: undefined, // Initially undefined, can be added later
-        customerId: undefined, // Initially undefined, can be added later
-        vendorId: undefined, // Initially undefined, can be added later
+        customerId: '', // Initially undefined, can be added later
+        vendorId: '', // Initially undefined, can be added later
   }, // Initially undefined, will be set after login
     accessToken: '',
     refreshToken: '',
