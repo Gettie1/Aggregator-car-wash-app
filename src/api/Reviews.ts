@@ -1,11 +1,11 @@
+import { getHeaders } from "./profileApi";
+
 const url = 'http://localhost:4001/reviews';
 
 export const getReviews = async () => {
     const response = await fetch(`${url}`, {
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: getHeaders(),
     });
     if (!response.ok) {
         throw new Error('Failed to fetch reviews');
@@ -16,9 +16,7 @@ export const getReviews = async () => {
 export const getReview = async (id: string) => {
     const response = await fetch(`${url}/${id}`, {
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: getHeaders(),
     });
     if (!response.ok) {
         throw new Error('Failed to fetch review');
@@ -29,9 +27,7 @@ export const getReview = async (id: string) => {
 export const createReview = async (data: any) => {
     const response = await fetch(`${url}`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: getHeaders(),
         body: JSON.stringify(data),
     });
     if (!response.ok) {
@@ -43,9 +39,7 @@ export const createReview = async (data: any) => {
 export const updateReview = async (id: string, data: any) => {
     const response = await fetch(`${url}/${id}`, {
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: getHeaders(),
         body: JSON.stringify(data),
     });
     if (!response.ok) {
@@ -57,9 +51,7 @@ export const updateReview = async (id: string, data: any) => {
 export const deleteReview = async (id: string) => {
     const response = await fetch(`${url}/${id}`, {
         method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: getHeaders(),
     });
     if (!response.ok) {
         throw new Error('Failed to delete review');
@@ -69,9 +61,7 @@ export const deleteReview = async (id: string) => {
 export const getReviewsByVehicleId = async (vehicleId: string) => {
     const response = await fetch(`${url}/vehicle/${vehicleId}`, {
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: getHeaders(),
     });
     if (!response.ok) {
         throw new Error('Failed to fetch reviews for vehicle');
@@ -82,9 +72,7 @@ export const getReviewsByVehicleId = async (vehicleId: string) => {
 export const getReviewsByCustomerId = async (customerId: string) => {
     const response = await fetch(`${url}/customer/${customerId}`, {
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: getHeaders(),
     });
     if (!response.ok) {
         throw new Error('Failed to fetch reviews for customer');
@@ -95,9 +83,7 @@ export const getReviewsByCustomerId = async (customerId: string) => {
 export const getReviewsByVendorId = async (vendorId: string) => {
     const response = await fetch(`${url}/vendor/${vendorId}`, {
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: getHeaders(),
     });
     if (!response.ok) {
         throw new Error('Failed to fetch reviews for vendor');
@@ -108,9 +94,7 @@ export const getReviewsByVendorId = async (vendorId: string) => {
 export const getReviewsByBookingId = async (bookingId: string) => {
     const response = await fetch(`${url}/booking/${bookingId}`, {
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: getHeaders(),
     });
     if (!response.ok) {
         throw new Error('Failed to fetch reviews for booking');
@@ -121,9 +105,7 @@ export const getReviewsByBookingId = async (bookingId: string) => {
 export const getReviewsByServiceId = async (serviceId: string) => {
     const response = await fetch(`${url}/service/${serviceId}`, {
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: getHeaders(),
     });
     if (!response.ok) {
         throw new Error('Failed to fetch reviews for service');

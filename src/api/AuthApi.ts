@@ -1,3 +1,4 @@
+import { getHeaders } from "./profileApi";
 import type { LoginData, registerData } from "@/types/auth";
 
 const url = 'http://localhost:4001';
@@ -5,9 +6,7 @@ const url = 'http://localhost:4001';
 export const login = async (data: LoginData) => {
   const response = await fetch(`${url}/auth/signin`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: getHeaders(),
     body: JSON.stringify(data),
   });
   if (!response.ok) {
@@ -20,9 +19,7 @@ export const login = async (data: LoginData) => {
 export const register = async (data: registerData) => {
   const response = await fetch(`${url}/profile`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: getHeaders(),
     body: JSON.stringify(data),
   });
   if (!response.ok) {

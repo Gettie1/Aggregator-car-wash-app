@@ -1,5 +1,5 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { createBooking, getBooking, getBookings } from "@/api/Bookings";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createBooking, deleteBooking, getBooking, getBookings, getBookingsByCustomerId, getBookingsByVendorId, getUpdateBookingStatus, updateBooking } from "@/api/Bookings";
 
 export const useBookings = () => {
     return useQuery({
@@ -14,27 +14,62 @@ export const useBooking = (id: string) => {
     })
 }
 export const useCreateBooking = () => {
+    const queryClient = useQueryClient();
     return useMutation({
-         mutationKey: ['createBooking'],
-         mutationFn: (data:any) => createBooking(data),
-    })
+        mutationKey: ['createBooking'],
+        mutationFn: (data: any) => createBooking(data),
+        onSuccess: () => {
+            // Invalidate the bookings query to refetch the list after creation
+            queryClient.invalidateQueries({ queryKey: ['bookings'] });
+        },
+    });
 }
 export const useUpdateBooking = (id: string, data: any) => {
+    const queryClient = useQueryClient();
     return useMutation({
         mutationKey: ['updateBooking', id],
-        mutationFn: () => createBooking(data),
+        mutationFn: () => updateBooking(id,data),
+        onSuccess: () => {
+            // Invalidate the bookings query to refetch the updated booking
+            queryClient.invalidateQueries({ queryKey: ['booking', id] });
+            queryClient.invalidateQueries({ queryKey: ['bookings'] });
+        },
     });
 }
 export const useDeleteBooking = () => {
+    const queryClient = useQueryClient();
     return useMutation({
         mutationKey: ['deleteBooking'],
-        mutationFn: (id: string) => createBooking(id),
+        mutationFn: (id: string) => deleteBooking(id),
+        onSuccess: () => {
+            // Invalidate the bookings query to refetch the list after deletion
+            queryClient.invalidateQueries({ queryKey: ['bookings'] });
+        },
     });
 }
 export const useBookingsByVendorId = (vendorId: string) => {
     return useQuery({
         queryKey: ['bookings', vendorId],
-        queryFn: () => getBookings(), // Adjust this to fetch bookings by vendor ID if your API supports it
+        queryFn: () => getBookingsByVendorId(vendorId),
         enabled: !!vendorId, // Only run the query if vendorId is truthy
+    });
+}
+export const useBookingsByCustomerId = (customerId: string) => {
+    // const queryClient = useQueryClient();
+    return useQuery({
+        queryKey: ['bookings', 'customer', customerId],
+        queryFn: () => getBookingsByCustomerId(customerId),
+        enabled: !!customerId, // Only run the query if customerId is truthy
+    });
+}
+export const useUpdateBookingStatus = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationKey: ['updateBookingStatus'],
+        mutationFn: ({ id, status }: { id: string; status: string }) => getUpdateBookingStatus(id, status),
+        onSuccess: () => {
+            // Invalidate the bookings query to refetch the list after status update
+            queryClient.invalidateQueries({ queryKey: ['bookings'] });
+        },
     });
 }

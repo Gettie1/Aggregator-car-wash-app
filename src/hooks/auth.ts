@@ -1,30 +1,24 @@
 import { useMutation } from "@tanstack/react-query"
 import type { LoginData, LoginResponse, registerData, registerResponse } from "@/types/auth"
 import { login, register } from "@/api/AuthApi"
-import { authActions } from "@/store/authStore"
 
 export const uselogin = () => {
     return useMutation<LoginResponse, Error, LoginData >({
         mutationKey: ['login'],
         mutationFn: login,
         onSuccess: (data) => {
-            // Handle successful login, e.g., store token, redirect, etc.
+            // Debug: Log the exact response structure
+            console.log('🔍 Raw login response from backend:', data)
+            console.log('🔍 User object:', data.user)
+            console.log('🔍 User ID:', data.user.id)
+            console.log('🔍 User Role:', data.user.role)
+            console.log('🔍 Customer ID:', data.user.customerId)
+            console.log('🔍 Vendor ID:', data.user.vendorId)
+            console.log('🔍 Full user object keys:', Object.keys(data.user))
+            
+            // The signin component will handle setting the user data
+            // authActions.setUser(data) is called from the signin component
             console.log('Login successful:', data)
-            authActions.setUser(data)
-            //     user: { 
-            //         id: data.user.id,
-            //         role: data.user.role,
-            //         email: data.user.email,
-            //         firstname: data.user.firstname,
-            //         lastname: data.user.lastname,
-            //         phone: data.user.phone, // Optional, can be added later
-            //         customerId: data.user.customerId, // Optional, can be added later
-            //         vendorId: data.user.vendorId, // Optional, can be added later
-            //     },
-            //     accessToken: data.accessToken,
-            //     refreshToken: data.refreshToken
-            // } as LoginResponse
-            //     )
         },
         onError: (error) => {
             // Handle login error, e.g., show error message

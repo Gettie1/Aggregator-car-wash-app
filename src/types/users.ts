@@ -5,9 +5,11 @@ export type Customer = {
   email: string
   customer:{
     id: number
-    address: string
-    phone_number: string
-  }
+    address: string | null
+    phone_number: string | null
+    created_at: string | null
+    updated_at: string | null
+  } | null
 }
 
 // export interface Customers {
@@ -56,6 +58,7 @@ export interface VendorDetails {
   created_at: string
   updated_at: string
 }
+export interface VendorResponse {}
 export interface VehiclesDetails {
   id: number  
   make: string
@@ -66,13 +69,40 @@ export interface VehiclesDetails {
 }
 export type Reviews = {
   id: number
-  vehicle_id: number
+  vehicle?: {
+    id: number
+    license_plate: string
+    model: string
+  }
   customer_id: number
   vendor_id: number
   booking_id: number
   rating: number
   comment: string 
   created_at: string
+  customer?: {
+    id: number
+    firstname: string
+    lastname: string
+    email: string
+    phone?: string
+  }
+  vendor?: {
+    id: number
+    business_name: string
+    tax_id: string
+    business_address: string
+  }
+  service?: {
+    id: number
+    name: string
+    description: string
+    price: number
+    duration: number
+    created_at: string
+    updated_at: string
+
+  }
 }
 export type Bookings = {
   id: number

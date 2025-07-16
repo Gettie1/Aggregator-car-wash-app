@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useStore } from "@tanstack/react-form";
+import type { Bookings } from "@/types/users";
 import { authStore } from "@/store/authStore";
 import StatCard from "@/components/statCard";
 import { useServiceByVendorId } from "@/hooks/services";
@@ -8,11 +8,11 @@ import { useReviews } from "@/hooks/reviews";
 import { useVendor } from "@/hooks/vendors";
 
 function VendorDashboardOverview() {
-  const { user } = useStore(authStore);
-  const { data: vendorData } = useVendor(user.id);
-//   const vendorId = vendorData?.vendor.id;
-
-  const { data: services } = useServiceByVendorId(user.id);
+  const { user } = authStore.state;
+  const vendorId = user.vendorId;
+  
+  const { data: vendorData } = useVendor(vendorId || '');
+  const { data: services } = useServiceByVendorId(vendorId || '');
   const { data: bookings } = useBookings();
   const { data: reviews } = useReviews();
 
@@ -36,15 +36,24 @@ function VendorDashboardOverview() {
       <div className="bg-white rounded shadow p-6">
         <h2 className="text-lg font-semibold mb-4">Recent Bookings</h2>
         <ul className="divide-y divide-gray-200">
-          {bookings?.slice(0, 3).map((b: any) => (
+          {bookings?.slice(0, 3).map((b: Bookings) => (
             <li key={b.id} className="py-3 flex justify-between">
               <div>
-                <p className="font-medium">Service: {b.service?.name || "N/A"}</p>
+                <p className="font-medium">Service: {b.service || "N/A"}</p>
                 <p className="text-sm text-gray-500">Date: {new Date(b.scheduled_at).toLocaleString()}</p>
               </div>
-              <span className={`text-sm px-3 py-1 rounded-full ${b.status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                <span
+                className={`text-sm p-1 rounded-full flex items-center justify-center min-w-[90px] ${
+                  b.status === 'confirmed'
+                  ? 'bg-green-100 text-green-700'
+                  : b.status === 'cancelled'
+                  ? 'bg-red-100 text-red-700'
+                  : 'bg-yellow-100 text-yellow-700'
+                }`}
+                style={{ textAlign: "center" }}
+                >
                 {b.status}
-              </span>
+                </span>
             </li>
           )) || <p className="text-gray-400">No bookings found</p>}
         </ul>

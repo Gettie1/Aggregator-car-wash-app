@@ -7,6 +7,7 @@ import { authActions } from '../store/authStore'
 import TanStackQueryLayout from '../integrations/tanstack-query/layout.tsx'
 
 import type { QueryClient } from '@tanstack/react-query'
+import ToasterProvider from '@/components/ToasterProvider.tsx'
 // import DashboardSidebar from '@/components/Sidebar.tsx'
 
 interface MyRouterContext {
@@ -20,6 +21,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     }, [])
     return (
       <>
+      <ToasterProvider/>
         {/* <Navbar/> */}
         <Outlet />
         <TanStackRouterDevtools />

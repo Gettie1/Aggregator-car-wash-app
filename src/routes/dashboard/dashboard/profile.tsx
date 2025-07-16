@@ -1,7 +1,9 @@
 import React from 'react';
+import { toast } from 'sonner';
 import { createFileRoute } from '@tanstack/react-router'
 import { useStore } from '@tanstack/react-form';
 import { authStore } from '@/store/authStore';
+import { useUpdateProfile } from '@/hooks/profile';
 // import { useCustomer } from '@/hooks/customers';
 // import your updateUserProfile mutation/hook here
 // import { useUpdateUserProfile } from '@/hooks/useUpdateUserProfile';
@@ -16,13 +18,16 @@ function RouteComponent() {
   // const updateUserProfile = useUpdateUserProfile(); // example mutation hook
   const [isLoading, setIsLoading] = React.useState(false);
   const [isEditing, setIsEditing] = React.useState(false);
-
   const [formState, setFormState] = React.useState({
     firstname: user.firstname,
     lastname: user.lastname,
     email: user.email,
     phone: user.phone,
   });
+  // Pass the required arguments to useUpdateProfile (e.g., user.id and formState)
+  // const { data: profiles } = useUpdateProfile(user.id, formState); // Adjust arguments as needed based on your hook definition
+  const updateProfileMutate = useUpdateProfile(user.id);
+
 
   const handleEdit = () => setIsEditing(true);
   const handleCancel = () => {
@@ -39,20 +44,40 @@ function RouteComponent() {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setIsLoading(true);
-    try {
-      await 
-      setIsEditing(false);
-      // Optionally update authStore here if needed
-      console.log('Profile data submitted and updated in the db:', formState);
-    } catch (error) {
-      console.error('Error submitting profile data:', error);
-    } finally {
-      setIsLoading(false);
+ const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  event.preventDefault();
+  if (!isEditing) return;
+  // toast.loading('Updating profile...');
+
+  setIsLoading(true);
+  try {
+    // Determine which fields have changed
+    const changedFields: Partial<typeof formState> = {};
+    for (const key in formState) {
+      if (formState[key as keyof typeof formState] !== user[key as keyof typeof user]) {
+        changedFields[key as keyof typeof formState] = formState[key as keyof typeof formState];
+      }
     }
+
+    if (Object.keys(changedFields).length === 0) {
+      toast('No changes to update.');
+      setIsEditing(false);
+      return;
+    }
+
+    // Send only changed fields
+    await updateProfileMutate.mutateAsync(changedFields);
+
+    setIsEditing(false);
+    toast.success('Profile updated successfully!');
+    console.log('Updated fields:', changedFields);
+  } catch (error) {
+    console.error('Error updating profile:', error);
+  } finally {
+    setIsLoading(false);
   }
+};
+
 
   return (
     <div className="flex justify-center items-center min-h-[80vh] bg-gray-50">
@@ -103,18 +128,18 @@ function RouteComponent() {
               required
             />
           </div>
-          <div>
+            <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">Phone Number</label>
             <input
               type="tel"
               name="phone"
-              value={formState.phone}
+              value={formState.phone ?? ''}
               onChange={handleChange}
               disabled={!isEditing}
               className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 px-3 py-2 transition"
               required
             />
-          </div>
+            </div>
           <div className="flex gap-4 pt-2">
             {!isEditing ? (
               <button

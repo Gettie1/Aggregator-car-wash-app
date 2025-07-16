@@ -1,11 +1,11 @@
-const url = 'http://localhost:3000/services';
+import { getHeaders } from "./profileApi";
+
+const url = 'http://localhost:4001/services';
 
 export const getServices = async () => {
     const response = await fetch(`${url}`, {
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: getHeaders(),
     });
     if (!response.ok) {
         throw new Error('Failed to fetch services');
@@ -16,9 +16,7 @@ export const getServices = async () => {
 export const getService = async (id: string) => {
     const response = await fetch(`${url}/${id}`, {
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: getHeaders(),
     });
     if (!response.ok) {
         throw new Error('Failed to fetch service');
@@ -29,9 +27,7 @@ export const getService = async (id: string) => {
 export const createService = async (data: any) => {
     const response = await fetch(`${url}`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: getHeaders(),
         body: JSON.stringify(data),
     });
     if (!response.ok) {
@@ -43,9 +39,7 @@ export const createService = async (data: any) => {
 export const updateService = async (id: string, data: any) => {
     const response = await fetch(`${url}/${id}`, {
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: getHeaders(),
         body: JSON.stringify(data),
     });
     if (!response.ok) {
@@ -57,9 +51,7 @@ export const updateService = async (id: string, data: any) => {
 export const deleteService = async (id: string) => {
     const response = await fetch(`${url}/${id}`, {
         method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: getHeaders(),
     });
     if (!response.ok) {
         throw new Error('Failed to delete service');
@@ -69,9 +61,7 @@ export const deleteService = async (id: string) => {
 export const getServiceByVendor = async (vendorId: string) => {
     const response = await fetch(`${url}/vendor/${vendorId}`, {
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers:getHeaders(),
     });
     if (!response.ok) {
         throw new Error('Failed to fetch services by vendor');

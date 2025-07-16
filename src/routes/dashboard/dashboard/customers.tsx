@@ -23,6 +23,8 @@ function RouteComponent() {
       </div>
     );
   }
+
+  const validCustomer = customers.filter((customer: Customer) => customer.customer?.address && customer.customer.phone_number);
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
@@ -58,7 +60,7 @@ function RouteComponent() {
                 <svg className="w-4 h-4 text-blue-400 mr-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 12.414a4 4 0 10-5.657 5.657l4.243 4.243a8 8 0 0011.314-11.314l-4.243-4.243a4 4 0 00-5.657 5.657l4.243 4.243z" />
                 </svg>
-                <span>{customer.customer.address}</span>
+                <span>{customer.customer?.address}</span>
               </div>
             </div>
             <div>
@@ -67,12 +69,35 @@ function RouteComponent() {
                 <svg className="w-4 h-4 text-blue-400 mr-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm0 10a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2zm10-10a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zm0 10a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                 </svg>
-                <span>{customer.customer.phone_number}</span>
+                <span>{customer.customer?.phone_number}</span>
               </div>
             </div>
+
           </div>
         ))}
       </div>
+            <div className="mt-10 bg-white p-6 rounded shadow align-start">
+  <h2 className="text-xl font-semibold mb-4">🕒 Recent Sign-ups</h2>
+  <ul className="divide-y divide-gray-200">
+    {customers.slice(0, 5).map((recentCustomer: Customer) => (
+      <li key={recentCustomer.customer?.id} className="py-3 flex justify-between items-center">
+        <div>
+          <p className="font-medium text-gray-800">
+            {recentCustomer.firstName} {recentCustomer.lastName}
+          </p>
+          <p className="text-sm text-gray-500">
+            {recentCustomer.customer?.created_at
+              ? new Date(recentCustomer.customer.created_at).toLocaleDateString()
+              : 'N/A'}
+          </p>
+        </div>
+        <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
+          New
+        </span>
+      </li>
+    ))}
+  </ul>
+</div>
     </div>
   );
 }

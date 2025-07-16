@@ -3,7 +3,7 @@ import type { Customer } from "@/types/users";
 import type { UseQueryResult } from "@tanstack/react-query";
 import { createCustomer, deleteCustomer, getCustomer, getCustomers, updateCustomer } from "@/api/CustomerApi";
 
-export const useCustomers = (): UseQueryResult<Array<Customer>> => {
+export const useCustomers = () => {
     return useQuery({
         queryKey: ['customers'],
         queryFn: () => getCustomers(),

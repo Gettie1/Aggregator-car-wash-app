@@ -25,29 +25,30 @@ export enum Role {
 }
 
 export interface registerData {
+  id?: string; // Optional, can be added later
   firstName: string;
   lastName: string;
   email: string;
   password: string;
   role: Role;
+  phone?: string; // Optional, can be added later
 }
 export interface registerResponse {
-  user: {
     id: string;
     role: Role;
     email: string;
     firstname: string;
     lastname: string;
-  };
+    phone?: string; // Optional, can be added later
 }
-export interface User {
-  id: string;
-  role: Role;
-  email: string;
-  firstname: string;
-  lastname: string;
-  phone?: string; // Optional, can be added later
-  customerId?: string; // Optional, can be added later
-  vendorId?: string; // Optional, can be added later
-}
+// export interface User {
+//   id: string;
+//   role: Role;
+//   email: string;
+//   firstname: string;
+//   lastname: string;
+//   phone?: string; // Optional, can be added later
+//   customerId?: string; // Optional, can be added later
+//   vendorId?: string; // Optional, can be added later
+// }
 

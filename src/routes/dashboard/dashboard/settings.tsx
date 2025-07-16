@@ -1,13 +1,52 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
+import { useStore } from '@tanstack/react-form';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { toast } from 'sonner';
+import { useDeleteProfile, useRequestDelete } from '@/hooks/profile';
+import { authStore } from '@/store/authStore';
 
 export const Route = createFileRoute('/dashboard/dashboard/settings')({
   component: SettingsPage,
 });
 
 function SettingsPage() {
+  const {user} = useStore(authStore);
+  const deleteAccountMutation = useDeleteProfile();
+  const requestDeleteMutation = useRequestDelete();
   const [showChangePassword, setShowChangePassword] = useState(false);
   const navigate = useNavigate();
+
+  const handleDelete = () => {
+    if (user.role === 'admin') {
+      if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+        deleteAccountMutation.mutate({id: user.id, permanent: true}, {
+          onSuccess: () => {
+            toast.success('Account deleted successfully!');
+            navigate({ to: '/' });
+          },
+        })
+      }
+    } else if (user.role === 'vendor') {
+      if (confirm('Submit a request to delete your account? This action will be reviewed by an admin.')) {
+        requestDeleteMutation.mutate(user.id, {
+          onSuccess: () => {
+            toast.success('Request to delete account submitted successfully!');
+            navigate({ to: '/' });
+          },
+        });
+      }
+    } else if (user.role === 'customer') {
+      if (confirm('Are you sure you want to deactivate your account? You can restore it later.')) {
+        deleteAccountMutation.mutate({id: user.id, soft: true}, {
+          onSuccess: () => {
+            toast.success('Account deactivated successfully! You can restore it later.');
+            navigate({ to: '/' });
+          },
+        });
+      }
+    }
+
+  };
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-10">
@@ -52,9 +91,20 @@ function SettingsPage() {
       {/* Danger Zone */}
       <section className="bg-white shadow rounded-lg p-6 border">
         <h2 className="text-xl font-semibold text-red-600">⚠️ Danger Zone</h2>
-        <p className="text-sm text-red-400 mb-4">Permanently delete your account. This action is irreversible.</p>
-        <button className="px-5 py-2 bg-red-600 text-white rounded-lg shadow hover:bg-red-700 transition">
-          🗑️ Delete Account
+        <p className="text-sm text-red-400 mb-4">
+          {
+            user.role === 'admin'
+              ? 'Deleting your account will remove all your data permanently.'
+              : user.role === 'customer'
+              ? 'Deactivate your account (you can restore it later).'
+              : 'Submit a request to delete your account. This action will be reviewed by an admin.'
+          }
+        </p>
+        <button 
+          onClick={handleDelete}
+          // disabled={deleteAccountMutation.isLoading || requestDeleteMutation.isLoading}
+        className="px-5 py-2 bg-red-600 text-white rounded-lg shadow hover:bg-red-700 transition">
+          🗑️ {user.role === 'admin' ? 'Delete Permanently' : user.role === 'customer' ? 'Deactivate Account' : 'Request Delete'}
         </button>
       </section>
 

@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createService, deleteService, getService, getServiceByVendor, getServices, updateService } from "@/api/ServicesApi";
 
 export const useServices = () => {
@@ -15,21 +15,37 @@ export const useService = (id: string) => {
     });
 }
 export const useCreateService = () => {
+    const queryClient = useQueryClient();
     return useMutation({
         mutationKey: ['createService'],
         mutationFn: (data: any) => createService(data),
+        onSuccess: () => {
+            // Invalidate the services query to refetch the list after creation
+            queryClient.invalidateQueries({ queryKey: ['services'] });
+        },
     });
 }
 export const useUpdateService = (id: string, data: any) => {
+    const queryClient = useQueryClient();
     return useMutation({
         mutationKey: ['updateService', id],
         mutationFn: () => updateService(id, data),
+        onSuccess: () => {
+            // Invalidate the services query to refetch the updated service
+            queryClient.invalidateQueries({ queryKey: ['service', id] });
+            queryClient.invalidateQueries({ queryKey: ['services'] });
+        },
     });
 }
 export const useDeleteService = () => {
+    const queryclient = useQueryClient();
     return useMutation({
         mutationKey: ['deleteService'],
         mutationFn: (id: string) => deleteService(id),
+        onSuccess: () => {
+            // Invalidate the services query to refetch the list after deletion
+            queryclient.invalidateQueries({ queryKey: ['services'] });
+        },
     });
 }
 export const useServiceByVendorId = (vendorId: string) => {

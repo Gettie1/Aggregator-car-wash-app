@@ -48,7 +48,7 @@ function AdminDashboardOverview() {
               </tr>
             </thead>
             <tbody className="divide-y bg-white">
-              {bookings?.slice(0, 5).map((booking: Bookings) => (
+              {bookings?.map((booking: Bookings) => (
                 <tr key={booking.id}>
                   <td className="px-4 py-2">{booking.customer}</td>
                   <td className="px-4 py-2">{booking.vendor}</td>

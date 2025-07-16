@@ -1,19 +1,37 @@
 import { Link } from "@tanstack/react-router"
-import { useStore } from "@tanstack/react-form"
 import { useState } from "react"
 import BookingModal from "../bookings/BookingModal"
 import StatCard from "@/components/statCard"
-// import { User } from "@/types/auth"
 import { authStore } from "@/store/authStore"
 import { useVehiclebyCustomerId } from "@/hooks/vehicle"
 import { useReviewsByCustomerId } from "@/hooks/reviews"
+import { useBookingsByCustomerId } from "@/hooks/bookings"
 
 function CustomerDashboardOverview() {
   const [showBookingModal, setShowBookingModal] = useState(false)
-  const { user } = useStore(authStore)
-  const { data: vehicles } = useVehiclebyCustomerId(user.id)
-  const {  data: bookings, } = useVehiclebyCustomerId(user.id)
+  const { user } = authStore.state
+  
+  const customerId = user.customerId
+  
+  const { data: vehicles } = useVehiclebyCustomerId(customerId || '')
+  const { data: bookings } = useBookingsByCustomerId(customerId || '')
   const { data: reviews } = useReviewsByCustomerId(user.id)
+  
+  // Helper function to safely get next booking
+  const getNextBooking = () => {
+    if (!bookings || bookings.length === 0) return null
+    const now = new Date()
+    return bookings.find(
+      (b: any) =>
+        b.scheduled_at &&
+        new Date(b.scheduled_at) > now &&
+        b.status !== "completed" &&
+        b.status !== "cancelled"
+    )
+  }
+  
+  const nextBooking = getNextBooking()
+  const completedBookings = bookings ? bookings.filter((b: any) => b.status === "completed") : []
   return (
     <div className="space-y-8">
       {/* Welcome */}
@@ -32,32 +50,12 @@ function CustomerDashboardOverview() {
         <StatCard
           icon="📅"
           title="Upcoming Booking"
-          value={
-        bookings && bookings.length > 0
-          ? (() => {
-          const now = new Date();
-          const upcoming = bookings.find(
-            (b: any) =>
-              b.scheduled_at &&
-              new Date(b.scheduled_at) > now &&
-              b.status !== "completed" &&
-              b.status !== "cancelled"
-          );
-          return upcoming
-            ? new Date(upcoming.scheduled_at).toLocaleString()
-            : "None";
-            })()
-          : "None"
-          }
+          value={nextBooking ? new Date(nextBooking.scheduled_at).toLocaleString() : "None"}
         />
         <StatCard
           icon="✅"
           title="Completed Bookings"
-          value={
-        bookings
-          ? bookings.filter((b: any) => b.status === "completed").length
-          : 0
-          }
+          value={completedBookings.length}
         />
         <StatCard icon="⭐" title="Reviews Submitted" value={reviews ? reviews.length : 0} />
       </div>
@@ -65,33 +63,27 @@ function CustomerDashboardOverview() {
       {/* Next Booking Details */}
       <div className="bg-white p-6 rounded shadow">
         <h2 className="text-lg font-semibold mb-2">Your Next Booking</h2>
-        <ul className="text-gray-700 space-y-1">
-          <strong>Service:</strong> {bookings && bookings.length > 0 && bookings[0].service ? bookings[0].service.name : "N/A"}
+        {nextBooking ? (
+          <ul className="text-gray-700 space-y-1">
             <li>
-            <strong>Vehicle:</strong>{" "}
-            {bookings && bookings.length > 0 && bookings[0].vehicle
-              ? bookings[0].vehicle.plate || bookings[0].vehicle.model
-              : "N/A"}
+              <strong>Service:</strong> {nextBooking.service?.name || "N/A"}
             </li>
             <li>
-            <strong>Date & Time:</strong>{" "}
-            {bookings && bookings.length > 0 && bookings[0].time
-              ? new Date(bookings[0].scheduled_at).toLocaleString()
-              : "N/A"}
+              <strong>Vehicle:</strong> {nextBooking.vehicle?.plate || nextBooking.vehicle?.model || "N/A"}
             </li>
             <li>
-            <strong>Vendor:</strong>{" "}
-            {bookings && bookings.length > 0 && bookings[0].vendor
-              ? bookings[0].vendor.bussiness_name
-              : "N/A"}
+              <strong>Date & Time:</strong> {new Date(nextBooking.scheduled_at).toLocaleString()}
             </li>
             <li>
-            <strong>Location:</strong>{" "}
-            {bookings && bookings.length > 0 && bookings[0].location
-              ? bookings[0].location
-              : "Nairobi"}
+              <strong>Vendor:</strong> {nextBooking.vendor?.business_name || "N/A"}
             </li>
-        </ul>
+            <li>
+              <strong>Location:</strong> {nextBooking.location || "Nairobi"}
+            </li>
+          </ul>
+        ) : (
+          <p className="text-gray-500">No upcoming bookings. Ready to book a wash?</p>
+        )}
       </div>
 
       {/* Recent Bookings */}
