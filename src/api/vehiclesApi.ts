@@ -1,11 +1,13 @@
+import { getHeaders } from "./profileApi";
+
 const url = 'http://localhost:4001';
 
 export const getVehicles = async () => {
     const response = await fetch(`${url}/vehicles`, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
-        },
+            'Content-Type': 'application/json'
+        }
     });
     if (!response.ok) {
         throw new Error('Failed to fetch vehicles');
@@ -18,7 +20,7 @@ export const getVehicle = async (id: string) => {
   const response = await fetch(`${url}/vehicles/${id}`, {
     method: 'GET',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     },
   });
   if (!response.ok) {
@@ -28,24 +30,75 @@ export const getVehicle = async (id: string) => {
   return jsonData;
 };
 export const getVehiclesByCustomerId = async (customerId: string) => {
-  const response = await fetch(`${url}/vehicles?customerId=${customerId}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  if (!response.ok) {
-    throw new Error('Failed to fetch vehicles for customer');
+  console.log('🔍 Fetching vehicles for customerId:', customerId);
+  
+  const apiUrl = `${url}/vehicles?customerId=${customerId}`;
+  console.log('🔍 API URL:', apiUrl);
+  
+  // Don't send Authorization header since vehicles endpoints don't require auth
+  const headers = {
+    'Content-Type': 'application/json'
+  };
+  console.log('🔍 Request headers (no auth):', headers);
+  
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: headers,
+    });
+    
+    console.log('🔍 Response status:', response.status);
+    console.log('🔍 Response ok:', response.ok);
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('🔍 Response error:', errorText);
+      throw new Error(`Failed to fetch vehicles for customer: ${errorText}`);
+    }
+    
+    const jsonData = await response.json();
+    console.log('🔍 API response successful:', jsonData);
+    console.log('🔍 Number of vehicles returned:', jsonData.length);
+    
+    // Check if backend filtered correctly, if not apply client-side filtering
+    const allBelongToCustomer = jsonData.every((vehicle: any) => 
+      String(vehicle.customer_id) === String(customerId)
+    );
+    
+    if (allBelongToCustomer) {
+      console.log('🔍 Backend filtered correctly, returning all vehicles');
+      return jsonData;
+    } else {
+      console.log('🔍 Backend did not filter, applying client-side filtering');
+      return filterVehicles(jsonData, customerId);
+    }
+    
+  } catch (error) {
+    console.error('🔍 Fetch error:', error);
+    throw error;
   }
-  const jsonData = await response.json();
-  return jsonData;
+}
+
+// Helper function to filter vehicles
+function filterVehicles(jsonData: Array<any>, customerId: string) {
+  console.log('🔍 Raw API response:', jsonData);
+  console.log('🔍 Number of vehicles returned:', jsonData.length);
+  
+  // Add client-side filtering as a fallback if backend doesn't filter properly
+  const filteredVehicles = jsonData.filter((vehicle: any) => {
+    console.log(`🔍 Vehicle ${vehicle.id}: customer_id=${vehicle.customer_id}, looking for=${customerId}`);
+    return String(vehicle.customer_id) === String(customerId);
+  });
+  
+  console.log('🔍 Filtered vehicles count:', filteredVehicles.length);
+  console.log('🔍 Filtered vehicles:', filteredVehicles);
+  
+  return filteredVehicles;
 }
 export const createVehicle = async (data: any) => {
   const response = await fetch(`${url}/vehicles`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: getHeaders(),
     body: JSON.stringify(data),
   });
   if (!response.ok) {
@@ -58,9 +111,7 @@ export const createVehicle = async (data: any) => {
 export const updateVehicle = async (id: string, data: any) => {
   const response = await fetch(`${url}/vehicles/${id}`, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: getHeaders(),
     body: JSON.stringify(data),
   });
   if (!response.ok) {
@@ -73,9 +124,7 @@ export const updateVehicle = async (id: string, data: any) => {
 export const deleteVehicle = async (id: string) => {
   const response = await fetch(`${url}/vehicles/${id}`, {
     method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: getHeaders(), 
   });
   if (!response.ok) {
     throw new Error('Failed to delete vehicle');

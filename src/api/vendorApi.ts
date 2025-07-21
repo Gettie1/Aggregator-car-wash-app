@@ -1,11 +1,11 @@
+import { getHeaders } from "./profileApi";
+
 const url = 'http://localhost:4001';
 
 export const getVendors = async () => {
     const response = await fetch(`${url}/vendors`, {
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: getHeaders(),
     });
     if (!response.ok) {
         throw new Error('Failed to fetch vendors');
@@ -16,9 +16,7 @@ export const getVendors = async () => {
 export const getVendor = async (id: string) => {
     const response = await fetch(`${url}/vendors/${id}`, {
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: getHeaders(),
     });
     if (!response.ok) {
         throw new Error('Failed to fetch vendor');
@@ -29,9 +27,7 @@ export const getVendor = async (id: string) => {
 export const createVendor = async (data: any) => {
     const response = await fetch(`${url}/vendors`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: getHeaders(),
         body: JSON.stringify(data),
     });
     if (!response.ok) {
@@ -43,9 +39,7 @@ export const createVendor = async (data: any) => {
 export const updateVendor = async (id: string, data: any) => {
     const response = await fetch(`${url}/vendors/${id}`, {
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: getHeaders(),
         body: JSON.stringify(data),
     });
     if (!response.ok) {
@@ -57,9 +51,7 @@ export const updateVendor = async (id: string, data: any) => {
 export const deleteVendor = async (id: string) => {
     const response = await fetch(`${url}/vendors/${id}`, {
         method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: getHeaders(),
     });
     if (!response.ok) {
         throw new Error('Failed to delete vendor');

@@ -1,10 +1,13 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router';
+import { useState } from 'react';
 import type { QueryClient } from '@tanstack/react-query';
 // import { useAuth } from '@/hooks/useAuth'; // custom context hook
 import Sidebar from '@/components/Sidebar'; // Sidebar component
 import { Header } from '@/components/Header';
 import { authStore } from '@/store/authStore';
 import Footer from '@/components/Footer';
+import ChatbotModal from '@/components/modals/ChatBot';
+import ChatBot from '@/components/ui/Chatbot';
 
 type DashboardRouteContext = {
   queryClient: QueryClient;
@@ -35,6 +38,7 @@ export const Route = createFileRoute('/dashboard/dashboard')<DashboardRouteConte
 
 function DashboardLayout() {
   // const { user } = useAuth(); // Must include `role` in user object
+  const [chatOpen, setChatOpen] = useState(false);
 
   return (
     <div className="flex flex-col h-screen">
@@ -43,9 +47,24 @@ function DashboardLayout() {
         <Sidebar />
         <main className="flex-1 p-6 overflow-auto">
           <Outlet />
-        </main>
-      </div>
-        <Footer />
+
+            </main>
+            </div>
+          {/* 🧠 Chatbot Modal */}
+          {/* <ChatbotModal isOpen={chatOpen} onClose={() => setChatOpen(false)} /> */}
+          <ChatBot/>
+          
+      {/* Footer */}
+      <Footer />
+      
+      {/* Chatbot Button - positioned above footer */}
+      {/* <button
+        onClick={() => setChatOpen(true)}
+        className="fixed right-12 bottom-12 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-colors z-50"
+        style={{ bottom: '120px' }}
+      >
+        💬
+      </button> */}
     </div>
   );
 }

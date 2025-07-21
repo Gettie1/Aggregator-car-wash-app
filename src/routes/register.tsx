@@ -44,7 +44,7 @@ function RegisterComponent() {
 
   mutate({ ...value, role: mappedRole }, {
     onSuccess: () => {
-      router.navigate({ to: '/signin' })
+      router.navigate({ to: '/CreateAccount' })
     },
     onError: (err: any) => {
       console.error('Registration failed:', err)

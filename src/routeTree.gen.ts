@@ -13,6 +13,7 @@ import { Route as SigninRouteImport } from './routes/signin'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ReadmoreRouteImport } from './routes/readmore'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as CreateAccountRouteImport } from './routes/CreateAccount'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardDashboardRouteImport } from './routes/dashboard/dashboard'
 import { Route as DashboardDashboardIndexRouteImport } from './routes/dashboard/dashboard/index'
@@ -24,6 +25,7 @@ import { Route as DashboardDashboardReviewsRouteImport } from './routes/dashboar
 import { Route as DashboardDashboardProfileRouteImport } from './routes/dashboard/dashboard/profile'
 import { Route as DashboardDashboardCustomersRouteImport } from './routes/dashboard/dashboard/customers'
 import { Route as DashboardDashboardBookingsRouteImport } from './routes/dashboard/dashboard/bookings'
+import { Route as DashboardDashboardMyBookingsRouteImport } from './routes/dashboard/dashboard/MyBookings'
 import { Route as DashboardDashboardAllReviewsRouteImport } from './routes/dashboard/dashboard/AllReviews'
 import { Route as DashboardDashboardAllBookingsRouteImport } from './routes/dashboard/dashboard/AllBookings'
 
@@ -45,6 +47,11 @@ const ReadmoreRoute = ReadmoreRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreateAccountRoute = CreateAccountRouteImport.update({
+  id: '/CreateAccount',
+  path: '/CreateAccount',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -110,6 +117,12 @@ const DashboardDashboardBookingsRoute =
     path: '/bookings',
     getParentRoute: () => DashboardDashboardRoute,
   } as any)
+const DashboardDashboardMyBookingsRoute =
+  DashboardDashboardMyBookingsRouteImport.update({
+    id: '/MyBookings',
+    path: '/MyBookings',
+    getParentRoute: () => DashboardDashboardRoute,
+  } as any)
 const DashboardDashboardAllReviewsRoute =
   DashboardDashboardAllReviewsRouteImport.update({
     id: '/AllReviews',
@@ -125,6 +138,7 @@ const DashboardDashboardAllBookingsRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/CreateAccount': typeof CreateAccountRoute
   '/about': typeof AboutRoute
   '/readmore': typeof ReadmoreRoute
   '/register': typeof RegisterRoute
@@ -132,6 +146,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/dashboard': typeof DashboardDashboardRouteWithChildren
   '/dashboard/dashboard/AllBookings': typeof DashboardDashboardAllBookingsRoute
   '/dashboard/dashboard/AllReviews': typeof DashboardDashboardAllReviewsRoute
+  '/dashboard/dashboard/MyBookings': typeof DashboardDashboardMyBookingsRoute
   '/dashboard/dashboard/bookings': typeof DashboardDashboardBookingsRoute
   '/dashboard/dashboard/customers': typeof DashboardDashboardCustomersRoute
   '/dashboard/dashboard/profile': typeof DashboardDashboardProfileRoute
@@ -144,12 +159,14 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/CreateAccount': typeof CreateAccountRoute
   '/about': typeof AboutRoute
   '/readmore': typeof ReadmoreRoute
   '/register': typeof RegisterRoute
   '/signin': typeof SigninRoute
   '/dashboard/dashboard/AllBookings': typeof DashboardDashboardAllBookingsRoute
   '/dashboard/dashboard/AllReviews': typeof DashboardDashboardAllReviewsRoute
+  '/dashboard/dashboard/MyBookings': typeof DashboardDashboardMyBookingsRoute
   '/dashboard/dashboard/bookings': typeof DashboardDashboardBookingsRoute
   '/dashboard/dashboard/customers': typeof DashboardDashboardCustomersRoute
   '/dashboard/dashboard/profile': typeof DashboardDashboardProfileRoute
@@ -163,6 +180,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/CreateAccount': typeof CreateAccountRoute
   '/about': typeof AboutRoute
   '/readmore': typeof ReadmoreRoute
   '/register': typeof RegisterRoute
@@ -170,6 +188,7 @@ export interface FileRoutesById {
   '/dashboard/dashboard': typeof DashboardDashboardRouteWithChildren
   '/dashboard/dashboard/AllBookings': typeof DashboardDashboardAllBookingsRoute
   '/dashboard/dashboard/AllReviews': typeof DashboardDashboardAllReviewsRoute
+  '/dashboard/dashboard/MyBookings': typeof DashboardDashboardMyBookingsRoute
   '/dashboard/dashboard/bookings': typeof DashboardDashboardBookingsRoute
   '/dashboard/dashboard/customers': typeof DashboardDashboardCustomersRoute
   '/dashboard/dashboard/profile': typeof DashboardDashboardProfileRoute
@@ -184,6 +203,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/CreateAccount'
     | '/about'
     | '/readmore'
     | '/register'
@@ -191,6 +211,7 @@ export interface FileRouteTypes {
     | '/dashboard/dashboard'
     | '/dashboard/dashboard/AllBookings'
     | '/dashboard/dashboard/AllReviews'
+    | '/dashboard/dashboard/MyBookings'
     | '/dashboard/dashboard/bookings'
     | '/dashboard/dashboard/customers'
     | '/dashboard/dashboard/profile'
@@ -203,12 +224,14 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/CreateAccount'
     | '/about'
     | '/readmore'
     | '/register'
     | '/signin'
     | '/dashboard/dashboard/AllBookings'
     | '/dashboard/dashboard/AllReviews'
+    | '/dashboard/dashboard/MyBookings'
     | '/dashboard/dashboard/bookings'
     | '/dashboard/dashboard/customers'
     | '/dashboard/dashboard/profile'
@@ -221,6 +244,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/CreateAccount'
     | '/about'
     | '/readmore'
     | '/register'
@@ -228,6 +252,7 @@ export interface FileRouteTypes {
     | '/dashboard/dashboard'
     | '/dashboard/dashboard/AllBookings'
     | '/dashboard/dashboard/AllReviews'
+    | '/dashboard/dashboard/MyBookings'
     | '/dashboard/dashboard/bookings'
     | '/dashboard/dashboard/customers'
     | '/dashboard/dashboard/profile'
@@ -241,6 +266,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CreateAccountRoute: typeof CreateAccountRoute
   AboutRoute: typeof AboutRoute
   ReadmoreRoute: typeof ReadmoreRoute
   RegisterRoute: typeof RegisterRoute
@@ -276,6 +302,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/CreateAccount': {
+      id: '/CreateAccount'
+      path: '/CreateAccount'
+      fullPath: '/CreateAccount'
+      preLoaderRoute: typeof CreateAccountRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -355,6 +388,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardDashboardBookingsRouteImport
       parentRoute: typeof DashboardDashboardRoute
     }
+    '/dashboard/dashboard/MyBookings': {
+      id: '/dashboard/dashboard/MyBookings'
+      path: '/MyBookings'
+      fullPath: '/dashboard/dashboard/MyBookings'
+      preLoaderRoute: typeof DashboardDashboardMyBookingsRouteImport
+      parentRoute: typeof DashboardDashboardRoute
+    }
     '/dashboard/dashboard/AllReviews': {
       id: '/dashboard/dashboard/AllReviews'
       path: '/AllReviews'
@@ -375,6 +415,7 @@ declare module '@tanstack/react-router' {
 interface DashboardDashboardRouteChildren {
   DashboardDashboardAllBookingsRoute: typeof DashboardDashboardAllBookingsRoute
   DashboardDashboardAllReviewsRoute: typeof DashboardDashboardAllReviewsRoute
+  DashboardDashboardMyBookingsRoute: typeof DashboardDashboardMyBookingsRoute
   DashboardDashboardBookingsRoute: typeof DashboardDashboardBookingsRoute
   DashboardDashboardCustomersRoute: typeof DashboardDashboardCustomersRoute
   DashboardDashboardProfileRoute: typeof DashboardDashboardProfileRoute
@@ -389,6 +430,7 @@ interface DashboardDashboardRouteChildren {
 const DashboardDashboardRouteChildren: DashboardDashboardRouteChildren = {
   DashboardDashboardAllBookingsRoute: DashboardDashboardAllBookingsRoute,
   DashboardDashboardAllReviewsRoute: DashboardDashboardAllReviewsRoute,
+  DashboardDashboardMyBookingsRoute: DashboardDashboardMyBookingsRoute,
   DashboardDashboardBookingsRoute: DashboardDashboardBookingsRoute,
   DashboardDashboardCustomersRoute: DashboardDashboardCustomersRoute,
   DashboardDashboardProfileRoute: DashboardDashboardProfileRoute,
@@ -405,6 +447,7 @@ const DashboardDashboardRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CreateAccountRoute: CreateAccountRoute,
   AboutRoute: AboutRoute,
   ReadmoreRoute: ReadmoreRoute,
   RegisterRoute: RegisterRoute,

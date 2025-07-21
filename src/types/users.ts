@@ -47,6 +47,9 @@ business_name: string
 tax_id: string
 business_address: string
 status: string
+services:{
+  name: string
+}
 }
 }
 export interface VendorDetails {
@@ -57,10 +60,14 @@ export interface VendorDetails {
   status: 'active' | 'inactive' | 'pending'
   created_at: string
   updated_at: string
+  services?:{
+    name: string
+  }
 }
 export interface VendorResponse {}
 export interface VehiclesDetails {
-  id: number  
+  customer_id: number
+  id: number
   make: string
   model: string 
   year: number

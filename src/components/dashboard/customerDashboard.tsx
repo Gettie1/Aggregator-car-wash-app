@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router"
 import { useState } from "react"
-import BookingModal from "../bookings/BookingModal"
+import BookingModal from "../modals/BookingModal"
+import type { Bookings } from "@/types/users"
 import StatCard from "@/components/statCard"
 import { authStore } from "@/store/authStore"
 import { useVehiclebyCustomerId } from "@/hooks/vehicle"
@@ -89,22 +90,38 @@ function CustomerDashboardOverview() {
       {/* Recent Bookings */}
       <div>
         <h2 className="text-lg font-semibold mb-2">Recent Bookings</h2>
-        <ul className="divide-y border rounded shadow bg-white">
-          <li className="p-4 flex justify-between">
-            <div>
-              <div className="font-medium">June 24 - KCU 223D</div>
-              <div className="text-sm text-gray-500">Interior & Exterior</div>
-            </div>
-            <span className="bg-green-100 text-green-800 text-sm px-3 py-1 rounded">Completed</span>
-          </li>
-          <li className="p-4 flex justify-between">
-            <div>
-              <div className="font-medium">June 10 - KDK 121A</div>
-              <div className="text-sm text-gray-500">Exterior Only</div>
-            </div>
-            <span className="bg-red-100 text-red-800 text-sm px-3 py-1 rounded">Cancelled</span>
-          </li>
-        </ul>
+        {bookings && bookings.length > 0 ? (
+          <ul className="space-y-2">
+            {bookings.map((booking: Bookings) => (
+              <>
+                <li key={booking.id} className="bg-white p-4 rounded shadow hover:shadow-lg transition flex justify-between items-center">
+                  <div>
+                  <strong className="text-gray-800">Booking ID: {booking.id}</strong>
+                  <h3 className="font-semibold">{booking.service || "N/A"}</h3>
+                  <p className="text-sm text-gray-600">
+                    {new Date(booking.scheduled_at).toLocaleString()}
+                  </p>
+                  </div>
+                    <p
+                      className={`text-sm px-2 py-1 rounded 
+                      ${
+                        booking.status === "pending"
+                        ? "bg-yellow-100 text-yellow-700"
+                        : booking.status === "confirmed"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-gray-100 text-gray-700"
+                      }
+                      `}
+                    >
+                      {booking.status}
+                    </p>
+                </li>
+              </>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-gray-500">No recent bookings found.</p>
+        )}
       </div>
 
       {/* Quick Actions */}

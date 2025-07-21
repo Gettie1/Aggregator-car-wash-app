@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { createVehicle, deleteVehicle, getVehicle, getVehicles, getVehiclesByCustomerId, updateVehicle } from "@/api/vehiclesApi"
 
 export const useVehicles = () => {
@@ -24,24 +24,41 @@ export const useVehiclebyCustomerId = (customerId: string) => {
     });
 }
 export const useCreateVehicle = () => {
+    const queryClient = useQueryClient();
     return useMutation({
         mutationKey: ['createVehicle'],
         mutationFn: createVehicle,
+        onSuccess: () => {
+            // Optionally, you can invalidate the vehicles query to refetch the list
+            queryClient.invalidateQueries({ queryKey: ['vehicles'] });
+        }
 }
     );
 }
 
 export const useUpdateVehicle = (id: string, data: any) => {
+    const queryClient = useQueryClient();
     return useMutation({
         mutationKey: ['updateVehicle', id],
         mutationFn: () => updateVehicle(id, data),
+        onSuccess: () => {
+            // Invalidate the specific vehicle query to refetch updated data
+            queryClient.invalidateQueries({ queryKey: ['vehicle', id] });
+            // Optionally, you can also invalidate the vehicles list
+            queryClient.invalidateQueries({ queryKey: ['vehicles'] });
+        }
     });
 }
 
 
 export const useDeleteVehicle = () => {
+    const queryClient = useQueryClient();
     return useMutation({
         mutationKey: ['deleteVehicle'],
         mutationFn: (id: string) => deleteVehicle(id),
+        onSuccess: () => {
+            // Optionally, you can invalidate the vehicles query to refetch the list
+            queryClient.invalidateQueries({ queryKey: ['vehicles'] });
+        }
     });
 }

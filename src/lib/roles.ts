@@ -43,10 +43,10 @@ const NavLinks = [
         label: "Customer",
         links: [
             { to: "/dashboard/dashboard", icon: Home, title: "Dashboard" },
-            { to: "/dashboard/dashboard/bookings", icon: CalendarCheck, title: "My Bookings" },
+            { to: "/dashboard/dashboard/MyBookings", icon: CalendarCheck, title: "My Bookings" },
             { to: "/dashboard/dashboard/vehicles", icon: CarIcon, title: "Vehicles" },
             { to: "/dashboard/dashboard/reviews", icon: Star, title: "Reviews" },
-            { to: "/dashboard/dashboard/services", icon: User, title: "View available services" }
+            { to: "/dashboard/dashboard/services", icon: User, title: "View services" }
         ]
     }
 
