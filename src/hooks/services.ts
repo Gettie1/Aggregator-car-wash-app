@@ -6,8 +6,8 @@ export const useServices = () => {
         queryKey: ['services'],
         queryFn: () => getServices(),
     });
-    }
-export const useService = (id: string) => {
+}
+export const useService = (id: number) => {
     return useQuery({
         queryKey: ['service', id],
         queryFn: () => getService(id),
@@ -25,7 +25,7 @@ export const useCreateService = () => {
         },
     });
 }
-export const useUpdateService = (id: string, data: any) => {
+export const useUpdateService = (id: number, data: any) => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationKey: ['updateService', id],
@@ -41,14 +41,14 @@ export const useDeleteService = () => {
     const queryclient = useQueryClient();
     return useMutation({
         mutationKey: ['deleteService'],
-        mutationFn: (id: string) => deleteService(id),
+        mutationFn: (id: number) => deleteService(id),
         onSuccess: () => {
             // Invalidate the services query to refetch the list after deletion
             queryclient.invalidateQueries({ queryKey: ['services'] });
         },
     });
 }
-export const useServiceByVendorId = (vendorId: string) => {
+export const useServiceByVendorId = (vendorId: number) => {
     return useQuery({
         queryKey: ['services', vendorId],
         queryFn: () => getServiceByVendor(vendorId),

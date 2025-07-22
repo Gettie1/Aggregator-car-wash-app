@@ -7,9 +7,9 @@ export const useBookings = () => {
         queryFn: () => getBookings(),
     });
 }
-export const useBooking = (id: string) => {
+export const useBooking = (id: number) => {
     return useQuery({
-        queryKey: ['booking',id],
+        queryKey: ['booking', id],
         queryFn: () => getBooking(id)
     })
 }
@@ -24,7 +24,7 @@ export const useCreateBooking = () => {
         },
     });
 }
-export const useUpdateBooking = (id: string, data: any) => {
+export const useUpdateBooking = (id: number, data: any) => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationKey: ['updateBooking', id],
@@ -40,21 +40,21 @@ export const useDeleteBooking = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationKey: ['deleteBooking'],
-        mutationFn: (id: string) => deleteBooking(id),
+        mutationFn: (id: number) => deleteBooking(id),
         onSuccess: () => {
             // Invalidate the bookings query to refetch the list after deletion
             queryClient.invalidateQueries({ queryKey: ['bookings'] });
         },
     });
 }
-export const useBookingsByVendorId = (vendorId: string) => {
+export const useBookingsByVendorId = (vendorId: number) => {
     return useQuery({
         queryKey: ['bookings', vendorId],
         queryFn: () => getBookingsByVendorId(vendorId),
         enabled: !!vendorId, // Only run the query if vendorId is truthy
     });
 }
-export const useBookingsByCustomerId = (customerId: string) => {
+export const useBookingsByCustomerId = (customerId: number) => {
     // const queryClient = useQueryClient();
     return useQuery({
         queryKey: ['bookings', 'customer', customerId],
@@ -66,7 +66,7 @@ export const useUpdateBookingStatus = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationKey: ['updateBookingStatus'],
-        mutationFn: ({ id, status }: { id: string; status: string }) => getUpdateBookingStatus(id, status),
+        mutationFn: ({ id, status }: { id: number; status: string }) => getUpdateBookingStatus(id, status),
         onSuccess: () => {
             // Invalidate the bookings query to refetch the list after status update
             queryClient.invalidateQueries({ queryKey: ['bookings'] });

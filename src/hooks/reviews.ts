@@ -8,7 +8,7 @@ export const useReviews = () => {
     });
 }
 
-export const useReview = (id: string) => {
+export const useReview = (id: number) => {
     return useQuery({
         queryKey: ['review', id],
         queryFn: () => getReview(id),
@@ -26,7 +26,7 @@ export const useCreateReview = () => {
         },
     });
 }
-export const useUpdateReview = (id: string, data: any) => {
+export const useUpdateReview = (id: number, data: any) => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationKey: ['updateReview', id],
@@ -42,7 +42,7 @@ export const useDeleteReview = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationKey: ['deleteReview'],
-        mutationFn: (id: string) => deleteReview(id),
+        mutationFn: (id: number) => deleteReview(id),
         onSuccess: () => {
             // Invalidate the reviews query to refetch the list after deletion
             queryClient.invalidateQueries({ queryKey: ['reviews'] });
@@ -50,21 +50,21 @@ export const useDeleteReview = () => {
     });
 }
 
-export const useReviewsByVehicleId = (vehicleId: string) => {
+export const useReviewsByVehicleId = (vehicleId: number) => {
     return useQuery({
         queryKey: ['reviews', vehicleId],
         queryFn: () => getReviewsByVehicleId(vehicleId),
         enabled: !!vehicleId, // Only run the query if vehicleId is truthy
     });
 }
-export const useReviewsByCustomerId = (customerId: string) => {
+export const useReviewsByCustomerId = (customerId: number) => {
     return useQuery({
         queryKey: ['reviews', customerId],
         queryFn: () => getReviewsByCustomerId(customerId),
         enabled: !!customerId, 
     });
 }
-export const useReviewsByVendorId = (vendorId: string) => {
+export const useReviewsByVendorId = (vendorId: number) => {
     return useQuery({
         queryKey: ['reviews', 'vendor', vendorId],
         queryFn: () => getReviewsByVendorId(vendorId), // Adjust this to fetch reviews by vendor ID if your API supports it

@@ -16,7 +16,7 @@ export const getVehicles = async () => {
     return jsonData;
 };
 
-export const getVehicle = async (id: string) => {
+export const getVehicle = async (id: number) => {
   const response = await fetch(`${url}/vehicles/${id}`, {
     method: 'GET',
     headers: {
@@ -29,7 +29,7 @@ export const getVehicle = async (id: string) => {
   const jsonData = await response.json();
   return jsonData;
 };
-export const getVehiclesByCustomerId = async (customerId: string) => {
+export const getVehiclesByCustomerId = async (customerId: number) => {
   console.log('🔍 Fetching vehicles for customerId:', customerId);
   
   const apiUrl = `${url}/vehicles?customerId=${customerId}`;
@@ -80,7 +80,7 @@ export const getVehiclesByCustomerId = async (customerId: string) => {
 }
 
 // Helper function to filter vehicles
-function filterVehicles(jsonData: Array<any>, customerId: string) {
+function filterVehicles(jsonData: Array<any>, customerId: number) {
   console.log('🔍 Raw API response:', jsonData);
   console.log('🔍 Number of vehicles returned:', jsonData.length);
   
@@ -108,7 +108,7 @@ export const createVehicle = async (data: any) => {
   return jsonData;
 };
 
-export const updateVehicle = async (id: string, data: any) => {
+export const updateVehicle = async (id: number, data: any) => {
   const response = await fetch(`${url}/vehicles/${id}`, {
     method: 'PUT',
     headers: getHeaders(),
@@ -121,7 +121,7 @@ export const updateVehicle = async (id: string, data: any) => {
   return jsonData;
 };
 
-export const deleteVehicle = async (id: string) => {
+export const deleteVehicle = async (id: number) => {
   const response = await fetch(`${url}/vehicles/${id}`, {
     method: 'DELETE',
     headers: getHeaders(), 

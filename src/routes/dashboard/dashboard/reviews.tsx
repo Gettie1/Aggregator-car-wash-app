@@ -1,9 +1,9 @@
 import { useStore } from '@tanstack/react-form'
 import { createFileRoute } from '@tanstack/react-router'
 import { toast } from 'sonner'
-import type { Reviews } from '@/types/users'
+import type { Review, Reviews } from '@/types/users'
 import { authStore } from '@/store/authStore'
-import { useDeleteReview, useReviewsByVendorId } from '@/hooks/reviews'
+import { useDeleteReview, useReviewsByCustomerId} from '@/hooks/reviews'
 
 export const Route = createFileRoute('/dashboard/dashboard/reviews')({
   component: RouteComponent,
@@ -11,11 +11,11 @@ export const Route = createFileRoute('/dashboard/dashboard/reviews')({
 
 function RouteComponent() {
   const { user } = useStore(authStore)
-  const {data:reviews } = useReviewsByVendorId(user.vendorId || '')
+  const {data:reviews } = useReviewsByCustomerId(user.customerId ?? 0)
   const deleteReviewMutation = useDeleteReview()
   const handleDelete = (reviewId: number) => {
     if (window.confirm('Are you sure you want to delete this review?')) {
-      deleteReviewMutation.mutate(reviewId.toString())
+      deleteReviewMutation.mutate(reviewId)
     }
     toast.success('Review deleted successfully!')
   }
@@ -29,7 +29,7 @@ function RouteComponent() {
         <thead className="bg-gray-50">
           <tr>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer ID</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">vendor Nme</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Booking ID</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vehicle ID</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</th>
@@ -39,14 +39,14 @@ function RouteComponent() {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {reviews?.map((review : Reviews) => (
+          {reviews?.map((review : Review) => (
             <tr key={review.id}>
               <td className="px-6 py-4 whitespace-nowrap">{review.id}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{review.customer_id}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{review.booking_id}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{review.vehicle?.license_plate}</td>
+              <td className="px-6 py-4 whitespace-nowrap">{review.vendor}</td>
+              <td className="px-6 py-4 whitespace-nowrap">{review.service}</td>
+              <td className="px-6 py-4 whitespace-nowrap">{review.vehicle}</td>
               <td className="px-6 py-4 whitespace-nowrap">{review.rating}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{review.comment}</td>
+              <td className="px-6 py-4 whitespace-nowrap">{review.comment || 'No comment'}</td>
               <td className="px-6 py-4 whitespace-nowrap">{new Date(review.created_at).toLocaleDateString()}</td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <button
@@ -63,12 +63,12 @@ function RouteComponent() {
     </div>
     {/* customer profile cards */}
     <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {reviews?.map((review: Reviews)=> (
-        <div key={review.customer_id} 
-         className="bg-white  rounded-lg p-4 flex flex-col items-center space-x-4"
-          >
-            <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center text-xl font-bold text-blue-700">
-              {review.customer?.firstname?? 'U'}
+      {reviews?.map((review: Reviews) => (
+        <div key={review.customer_id}
+          className="bg-white  rounded-lg p-4 flex flex-col items-center space-x-4"
+        >
+          <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center text-xl font-bold text-blue-700">
+            {review.customer?.firstname ?? 'U'}
             </div>
             <div>
               <p className="text-lg font-semibold">

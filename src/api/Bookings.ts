@@ -13,7 +13,7 @@ export const getBookings = async () => {
     const jsonData = await response.json();
     return jsonData;
 };
-export const getBooking = async (id: string) => {
+export const getBooking = async (id: number) => {
     const response = await fetch(`${url}/${id}`, {
         method: 'GET',
         headers: getHeaders(),
@@ -36,7 +36,7 @@ export const createBooking = async (data: any) => {
     const jsonData = await response.json();
     return jsonData;
 };
-export const updateBooking = async (id: string, data: any) => {
+export const updateBooking = async (id: number, data: any) => {
     const response = await fetch(`${url}/${id}`, {
         method: 'PUT',
         headers: getHeaders(),
@@ -48,7 +48,7 @@ export const updateBooking = async (id: string, data: any) => {
     const jsonData = await response.json();
     return jsonData;
 };
-export const deleteBooking = async (id: string) => {
+export const deleteBooking = async (id: number) => {
     const response = await fetch(`${url}/${id}`, {
         method: 'DELETE',
         headers: getHeaders(),
@@ -58,7 +58,7 @@ export const deleteBooking = async (id: string) => {
     }
     return { message: 'Booking deleted successfully' };
 };
-export const getBookingsByCustomerId = async (customerId: string) => {
+export const getBookingsByCustomerId = async (customerId: number) => {
     const response = await fetch(`${url}/customer/${customerId}`, {
         method: 'GET',
         headers: getHeaders(),
@@ -69,7 +69,7 @@ export const getBookingsByCustomerId = async (customerId: string) => {
     const jsonData = await response.json();
     return jsonData;
 };
-export const getBookingsByVendorId = async (vendorId: string) => {
+export const getBookingsByVendorId = async (vendorId: number) => {
     const response = await fetch(`${url}/vendor/${vendorId}`, {
         method: 'GET',
         headers: getHeaders(),
@@ -81,7 +81,7 @@ export const getBookingsByVendorId = async (vendorId: string) => {
     return jsonData;
 };
 
-export const getUpdateBookingStatus = async (id: string, status: string) => {
+export const getUpdateBookingStatus = async (id: number, status: string) => {
     const response = await fetch(`${url}/${id}/status`, {
         method: 'PATCH',
         headers: getHeaders(),

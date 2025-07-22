@@ -1,15 +1,15 @@
 // types/vendor.ts
 export type Customer = {
-  firstName: string
-  lastName: string
-  email: string
-  customer:{
     id: number
     address: string | null
     phone_number: string | null
     created_at: string | null
     updated_at: string | null
-  } | null
+    profile:{
+      firstName: string
+      lastName: string
+      email: string
+         } | null
 }
 
 // export interface Customers {
@@ -42,9 +42,9 @@ export type Vendor = {
   lastName: string
   email: string
   vendor:{
-id: string
+id: number
 business_name: string
-tax_id: string
+tax_id: number
 business_address: string
 status: string
 services:{
@@ -55,7 +55,7 @@ services:{
 export interface VendorDetails {
   id: number
   business_name: string
-  tax_id: string
+  tax_id: number
   business_address: string
   status: 'active' | 'inactive' | 'pending'
   created_at: string
@@ -73,6 +73,16 @@ export interface VehiclesDetails {
   year: number
   color: string
   license_plate: string
+}
+export type Review = {
+  id: number
+  vehicle: number
+  customer_id: number
+  rating: number
+  comment: string
+  vendor: string
+  service: string
+  created_at: string
 }
 export type Reviews = {
   id: number
@@ -97,7 +107,7 @@ export type Reviews = {
   vendor?: {
     id: number
     business_name: string
-    tax_id: string
+    tax_id: number
     business_address: string
   }
   service?: {
@@ -125,6 +135,7 @@ export type Bookings = {
   vendor: string
   service: string
   vehicle: string
+  servicePrice: string
   
 }
 export type Services = {
@@ -135,5 +146,8 @@ export type Services = {
   duration: number
   created_at: string
   updated_at: string
+  vendor:{
+    id:number
+  }
 }
   

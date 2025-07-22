@@ -13,7 +13,7 @@ export const getVendors = async () => {
     const jsonData = await response.json();
     return jsonData;
 }
-export const getVendor = async (id: string) => {
+export const getVendor = async (id: number) => {
     const response = await fetch(`${url}/vendors/${id}`, {
         method: 'GET',
         headers: getHeaders(),
@@ -36,7 +36,7 @@ export const createVendor = async (data: any) => {
     const jsonData = await response.json();
     return jsonData;
 };
-export const updateVendor = async (id: string, data: any) => {
+export const updateVendor = async (id: number, data: any) => {
     const response = await fetch(`${url}/vendors/${id}`, {
         method: 'PUT',
         headers: getHeaders(),
@@ -48,7 +48,7 @@ export const updateVendor = async (id: string, data: any) => {
     const jsonData = await response.json();
     return jsonData;
 };
-export const deleteVendor = async (id: string) => {
+export const deleteVendor = async (id: number) => {
     const response = await fetch(`${url}/vendors/${id}`, {
         method: 'DELETE',
         headers: getHeaders(),

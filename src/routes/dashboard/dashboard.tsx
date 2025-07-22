@@ -1,12 +1,12 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router';
-import { useState } from 'react';
+// import { useState } from 'react';
 import type { QueryClient } from '@tanstack/react-query';
 // import { useAuth } from '@/hooks/useAuth'; // custom context hook
 import Sidebar from '@/components/Sidebar'; // Sidebar component
 import { Header } from '@/components/Header';
 import { authStore } from '@/store/authStore';
 import Footer from '@/components/Footer';
-import ChatbotModal from '@/components/modals/ChatBot';
+// import ChatbotModal from '@/components/modals/ChatBot';
 import ChatBot from '@/components/ui/Chatbot';
 
 type DashboardRouteContext = {
@@ -38,7 +38,7 @@ export const Route = createFileRoute('/dashboard/dashboard')<DashboardRouteConte
 
 function DashboardLayout() {
   // const { user } = useAuth(); // Must include `role` in user object
-  const [chatOpen, setChatOpen] = useState(false);
+  // const [chatOpen, setChatOpen] = useState(false);
 
   return (
     <div className="flex flex-col h-screen">

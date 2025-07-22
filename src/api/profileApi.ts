@@ -36,7 +36,7 @@ export const getProfiles = async () => {
   }
   return jsonData;
 }
-export const getProfile = async (id: string) => {
+export const getProfile = async (id: number) => {
   const response = await fetch(`${url}/${id}`, {
     method: 'GET',
     headers: getHeaders(),
@@ -47,7 +47,7 @@ export const getProfile = async (id: string) => {
   }
   return jsonData;
 }
- export const updateProfile = async (id: string, data: any) => {
+ export const updateProfile = async (id: number, data: any) => {
   const response = await fetch(`${url}/${id}`, {
     method: 'PATCH',
     headers:getHeaders(),
@@ -59,7 +59,7 @@ export const getProfile = async (id: string) => {
   }
   return jsonData;  
 }
- export const deleteProfile = async (id: string, soft?: boolean, permanent?: boolean) => {
+ export const deleteProfile = async (id: number, soft?: boolean, permanent?: boolean) => {
   const response = await fetch(`${url}/${id}`, {
     method: 'DELETE',
     headers: getHeaders(),
@@ -71,7 +71,7 @@ export const getProfile = async (id: string) => {
   }
   return jsonData;
 }
- export const requestDeleteAccount = async (id: string) => {
+ export const requestDeleteAccount = async (id: number) => {
   const response = await fetch(`${url}/request-delete/${id}`, {
     method: 'POST',
     headers: getHeaders(),

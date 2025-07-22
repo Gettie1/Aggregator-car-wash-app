@@ -1,62 +1,84 @@
 import { useStore } from "@tanstack/react-form";
 import { useState } from "react";
-import type { VehiclesDetails, Vendor, VendorDetails } from "@/types/users";
-// import type { User } from "@/types/auth";
+import type { VehiclesDetails, VendorDetails } from "@/types/users";
 import { authStore } from "@/store/authStore";
 import { useVendors } from "@/hooks/vendors";
-import { useCustomer } from "@/hooks/customers";
 import { useVehiclebyCustomerId } from "@/hooks/vehicle";
+import { useServiceByVendorId } from "@/hooks/services";
+import { useCreateBooking } from "@/hooks/bookings";
 
 export interface BookingModalProps {
   isOpen: boolean;
   onClose: () => void;
-  // user: User;
-  // vehicles: any[]; // Replace with actual vehicle type
 }
 
+function BookingModal({ isOpen, onClose }: BookingModalProps) {
+  const { data: vendors } = useVendors();
+  const { user } = useStore(authStore);
+  const { data: vehicles } = useVehiclebyCustomerId(user.customerId ?? 0);
+  const [selectedVendor, setSelectedVendor] = useState<number | null>(null);
+  const { data: services } = useServiceByVendorId(selectedVendor ?? 0);
 
-function BookingModal({ isOpen, onClose}: BookingModalProps) {
-  const {data: vendors} = useVendors();
-  const { user: authUser } = useStore(authStore);
-  const {data: customers} = useCustomer(authUser.customerId || "");
-  const {data: vehicles} = useVehiclebyCustomerId(authUser.customerId || "");
-  const [selectedVendor, setSelectedVendor] = useState<string>("");
-  
-  // Debug logging
-  console.log('🔍 AuthUser:', authUser);
-  console.log('🔍 AuthUser customerId:', authUser.customerId);
-  console.log('🔍 Vehicles data:', vehicles);
-  console.log('🔍 Vehicles length:', vehicles?.length);
-  
-  if (!isOpen) {
-    return null;
-  }
+  const handleCreateBookingMutation = useCreateBooking();
+  const [formData, setFormData] = useState({
+    customerId: user.customerId,
+    vehiclePlateNo: "",
+    vendorName: "",
+    serviceName: "",
+    location: "",
+    scheduled_at: "",
+    payment_method: ""
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleCreateBookingMutation.mutate({ ...formData });
+    setFormData({
+      customerId: user.customerId,
+      vehiclePlateNo: "",
+      vendorName: "",
+      serviceName: "",
+      location: "",
+      scheduled_at: "",
+      payment_method: ""
+    });
+    onClose();
+  };
+
+  if (!isOpen) return null;
 
   return (
     <>
-      {/* display booking data in a form for a user to a booking */}
-      <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={onClose}></div>
-      <div className="fixed inset-0 flex items-center justify-center z-50">
-        <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
-          <h2 className="text-xl font-semibold mb-4">Book a Wash</h2>
-            <form onSubmit={(e) => e.preventDefault()}>
+      {/* Floating modal box */}
+      <div className="absolute z-50 top-24 left-1/2 -translate-x-1/2 flex items-center justify-center w-full max-w-md">
+        <div className="bg-white rounded-2xl shadow-md p-8 w-full border border-gray-200">
+          <h2 className="text-2xl font-bold mb-6 text-blue-700 text-center">Book a Wash</h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Customer Id</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Customer Id</label>
               <input
                 type="text"
-                value={authUser.customerId}
+                value={user.customerId}
                 readOnly
-                className="mt-1 block p-1 w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="block w-full p-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-500"
               />
             </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 m-1">Vehicle</label>
-              
-              <select className="mt-1 block p-1 w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Vehicle</label>
+              <select
+                name="vehiclePlateNo"
+                value={formData.vehiclePlateNo}
+                onChange={handleChange}
+                className="block w-full p-2 border border-gray-300 rounded-lg"
+              >
                 <option value="">Select Vehicle</option>
                 {vehicles && vehicles.length > 0 ? (
                   vehicles.map((vehicle: VehiclesDetails) => (
-                    <option key={vehicle.id} value={vehicle.id}>
+                    <option key={vehicle.id} value={vehicle.license_plate}>
                       {vehicle.license_plate} - {vehicle.make} {vehicle.model}
                     </option>
                   ))
@@ -65,17 +87,22 @@ function BookingModal({ isOpen, onClose}: BookingModalProps) {
                 )}
               </select>
             </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 m-1">Vendor</label>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Vendor</label>
               <select
-                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                value={selectedVendor}
-                onChange={e => setSelectedVendor(e.target.value)}
+                name="vendorName"
+                value={formData.vendorName}
+                onChange={(e) => {
+                  handleChange(e);
+                  const selectedVendorData = vendors?.find((vendor: VendorDetails) => vendor.business_name === e.target.value);
+                  setSelectedVendor(selectedVendorData?.id ?? null);
+                }}
+                className="block w-full p-2 border border-gray-300 rounded-lg"
               >
                 <option value="">Select Vendor</option>
                 {Array.isArray(vendors) && vendors.length > 0 ? (
                   vendors.map((vendor: VendorDetails) => (
-                    <option key={vendor.id} value={vendor.id}>
+                    <option key={vendor.business_name} value={vendor.business_name}>
                       {vendor.business_name}
                     </option>
                   ))
@@ -85,39 +112,72 @@ function BookingModal({ isOpen, onClose}: BookingModalProps) {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Location</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
               <input
                 type="text"
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
                 placeholder="Enter Location"
-                className="mt-1 block w-full p-1 border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                className="block w-full p-2 border border-gray-300 rounded-lg"
               />
             </div>
-            <div className="mb-4">
-              <label className="block text-sm m-1 font-medium text-gray-700">Service Type</label>
-                <select className="mt-1 p-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Service Type</label>
+              <select
+                name="serviceName"
+                value={formData.serviceName}
+                onChange={handleChange}
+                className="block w-full p-2 border border-gray-300 rounded-lg"
+              >
                 <option value="">Select Service</option>
-                {vendors &&
-                  vendors
-                  .find((vendor: VendorDetails) => vendor.id === Number(selectedVendor))
-                  ?.services?.map((service: { id: string; name: string }) => (
-                    <option key={service.id} value={service.id}>
-                    {service.name}
+                {services && services.length > 0 ? (
+                  services.map((service: { id: string; name: string }) => (
+                    <option key={service.id} value={service.name}>
+                      {service.name}
                     </option>
-                  ))}
-                </select>
+                  ))
+                ) : (
+                  <option disabled>No services found</option>
+                )}
+              </select>
             </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700  m-1">Date & Time</label>
-              <input type="datetime-local" className="mt-1 block w-full border-gray-300 rounded-md p-1 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Date & Time</label>
+              <input
+                type="datetime-local"
+                name="scheduled_at"
+                value={formData.scheduled_at}
+                onChange={e => setFormData({ ...formData, scheduled_at: e.target.value })}
+                className="block w-full p-2 border border-gray-300 rounded-lg"
+              />
             </div>
-            <div className="mb-4 flex items-center justify-between">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Payment Method</label>
+              <select
+                name="payment_method"
+                value={formData.payment_method}
+                onChange={handleChange}
+                className="block w-full p-2 border border-gray-300 rounded-lg"
+              >
+                <option value="">Select Payment Method</option>
+                <option value="cash">Cash</option>
+                <option value="credit_card">Card</option>
+                <option value="mobile_money">Mobile Money</option>
+              </select>
+            </div>
+            <div className="flex items-center justify-between mt-6">
               <button
                 type="submit"
-                className="bg-blue-600 p-2 text-white py-2 rounded-md hover:bg-blue-700"
+                className="bg-blue-600 px-4 py-2 text-white rounded-lg font-semibold hover:bg-blue-700 transition"
               >
                 Book Now
               </button>
-              <button onClick={onClose} className="mt-4 text-sm text-gray-600 hover:text-gray-900 ">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-100 transition"
+              >
                 Close
               </button>
             </div>
@@ -125,8 +185,7 @@ function BookingModal({ isOpen, onClose}: BookingModalProps) {
         </div>
       </div>
     </>
-                  
-  )
+  );
 }
 
-export default BookingModal
+export default BookingModal;

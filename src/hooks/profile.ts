@@ -8,7 +8,7 @@ export const useProfiles = () => {
     });
 }
 
-export const useProfile = (id: string) => {
+export const useProfile = (id: number) => {
     return useQuery({
         queryKey: ['profile', id],
         queryFn: () => getProfile(id),
@@ -28,7 +28,7 @@ export const useCreateProfile = () => {
     });
 }
 
-export const useUpdateProfile = (id: string) => {
+export const useUpdateProfile = (id: number) => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationKey: ['updateProfile', id],
@@ -49,7 +49,7 @@ export const useDeleteProfile = () => {
     id,
     soft,
     permanent,
-  }: { id: string; soft?: boolean; permanent?: boolean }) => deleteProfile(id, soft, permanent),
+  }: { id: number; soft?: boolean; permanent?: boolean }) => deleteProfile(id, soft, permanent),
 
         onSuccess: () => {
             // Invalidate the profiles query to refetch the list after deletion
@@ -61,7 +61,7 @@ export const useRequestDelete = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationKey: ['requestDelete'],
-        mutationFn: (id: string) => requestDeleteAccount(id),
+        mutationFn: (id: number) => requestDeleteAccount(id),
         onSuccess: () => {
             // Invalidate the profiles query to refetch the list after deletion
             queryClient.invalidateQueries({ queryKey: ['profiles'] });

@@ -13,7 +13,7 @@ export const getReviews = async () => {
     const jsonData = await response.json();
     return jsonData;
 };
-export const getReview = async (id: string) => {
+export const getReview = async (id: number) => {
     const response = await fetch(`${url}/${id}`, {
         method: 'GET',
         headers: getHeaders(),
@@ -36,7 +36,7 @@ export const createReview = async (data: any) => {
     const jsonData = await response.json();
     return jsonData;
 };
-export const updateReview = async (id: string, data: any) => {
+export const updateReview = async (id: number, data: any) => {
     const response = await fetch(`${url}/${id}`, {
         method: 'PUT',
         headers: getHeaders(),
@@ -48,7 +48,7 @@ export const updateReview = async (id: string, data: any) => {
     const jsonData = await response.json();
     return jsonData;
 };
-export const deleteReview = async (id: string) => {
+export const deleteReview = async (id: number) => {
     const response = await fetch(`${url}/${id}`, {
         method: 'DELETE',
         headers: getHeaders(),
@@ -58,7 +58,7 @@ export const deleteReview = async (id: string) => {
     }
     return { success: true };
 };
-export const getReviewsByVehicleId = async (vehicleId: string) => {
+export const getReviewsByVehicleId = async (vehicleId: number) => {
     const response = await fetch(`${url}/vehicle/${vehicleId}`, {
         method: 'GET',
         headers: getHeaders(),
@@ -69,7 +69,7 @@ export const getReviewsByVehicleId = async (vehicleId: string) => {
     const jsonData = await response.json();
     return jsonData;
 };
-export const getReviewsByCustomerId = async (customerId: string) => {
+export const getReviewsByCustomerId = async (customerId: number) => {
     const response = await fetch(`${url}/customer/${customerId}`, {
         method: 'GET',
         headers: getHeaders(),
@@ -80,7 +80,7 @@ export const getReviewsByCustomerId = async (customerId: string) => {
     const jsonData = await response.json();
     return jsonData;
 };
-export const getReviewsByVendorId = async (vendorId: string) => {
+export const getReviewsByVendorId = async (vendorId: number) => {
     const response = await fetch(`${url}/vendor/${vendorId}`, {
         method: 'GET',
         headers: getHeaders(),
@@ -91,7 +91,7 @@ export const getReviewsByVendorId = async (vendorId: string) => {
     const jsonData = await response.json();
     return jsonData;
 };
-export const getReviewsByBookingId = async (bookingId: string) => {
+export const getReviewsByBookingId = async (bookingId: number) => {
     const response = await fetch(`${url}/booking/${bookingId}`, {
         method: 'GET',
         headers: getHeaders(),
@@ -102,7 +102,7 @@ export const getReviewsByBookingId = async (bookingId: string) => {
     const jsonData = await response.json();
     return jsonData;
 };
-export const getReviewsByServiceId = async (serviceId: string) => {
+export const getReviewsByServiceId = async (serviceId: number) => {
     const response = await fetch(`${url}/service/${serviceId}`, {
         method: 'GET',
         headers: getHeaders(),

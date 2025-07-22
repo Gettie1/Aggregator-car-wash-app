@@ -8,7 +8,7 @@ export const useVehicles = () => {
     });
 }
 
-export const useVehicle = (id: string) => {
+export const useVehicle = (id: number) => {
     return useQuery({
         queryKey: ['vehicle', id],
         queryFn: () => getVehicle(id),
@@ -16,7 +16,7 @@ export const useVehicle = (id: string) => {
     });
 }
 
-export const useVehiclebyCustomerId = (customerId: string) => {
+export const useVehiclebyCustomerId = (customerId: number) => {
     return useQuery({
         queryKey: ['vehicles', customerId],
         queryFn: () => getVehiclesByCustomerId(customerId),
@@ -36,7 +36,7 @@ export const useCreateVehicle = () => {
     );
 }
 
-export const useUpdateVehicle = (id: string, data: any) => {
+export const useUpdateVehicle = (id: number, data: any) => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationKey: ['updateVehicle', id],
@@ -55,7 +55,7 @@ export const useDeleteVehicle = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationKey: ['deleteVehicle'],
-        mutationFn: (id: string) => deleteVehicle(id),
+        mutationFn: (id: number) => deleteVehicle(id),
         onSuccess: () => {
             // Optionally, you can invalidate the vehicles query to refetch the list
             queryClient.invalidateQueries({ queryKey: ['vehicles'] });

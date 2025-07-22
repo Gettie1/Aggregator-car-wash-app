@@ -13,7 +13,7 @@ export const Route = createFileRoute('/dashboard/dashboard/services')({
 function RouteComponent() {
   const { user } = useStore(authStore)
   const [showModal, setShowModal] = useState(false)
-  const { data: services, isLoading } = useServiceByVendorId(user.vendorId || '')
+  const { data: services, isLoading } = useServiceByVendorId(user.vendorId ?? 0)
   const addServiceMutation = useCreateService()
   const [formData, setFormData] = useState({
     name: '',
@@ -33,7 +33,7 @@ function RouteComponent() {
       price: Number(formData.price),
       duration: Number(formData.duration),
       // ...formData,
-      vendorId: Number(user.vendorId), // Ensure vendorId is a string
+      vendorId: user.vendorId,
     })
     toast.success('Service created successfully!')
     console.log('Service created:', formData)

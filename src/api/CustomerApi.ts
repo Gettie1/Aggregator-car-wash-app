@@ -1,3 +1,5 @@
+import type { Customer } from "@/types/users";
+
 const url = 'http://localhost:4001/customer';
 
 export const getCustomers = async () => {
@@ -13,7 +15,7 @@ export const getCustomers = async () => {
     const jsonData = await response.json();
     return jsonData;
 };
-export const getCustomer = async (id: string) => {
+export const getCustomer = async (id: number): Promise<Customer> => {
     const response = await fetch(`${url}/${id}`, {
         method: 'GET',
         headers: {
@@ -40,7 +42,7 @@ export const createCustomer = async (data: any) => {
     const jsonData = await response.json();
     return jsonData;
 };
-export const updateCustomer = async (id: string, data: any) => {
+export const updateCustomer = async (id: number, data: any) => {
     const response = await fetch(`${url}/${id}`, {
         method: 'PUT',
         headers: {
@@ -54,7 +56,7 @@ export const updateCustomer = async (id: string, data: any) => {
     const jsonData = await response.json();
     return jsonData;
 };
-export const deleteCustomer = async (id: string) => {
+export const deleteCustomer = async (id: number) => {
     const response = await fetch(`${url}/${id}`, {
         method: 'DELETE',
         headers: {

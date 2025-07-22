@@ -13,7 +13,7 @@ export const getServices = async () => {
     const jsonData = await response.json();
     return jsonData;
 };
-export const getService = async (id: string) => {
+export const getService = async (id: number) => {
     const response = await fetch(`${url}/${id}`, {
         method: 'GET',
         headers: getHeaders(),
@@ -36,7 +36,7 @@ export const createService = async (data: any) => {
     const jsonData = await response.json();
     return jsonData;
 };
-export const updateService = async (id: string, data: any) => {
+export const updateService = async (id: number, data: any) => {
     const response = await fetch(`${url}/${id}`, {
         method: 'PUT',
         headers: getHeaders(),
@@ -48,7 +48,7 @@ export const updateService = async (id: string, data: any) => {
     const jsonData = await response.json();
     return jsonData;
 };
-export const deleteService = async (id: string) => {
+export const deleteService = async (id: number) => {
     const response = await fetch(`${url}/${id}`, {
         method: 'DELETE',
         headers: getHeaders(),
@@ -58,7 +58,7 @@ export const deleteService = async (id: string) => {
     }
     return { message: 'Service deleted successfully' };
 };
-export const getServiceByVendor = async (vendorId: string) => {
+export const getServiceByVendor = async (vendorId: number) => {
     const response = await fetch(`${url}/vendor/${vendorId}`, {
         method: 'GET',
         headers:getHeaders(),

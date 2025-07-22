@@ -11,7 +11,7 @@ export const useVendors = () => {
     });
     }
 
-export const useVendor = (id: string) => {
+export const useVendor = (id: number) => {
     return useQuery({
         queryKey: ['vendor', id],
         queryFn: () => getVendor(id),
@@ -36,7 +36,7 @@ export const useUpdateVendor = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationKey: ['updateVendor'],
-        mutationFn: ({ id, vendorData }: { id: string; vendorData: any }) => updateVendor(id, vendorData),
+        mutationFn: ({ id, vendorData }: { id: number; vendorData: any }) => updateVendor(id, vendorData),
         onSuccess: (_data, variables) => {
             // Invalidate the specific vendor query to refetch updated data
             queryClient.invalidateQueries({ queryKey: ['vendor', variables.id] });

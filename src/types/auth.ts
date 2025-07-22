@@ -5,14 +5,14 @@ export interface LoginData {
 export interface LoginResponse {
   isVerified: boolean;
     user: {
-        id: string;
+        id: number;
         role: Role | string;
         email: string;
         firstname: string;
         lastname: string;
         phone?: string; // Optional, can be added later
-        customerId?: string; // Optional, can be added later
-        vendorId?: string; // Optional, can be added later
+        customerId?: number; // Optional, can be added later
+        vendorId?: number; // Optional, can be added later
     };
     accessToken: string;
     refreshToken: string;
@@ -25,7 +25,7 @@ export enum Role {
 }
 
 export interface registerData {
-  id?: string; // Optional, can be added later
+  id?: number; // Optional, can be added later
   firstName: string;
   lastName: string;
   email: string;
@@ -34,7 +34,7 @@ export interface registerData {
   phone?: string; // Optional, can be added later
 }
 export interface registerResponse {
-    id: string;
+    id: number;
     role: Role;
     email: string;
     firstname: string;

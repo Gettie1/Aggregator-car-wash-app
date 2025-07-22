@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router"
 import { useState } from "react"
+import { useStore } from "@tanstack/react-form"
 import BookingModal from "../modals/BookingModal"
 import type { Bookings } from "@/types/users"
 import StatCard from "@/components/statCard"
@@ -10,14 +11,12 @@ import { useBookingsByCustomerId } from "@/hooks/bookings"
 
 function CustomerDashboardOverview() {
   const [showBookingModal, setShowBookingModal] = useState(false)
-  const { user } = authStore.state
-  
-  const customerId = user.customerId
-  
-  const { data: vehicles } = useVehiclebyCustomerId(customerId || '')
-  const { data: bookings } = useBookingsByCustomerId(customerId || '')
-  const { data: reviews } = useReviewsByCustomerId(user.id)
-  
+  const { user } = useStore(authStore)
+
+  const { data: vehicles } = useVehiclebyCustomerId(user.customerId ?? 0)
+  const { data: bookings } = useBookingsByCustomerId(user.customerId ? Number(user.customerId) : 0)
+  const { data: reviews } = useReviewsByCustomerId(user.customerId ?? 0)
+
   // Helper function to safely get next booking
   const getNextBooking = () => {
     if (!bookings || bookings.length === 0) return null
@@ -64,26 +63,44 @@ function CustomerDashboardOverview() {
       {/* Next Booking Details */}
       <div className="bg-white p-6 rounded shadow">
         <h2 className="text-lg font-semibold mb-2">Your Next Booking</h2>
-        {nextBooking ? (
+        {bookings && bookings.length > 0 ? (
+          (() => {
+        const confirmedUpcoming = bookings
+          .filter(
+            (b: any) =>
+          b.status === "confirmed" &&
+          b.scheduled_at &&
+          new Date(b.scheduled_at) > new Date()
+          )
+          .sort(
+            (a: any, b: any) =>
+          new Date(a.scheduled_at).getTime() - new Date(b.scheduled_at).getTime()
+          );
+        const nextConfirmed = confirmedUpcoming[0];
+        return nextConfirmed ? (
           <ul className="text-gray-700 space-y-1">
             <li>
-              <strong>Service:</strong> {nextBooking.service?.name || "N/A"}
+          <strong>Service:</strong> {nextConfirmed.service?.name || "N/A"}
             </li>
             <li>
-              <strong>Vehicle:</strong> {nextBooking.vehicle?.plate || nextBooking.vehicle?.model || "N/A"}
+          <strong>Vehicle:</strong> {nextConfirmed.vehicle?.plate || nextConfirmed.vehicle?.model || "N/A"}
             </li>
             <li>
-              <strong>Date & Time:</strong> {new Date(nextBooking.scheduled_at).toLocaleString()}
+          <strong>Date & Time:</strong> {new Date(nextConfirmed.scheduled_at).toLocaleString()}
             </li>
             <li>
-              <strong>Vendor:</strong> {nextBooking.vendor?.business_name || "N/A"}
+          <strong>Vendor:</strong> {nextConfirmed.vendor?.business_name || "N/A"}
             </li>
             <li>
-              <strong>Location:</strong> {nextBooking.location || "Nairobi"}
+          <strong>Location:</strong> {nextConfirmed.location || "Nairobi"}
             </li>
           </ul>
         ) : (
-          <p className="text-gray-500">No upcoming bookings. Ready to book a wash?</p>
+          <p className="text-gray-500">No upcoming confirmed bookings. Ready to book a wash?</p>
+        );
+          })()
+        ) : (
+          <p className="text-gray-500">No upcoming confirmed bookings. Ready to book a wash?</p>
         )}
       </div>
 
