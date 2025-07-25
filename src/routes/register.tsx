@@ -3,6 +3,8 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { z } from 'zod'
 import { Role } from '@/types/auth'
 import { useRegister } from '@/hooks/auth'
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
 
 const formSchema = z.object({
   firstName: z.string().min(1, 'First name is required').max(50, 'First name must be less than 50 characters'),
@@ -53,7 +55,9 @@ function RegisterComponent() {
     }
   })
 
-  return  <div className='flex min-h-screen items-center justify-center bg-gray-100 p-4'>
+  return <>
+    <Navbar />
+   <div className='flex min-h-screen items-center justify-center bg-gray-100 p-4'>
     <form
       onSubmit={(e) => {
         e.preventDefault()
@@ -223,4 +227,6 @@ function RegisterComponent() {
             
         
   </div>
+  <Footer/>
+  </>
 }

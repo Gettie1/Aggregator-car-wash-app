@@ -4,6 +4,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useStore } from '@tanstack/react-form';
 import { authStore } from '@/store/authStore';
 import { useUpdateProfile } from '@/hooks/profile';
+import { uploadFile } from '@/hooks/upload';
 // import { useCustomer } from '@/hooks/customers';
 // import your updateUserProfile mutation/hook here
 // import { useUpdateUserProfile } from '@/hooks/useUpdateUserProfile';
@@ -23,6 +24,7 @@ function RouteComponent() {
     lastname: user.lastname,
     email: user.email,
     phone: user.phone,
+    image: user.image,
   });
   // Pass the required arguments to useUpdateProfile (e.g., user.id and formState)
   // const { data: profiles } = useUpdateProfile(user.id, formState); // Adjust arguments as needed based on your hook definition
@@ -37,11 +39,39 @@ function RouteComponent() {
       lastname: user.lastname,
       email: user.email,
       phone: user.phone,
+      image: user.image,
     });
   };
-
+//   const handleImageChange = async(file: File)=> {
+//   if(file)
+//   {
+//     const imageUrl = await uploadFile(file); // Implement uploadImage function to handle image upload
+//     setFormState((prev) => ({ ...prev, image: imageUrl }));
+//     toast.success('Image uploaded successfully!');
+//   }
+//   else {
+//     toast.error('Please select an image to upload.');
+//   }
+// };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0];
+    if (file) {
+      try {
+        setIsLoading(true);
+        const uploadUrl = await uploadFile(file);
+        setFormState(prev => ({ ...prev, image: uploadUrl }));
+        toast.success('Image uploaded successfully!');
+      } catch (error) {
+        toast.error('Failed to upload image');
+        console.error('Image upload error:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
   };
 
  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -58,6 +88,7 @@ function RouteComponent() {
         changedFields[key as keyof typeof formState] = formState[key as keyof typeof formState];
       }
     }
+    console.log('changedFields:', changedFields);
 
     if (Object.keys(changedFields).length === 0) {
       toast('No changes to update.');
@@ -139,7 +170,17 @@ function RouteComponent() {
               className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 px-3 py-2 transition"
               required
             />
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Profile Image</label>
+              <input
+                type="file"
+                name="image"
+                onChange={handleFileChange}
+                disabled={!isEditing}
+                className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 px-3 py-2 transition"
+              />
             </div>
+          </div>
           <div className="flex gap-4 pt-2">
             {!isEditing ? (
               <button

@@ -4,7 +4,7 @@ import type { LoginResponse } from '@/types/auth'
 const initialState: LoginResponse = {
   isVerified: false,
   user:{
-        id: '',
+        id: 0,
         role: '', // Default role set to CUSTOMER
         email: '',
         firstname: '',
@@ -32,9 +32,10 @@ export const authActions = {
                 email: data.user.email,
                 firstname: data.user.firstname,
                 lastname: data.user.lastname,
+                image: data.user.image || '', // Optional, can be added later
                 phone: data.user.phone || '', // Ensure phone is a string, default to empty if undefined
-                customerId: data.user.customerId ?? '', // Optional, can be added later
-                vendorId: data.user.vendorId ?? '', // Optional, can be added later
+                customerId: typeof data.user.customerId === 'number' ? data.user.customerId : undefined, // Ensure number or undefined
+                vendorId: typeof data.user.vendorId === 'number' ? data.user.vendorId : undefined, // Ensure number or undefined
             }
         }
         

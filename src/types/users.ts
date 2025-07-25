@@ -1,15 +1,15 @@
 // types/vendor.ts
 export type Customer = {
-    id: number
-    address: string | null
-    phone_number: string | null
-    created_at: string | null
-    updated_at: string | null
-    profile:{
-      firstName: string
-      lastName: string
-      email: string
-         } | null
+    firstName: string
+    lastName: string
+    email: string
+    customer: {
+      id: number
+      address: string | null
+      phone_number: string | null
+      created_at: string | null
+      updated_at: string | null
+    } | null
 }
 
 // export interface Customers {
@@ -38,18 +38,18 @@ export interface Vendors {
   vendor: VendorDetails
 }
 export type Vendor = {
+  id: number
+  business_name: string
+  tax_id: number
+  business_address: string
+  status: string
+  profile: {
   firstName: string
   lastName: string
   email: string
-  vendor:{
-id: number
-business_name: string
-tax_id: number
-business_address: string
-status: string
-services:{
+  }
+  services:{
   name: string
-}
 }
 }
 export interface VendorDetails {

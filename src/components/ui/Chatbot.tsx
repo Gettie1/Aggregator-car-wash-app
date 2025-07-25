@@ -9,6 +9,7 @@ import {
   Sparkles,
 } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
+import { useNavigate } from '@tanstack/react-router'
 import { Button } from './button'
 import { Card } from './card'
 import { Input } from './input'
@@ -170,12 +171,16 @@ export default function ChatBot({
 
     await handleChatSubmit(e)
   }
-
+  const navigate = useNavigate()
   useEffect(() => {
     if (onReceiveMessage && chatMessages.length > 0) {
       const lastMessage = chatMessages[chatMessages.length - 1]
       if (lastMessage.role === 'assistant') {
         onReceiveMessage(lastMessage.content)
+        const match = lastMessage.content.match(/\[navigate:\s*(\/[^\]]+)\]/)
+        if (match && match[1]) {
+          navigate({ to: match[1] })
+        }
       }
     }
   }, [chatMessages, onReceiveMessage])

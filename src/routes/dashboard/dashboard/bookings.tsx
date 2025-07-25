@@ -40,7 +40,7 @@ function VendorBookingsSection() {
   console.log('🔍 User role:', user.role)
 
   const updateStatusMutation = useUpdateBookingStatus()
-  const handleStatusUpdate = (bookingId: string, status: string) => {
+  const handleStatusUpdate = (bookingId: number, status: string) => {
     updateStatusMutation.mutate({ id: bookingId, status })
   }
   const createBookingMutation = useCreateBooking()
@@ -353,13 +353,13 @@ const statusChartData = Object.entries(statusCounts).map(([status, count]) => ({
   {booking.status === 'pending' && (
     <>
       <button
-        onClick={() => handleStatusUpdate(String(booking.id), 'confirmed')}
+        onClick={() => handleStatusUpdate(booking.id, 'confirmed')}
         className="text-green-600 hover:underline text-sm"
       >
         Confirm
       </button>
       <button
-        onClick={() => handleStatusUpdate(String(booking.id), 'cancelled')}
+        onClick={() => handleStatusUpdate(booking.id, 'cancelled')}
         className="text-red-600 hover:underline text-sm"
       >
         Cancel
@@ -368,7 +368,7 @@ const statusChartData = Object.entries(statusCounts).map(([status, count]) => ({
   )}
   {booking.status === 'confirmed' && (
     <button
-      onClick={() => handleStatusUpdate(String(booking.id), 'cancelled')}
+      onClick={() => handleStatusUpdate(booking.id, 'cancelled')}
       className="text-red-600 hover:underline text-sm"
     >
       Cancel

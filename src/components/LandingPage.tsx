@@ -1,8 +1,9 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 
 function LandingPage() {
+  const navigate = useNavigate();
   return (
     <div className="bg-gradient-to-b from-blue-50 via-white to-gray-100 min-h-screen flex flex-col">
       <Navbar />
@@ -11,7 +12,7 @@ function LandingPage() {
         <section
           className="py-24 px-4 text-center relative overflow-hidden flex items-center justify-center"
           style={{
-            backgroundImage: "linear-gradient(rgba(30,64,175,0.7),rgba(30,64,175,0.5)),url('/assets/hero-bg.jpg')",
+            backgroundImage: "url('/assets/cleanride1.jpg')",
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
@@ -42,83 +43,64 @@ function LandingPage() {
         </section>
 
         {/* How It Works */}
-        <section className="py-20 bg-gradient-to-r from-blue-50 via-white to-blue-100">
-          <div className="max-w-6xl mx-auto px-6 text-center">
-            <h2 className="text-4xl font-extrabold mb-12 text-blue-800">How It Works</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-              {[
-                {
-                  img: "/assets/bookCar.jpg",
-                  title: "Choose Your Service",
-                  desc: "Select from a variety of car and bike wash services tailored to your needs.",
-                },
-                {
-                  img: "/assets/location.jpg",
-                  title: "Book Online",
-                  desc: "Schedule your wash at a time that suits you, with real-time availability.",
-                },
-                {
-                  img: "/assets/cleanride.jpg",
-                  title: "Enjoy the Clean",
-                  desc: "Relax while our trusted vendors take care of your vehicle right at your location.",
-                },
-              ].map((item, i) => (
-                <div
-                  key={item.title}
-                  className="p-8 bg-white shadow-xl rounded-3xl hover:scale-105 hover:shadow-2xl transition-all duration-300 border-t-4 border-blue-400"
-                >
-                  <img
-                    src={item.img}
-                    alt={item.title}
-                    className="w-full h-48 object-cover rounded-xl mb-6 shadow"
-                  />
-                  <h3 className="text-2xl font-bold mb-3 text-blue-700">{item.title}</h3>
-                  <p className="text-gray-600">{item.desc}</p>
-                </div>
-              ))}
+        <section className="py-20 px-6 bg-gray-50">
+        <h2 className="text-4xl font-bold text-center text-blue-800 mb-4">
+          How It Works
+        </h2>
+        <div className="w-20 h-1 bg-yellow-400 mx-auto mb-12 rounded"></div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {[
+            {
+              icon: '🧼',
+              title: 'Choose Your Service',
+              desc: 'Pick the perfect wash package for your car or bike.',
+              bg: 'from-white to-blue-100',
+            },
+            {
+              icon: '📅',
+              title: 'Book Online',
+              desc: 'Select your preferred time and location with ease.',
+              bg: 'from-blue-50 to-white',
+            },
+            {
+              icon: '✨',
+              title: 'Relax & Shine',
+              desc: 'Our professional vendors handle the rest!',
+              bg: 'from-white to-blue-50',
+            },
+          ].map((item, index) => (
+            <div
+              key={item.title}
+              className={`p-8 rounded-3xl shadow-xl bg-gradient-to-br ${item.bg} hover:-translate-y-1 hover:shadow-2xl transition transform relative`}
+            >
+              <div className="absolute -top-4 -left-4 bg-yellow-300 text-blue-900 font-bold text-lg rounded-full w-10 h-10 flex items-center justify-center shadow">
+                {index + 1}
+              </div>
+              <div className="text-4xl mb-4">{item.icon}</div>
+              <h3 className="text-2xl font-bold mb-2 text-blue-700">
+                {item.title}
+              </h3>
+              <p className="text-gray-600">{item.desc}</p>
             </div>
-          </div>
-        </section>
+          ))}
+        </div>
+      </section>
 
-        {/* Popular Vendors */}
-        <section className="py-20 bg-white">
-          <div className="max-w-6xl mx-auto px-6 text-center">
-            <h2 className="text-4xl font-extrabold mb-12 text-blue-800">Popular Vendors</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-              {[
-                {
-                  img: "/assets/vendor1.jpg",
-                  title: "CleanRide Express",
-                  desc: "Fast and reliable service with top-notch quality.",
-                },
-                {
-                  img: "/assets/vendor2.jpg",
-                  title: "EcoWash Solutions",
-                  desc: "Eco-friendly products for a sustainable wash.",
-                },
-                {
-                  img: "/assets/vendor3.jpg",
-                  title: "Shine & Go",
-                  desc: "Convenient doorstep service with a shine guarantee.",
-                },
-              ].map((item) => (
-                <div
-                  key={item.title}
-                  className="p-8 bg-gradient-to-br from-blue-50 to-blue-100 shadow-xl rounded-3xl hover:scale-105 hover:shadow-2xl transition-all duration-300"
-                >
-                  <img
-                    src={item.img}
-                    alt={item.title}
-                    className="w-full h-48 object-cover rounded-xl mb-6 shadow"
-                  />
-                  <h3 className="text-2xl font-bold mb-3 text-blue-700">{item.title}</h3>
-                  <p className="text-gray-600">{item.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
+      {/* Vendor Call to Action */}
+      <section className="bg-blue-700 text-white py-16 text-center px-6">
+        <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          Are you a Car Wash Vendor?
+        </h2>
+        <p className="text-lg mb-6 max-w-xl mx-auto">
+          Join our growing network and reach more customers effortlessly.
+        </p>
+        <Link
+          to="/register"
+          className="bg-yellow-400 text-blue-900 hover:bg-yellow-300 px-8 py-3 rounded-xl text-lg font-semibold transition"
+        >
+          Join as Vendor
+        </Link>
+      </section>
         {/* Service Packages */}
         <section className="py-20 bg-gradient-to-r from-blue-50 via-white to-blue-100">
           <div className="max-w-6xl mx-auto px-6 text-center">
@@ -168,6 +150,7 @@ function LandingPage() {
                     ))}
                   </ul>
                   <button
+                  onClick={() => navigate({ to: '/register' })}
                     className={`w-full py-3 rounded-full font-bold shadow-lg transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 ${
                       pkg.highlight
                         ? "bg-yellow-400 text-blue-900 hover:bg-yellow-300"
@@ -181,10 +164,12 @@ function LandingPage() {
             </div>
           </div>
         </section>
-        <Footer />
+
+      {/* Footer */}
+      <Footer />
       </main>
     </div>
   );
-}
+};
 
 export default LandingPage;

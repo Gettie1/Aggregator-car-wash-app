@@ -66,7 +66,7 @@ console.log(chartData)
     const deleteReviewMutation = useDeleteReview()
     const handleDelete = (reviewId: number) => {
         if (window.confirm('Are you sure you want to delete this review?')) {
-            deleteReviewMutation.mutate(reviewId.toString())
+            deleteReviewMutation.mutate(reviewId)
         }
         toast.success('Review deleted successfully!')
     }
@@ -75,7 +75,7 @@ console.log(chartData)
     }
     return (
         <div>
-            <h1 className="text-2xl font-bold">All Reviews from different Customers</h1>
+            <h1 className="text-2xl font-bold">Reviews from different Customers</h1>
             <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
@@ -100,7 +100,7 @@ console.log(chartData)
                                 <td className="px-6 py-4 whitespace-nowrap">{review.service?.name}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{review.vehicle?.license_plate}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{review.rating}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">{review.comment}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">{review.comment || 'No Comment'}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{new Date(review.created_at).toLocaleDateString()}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <button

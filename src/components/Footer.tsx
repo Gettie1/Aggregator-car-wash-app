@@ -3,7 +3,7 @@ import { Link } from '@tanstack/react-router'
 function Footer() {
   return (
     <div>
-    <footer className="py-10 text-center text-gray-500 text-sm bg-gray-100">
+    <footer className="py-10 text-center text-gray-500 text-sm bg-gray-300">
         {/* privacy policy terms of service contact us */}
         <div className="mb-4">
           <Link to="/privacy-policy" className="mx-2 hover:text-blue-600">
@@ -12,7 +12,7 @@ function Footer() {
           <Link to="/terms-of-service" className="mx-2 hover:text-blue-600">
             Terms of Service
           </Link>
-          <Link to="/contact-us" className="mx-2 hover:text-blue-600">
+          <Link to="/contactUs" className="mx-2 hover:text-blue-600">
             Contact Us
           </Link>
         </div>

@@ -10,6 +10,7 @@ export interface LoginResponse {
         email: string;
         firstname: string;
         lastname: string;
+        image?: string; // Optional, can be added later
         phone?: string; // Optional, can be added later
         customerId?: number; // Optional, can be added later
         vendorId?: number; // Optional, can be added later

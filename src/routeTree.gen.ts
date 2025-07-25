@@ -9,9 +9,11 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TermsOfServiceRouteImport } from './routes/terms-of-service'
 import { Route as SigninRouteImport } from './routes/signin'
 import { Route as RegisterRouteImport } from './routes/register'
-import { Route as ReadmoreRouteImport } from './routes/readmore'
+import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
+import { Route as ContactUsRouteImport } from './routes/contactUs'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as CreateAccountRouteImport } from './routes/CreateAccount'
 import { Route as IndexRouteImport } from './routes/index'
@@ -23,12 +25,19 @@ import { Route as DashboardDashboardSettingsRouteImport } from './routes/dashboa
 import { Route as DashboardDashboardServicesRouteImport } from './routes/dashboard/dashboard/services'
 import { Route as DashboardDashboardReviewsRouteImport } from './routes/dashboard/dashboard/reviews'
 import { Route as DashboardDashboardProfileRouteImport } from './routes/dashboard/dashboard/profile'
+import { Route as DashboardDashboardPaymentsRouteImport } from './routes/dashboard/dashboard/payments'
 import { Route as DashboardDashboardCustomersRouteImport } from './routes/dashboard/dashboard/customers'
 import { Route as DashboardDashboardBookingsRouteImport } from './routes/dashboard/dashboard/bookings'
+import { Route as DashboardDashboardMyServicesRouteImport } from './routes/dashboard/dashboard/MyServices'
 import { Route as DashboardDashboardMyBookingsRouteImport } from './routes/dashboard/dashboard/MyBookings'
 import { Route as DashboardDashboardAllReviewsRouteImport } from './routes/dashboard/dashboard/AllReviews'
 import { Route as DashboardDashboardAllBookingsRouteImport } from './routes/dashboard/dashboard/AllBookings'
 
+const TermsOfServiceRoute = TermsOfServiceRouteImport.update({
+  id: '/terms-of-service',
+  path: '/terms-of-service',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SigninRoute = SigninRouteImport.update({
   id: '/signin',
   path: '/signin',
@@ -39,9 +48,14 @@ const RegisterRoute = RegisterRouteImport.update({
   path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ReadmoreRoute = ReadmoreRouteImport.update({
-  id: '/readmore',
-  path: '/readmore',
+const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
+  id: '/privacy-policy',
+  path: '/privacy-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactUsRoute = ContactUsRouteImport.update({
+  id: '/contactUs',
+  path: '/contactUs',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -105,6 +119,12 @@ const DashboardDashboardProfileRoute =
     path: '/profile',
     getParentRoute: () => DashboardDashboardRoute,
   } as any)
+const DashboardDashboardPaymentsRoute =
+  DashboardDashboardPaymentsRouteImport.update({
+    id: '/payments',
+    path: '/payments',
+    getParentRoute: () => DashboardDashboardRoute,
+  } as any)
 const DashboardDashboardCustomersRoute =
   DashboardDashboardCustomersRouteImport.update({
     id: '/customers',
@@ -115,6 +135,12 @@ const DashboardDashboardBookingsRoute =
   DashboardDashboardBookingsRouteImport.update({
     id: '/bookings',
     path: '/bookings',
+    getParentRoute: () => DashboardDashboardRoute,
+  } as any)
+const DashboardDashboardMyServicesRoute =
+  DashboardDashboardMyServicesRouteImport.update({
+    id: '/MyServices',
+    path: '/MyServices',
     getParentRoute: () => DashboardDashboardRoute,
   } as any)
 const DashboardDashboardMyBookingsRoute =
@@ -140,15 +166,19 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/CreateAccount': typeof CreateAccountRoute
   '/about': typeof AboutRoute
-  '/readmore': typeof ReadmoreRoute
+  '/contactUs': typeof ContactUsRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
   '/register': typeof RegisterRoute
   '/signin': typeof SigninRoute
+  '/terms-of-service': typeof TermsOfServiceRoute
   '/dashboard/dashboard': typeof DashboardDashboardRouteWithChildren
   '/dashboard/dashboard/AllBookings': typeof DashboardDashboardAllBookingsRoute
   '/dashboard/dashboard/AllReviews': typeof DashboardDashboardAllReviewsRoute
   '/dashboard/dashboard/MyBookings': typeof DashboardDashboardMyBookingsRoute
+  '/dashboard/dashboard/MyServices': typeof DashboardDashboardMyServicesRoute
   '/dashboard/dashboard/bookings': typeof DashboardDashboardBookingsRoute
   '/dashboard/dashboard/customers': typeof DashboardDashboardCustomersRoute
+  '/dashboard/dashboard/payments': typeof DashboardDashboardPaymentsRoute
   '/dashboard/dashboard/profile': typeof DashboardDashboardProfileRoute
   '/dashboard/dashboard/reviews': typeof DashboardDashboardReviewsRoute
   '/dashboard/dashboard/services': typeof DashboardDashboardServicesRoute
@@ -161,14 +191,18 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/CreateAccount': typeof CreateAccountRoute
   '/about': typeof AboutRoute
-  '/readmore': typeof ReadmoreRoute
+  '/contactUs': typeof ContactUsRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
   '/register': typeof RegisterRoute
   '/signin': typeof SigninRoute
+  '/terms-of-service': typeof TermsOfServiceRoute
   '/dashboard/dashboard/AllBookings': typeof DashboardDashboardAllBookingsRoute
   '/dashboard/dashboard/AllReviews': typeof DashboardDashboardAllReviewsRoute
   '/dashboard/dashboard/MyBookings': typeof DashboardDashboardMyBookingsRoute
+  '/dashboard/dashboard/MyServices': typeof DashboardDashboardMyServicesRoute
   '/dashboard/dashboard/bookings': typeof DashboardDashboardBookingsRoute
   '/dashboard/dashboard/customers': typeof DashboardDashboardCustomersRoute
+  '/dashboard/dashboard/payments': typeof DashboardDashboardPaymentsRoute
   '/dashboard/dashboard/profile': typeof DashboardDashboardProfileRoute
   '/dashboard/dashboard/reviews': typeof DashboardDashboardReviewsRoute
   '/dashboard/dashboard/services': typeof DashboardDashboardServicesRoute
@@ -182,15 +216,19 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/CreateAccount': typeof CreateAccountRoute
   '/about': typeof AboutRoute
-  '/readmore': typeof ReadmoreRoute
+  '/contactUs': typeof ContactUsRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
   '/register': typeof RegisterRoute
   '/signin': typeof SigninRoute
+  '/terms-of-service': typeof TermsOfServiceRoute
   '/dashboard/dashboard': typeof DashboardDashboardRouteWithChildren
   '/dashboard/dashboard/AllBookings': typeof DashboardDashboardAllBookingsRoute
   '/dashboard/dashboard/AllReviews': typeof DashboardDashboardAllReviewsRoute
   '/dashboard/dashboard/MyBookings': typeof DashboardDashboardMyBookingsRoute
+  '/dashboard/dashboard/MyServices': typeof DashboardDashboardMyServicesRoute
   '/dashboard/dashboard/bookings': typeof DashboardDashboardBookingsRoute
   '/dashboard/dashboard/customers': typeof DashboardDashboardCustomersRoute
+  '/dashboard/dashboard/payments': typeof DashboardDashboardPaymentsRoute
   '/dashboard/dashboard/profile': typeof DashboardDashboardProfileRoute
   '/dashboard/dashboard/reviews': typeof DashboardDashboardReviewsRoute
   '/dashboard/dashboard/services': typeof DashboardDashboardServicesRoute
@@ -205,15 +243,19 @@ export interface FileRouteTypes {
     | '/'
     | '/CreateAccount'
     | '/about'
-    | '/readmore'
+    | '/contactUs'
+    | '/privacy-policy'
     | '/register'
     | '/signin'
+    | '/terms-of-service'
     | '/dashboard/dashboard'
     | '/dashboard/dashboard/AllBookings'
     | '/dashboard/dashboard/AllReviews'
     | '/dashboard/dashboard/MyBookings'
+    | '/dashboard/dashboard/MyServices'
     | '/dashboard/dashboard/bookings'
     | '/dashboard/dashboard/customers'
+    | '/dashboard/dashboard/payments'
     | '/dashboard/dashboard/profile'
     | '/dashboard/dashboard/reviews'
     | '/dashboard/dashboard/services'
@@ -226,14 +268,18 @@ export interface FileRouteTypes {
     | '/'
     | '/CreateAccount'
     | '/about'
-    | '/readmore'
+    | '/contactUs'
+    | '/privacy-policy'
     | '/register'
     | '/signin'
+    | '/terms-of-service'
     | '/dashboard/dashboard/AllBookings'
     | '/dashboard/dashboard/AllReviews'
     | '/dashboard/dashboard/MyBookings'
+    | '/dashboard/dashboard/MyServices'
     | '/dashboard/dashboard/bookings'
     | '/dashboard/dashboard/customers'
+    | '/dashboard/dashboard/payments'
     | '/dashboard/dashboard/profile'
     | '/dashboard/dashboard/reviews'
     | '/dashboard/dashboard/services'
@@ -246,15 +292,19 @@ export interface FileRouteTypes {
     | '/'
     | '/CreateAccount'
     | '/about'
-    | '/readmore'
+    | '/contactUs'
+    | '/privacy-policy'
     | '/register'
     | '/signin'
+    | '/terms-of-service'
     | '/dashboard/dashboard'
     | '/dashboard/dashboard/AllBookings'
     | '/dashboard/dashboard/AllReviews'
     | '/dashboard/dashboard/MyBookings'
+    | '/dashboard/dashboard/MyServices'
     | '/dashboard/dashboard/bookings'
     | '/dashboard/dashboard/customers'
+    | '/dashboard/dashboard/payments'
     | '/dashboard/dashboard/profile'
     | '/dashboard/dashboard/reviews'
     | '/dashboard/dashboard/services'
@@ -268,14 +318,23 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CreateAccountRoute: typeof CreateAccountRoute
   AboutRoute: typeof AboutRoute
-  ReadmoreRoute: typeof ReadmoreRoute
+  ContactUsRoute: typeof ContactUsRoute
+  PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   RegisterRoute: typeof RegisterRoute
   SigninRoute: typeof SigninRoute
+  TermsOfServiceRoute: typeof TermsOfServiceRoute
   DashboardDashboardRoute: typeof DashboardDashboardRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/terms-of-service': {
+      id: '/terms-of-service'
+      path: '/terms-of-service'
+      fullPath: '/terms-of-service'
+      preLoaderRoute: typeof TermsOfServiceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/signin': {
       id: '/signin'
       path: '/signin'
@@ -290,11 +349,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/readmore': {
-      id: '/readmore'
-      path: '/readmore'
-      fullPath: '/readmore'
-      preLoaderRoute: typeof ReadmoreRouteImport
+    '/privacy-policy': {
+      id: '/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof PrivacyPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contactUs': {
+      id: '/contactUs'
+      path: '/contactUs'
+      fullPath: '/contactUs'
+      preLoaderRoute: typeof ContactUsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -374,6 +440,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardDashboardProfileRouteImport
       parentRoute: typeof DashboardDashboardRoute
     }
+    '/dashboard/dashboard/payments': {
+      id: '/dashboard/dashboard/payments'
+      path: '/payments'
+      fullPath: '/dashboard/dashboard/payments'
+      preLoaderRoute: typeof DashboardDashboardPaymentsRouteImport
+      parentRoute: typeof DashboardDashboardRoute
+    }
     '/dashboard/dashboard/customers': {
       id: '/dashboard/dashboard/customers'
       path: '/customers'
@@ -386,6 +459,13 @@ declare module '@tanstack/react-router' {
       path: '/bookings'
       fullPath: '/dashboard/dashboard/bookings'
       preLoaderRoute: typeof DashboardDashboardBookingsRouteImport
+      parentRoute: typeof DashboardDashboardRoute
+    }
+    '/dashboard/dashboard/MyServices': {
+      id: '/dashboard/dashboard/MyServices'
+      path: '/MyServices'
+      fullPath: '/dashboard/dashboard/MyServices'
+      preLoaderRoute: typeof DashboardDashboardMyServicesRouteImport
       parentRoute: typeof DashboardDashboardRoute
     }
     '/dashboard/dashboard/MyBookings': {
@@ -416,8 +496,10 @@ interface DashboardDashboardRouteChildren {
   DashboardDashboardAllBookingsRoute: typeof DashboardDashboardAllBookingsRoute
   DashboardDashboardAllReviewsRoute: typeof DashboardDashboardAllReviewsRoute
   DashboardDashboardMyBookingsRoute: typeof DashboardDashboardMyBookingsRoute
+  DashboardDashboardMyServicesRoute: typeof DashboardDashboardMyServicesRoute
   DashboardDashboardBookingsRoute: typeof DashboardDashboardBookingsRoute
   DashboardDashboardCustomersRoute: typeof DashboardDashboardCustomersRoute
+  DashboardDashboardPaymentsRoute: typeof DashboardDashboardPaymentsRoute
   DashboardDashboardProfileRoute: typeof DashboardDashboardProfileRoute
   DashboardDashboardReviewsRoute: typeof DashboardDashboardReviewsRoute
   DashboardDashboardServicesRoute: typeof DashboardDashboardServicesRoute
@@ -431,8 +513,10 @@ const DashboardDashboardRouteChildren: DashboardDashboardRouteChildren = {
   DashboardDashboardAllBookingsRoute: DashboardDashboardAllBookingsRoute,
   DashboardDashboardAllReviewsRoute: DashboardDashboardAllReviewsRoute,
   DashboardDashboardMyBookingsRoute: DashboardDashboardMyBookingsRoute,
+  DashboardDashboardMyServicesRoute: DashboardDashboardMyServicesRoute,
   DashboardDashboardBookingsRoute: DashboardDashboardBookingsRoute,
   DashboardDashboardCustomersRoute: DashboardDashboardCustomersRoute,
+  DashboardDashboardPaymentsRoute: DashboardDashboardPaymentsRoute,
   DashboardDashboardProfileRoute: DashboardDashboardProfileRoute,
   DashboardDashboardReviewsRoute: DashboardDashboardReviewsRoute,
   DashboardDashboardServicesRoute: DashboardDashboardServicesRoute,
@@ -449,9 +533,11 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CreateAccountRoute: CreateAccountRoute,
   AboutRoute: AboutRoute,
-  ReadmoreRoute: ReadmoreRoute,
+  ContactUsRoute: ContactUsRoute,
+  PrivacyPolicyRoute: PrivacyPolicyRoute,
   RegisterRoute: RegisterRoute,
   SigninRoute: SigninRoute,
+  TermsOfServiceRoute: TermsOfServiceRoute,
   DashboardDashboardRoute: DashboardDashboardRouteWithChildren,
 }
 export const routeTree = rootRouteImport

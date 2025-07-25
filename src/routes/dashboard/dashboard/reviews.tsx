@@ -1,9 +1,11 @@
 import { useStore } from '@tanstack/react-form'
 import { createFileRoute } from '@tanstack/react-router'
+import { useState } from 'react'
 import { toast } from 'sonner'
 import type { Review, Reviews } from '@/types/users'
 import { authStore } from '@/store/authStore'
 import { useDeleteReview, useReviewsByCustomerId} from '@/hooks/reviews'
+import ReviewsModal from '@/components/modals/ReviewsModal'
 
 export const Route = createFileRoute('/dashboard/dashboard/reviews')({
   component: RouteComponent,
@@ -13,6 +15,8 @@ function RouteComponent() {
   const { user } = useStore(authStore)
   const {data:reviews } = useReviewsByCustomerId(user.customerId ?? 0)
   const deleteReviewMutation = useDeleteReview()
+  const [isOpenModal, setIsOpenModal] = useState(false)
+
   const handleDelete = (reviewId: number) => {
     if (window.confirm('Are you sure you want to delete this review?')) {
       deleteReviewMutation.mutate(reviewId)
@@ -23,7 +27,29 @@ function RouteComponent() {
     return <div className="text-gray-500 text-center py-6">No reviews yet</div>
   }
   return <div>
-    <h1 className="text-2xl font-bold">Reviews</h1>
+    <div className="mt-6 flex flex-row items-center justify-between">
+    <h1 className="text-2xl font-bold">Submitted Reviews</h1>
+      <div className="mb-4 flex items-center justify-between">
+        <input
+          type="text"
+          placeholder="Search reviews..."
+          className="p-2 border border-gray-300 rounded"
+          // onChange={handleSearchChange} // Implement search functionality if needed
+        />
+      </div>
+      <button
+        onClick={() => setIsOpenModal(true)}
+        className="bg-blue-500 text-white px-4 py-2 rounded"
+      >
+        Add Reviews
+      </button>
+      {isOpenModal && (
+        <ReviewsModal
+          isOpen={isOpenModal}
+          onClose={() => setIsOpenModal(false)}
+        />
+      )}
+    </div>
     <div className="overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">

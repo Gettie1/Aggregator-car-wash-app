@@ -1,5 +1,6 @@
 import { useStore } from "@tanstack/react-form";
 import { useState } from "react";
+import { toast } from "sonner";
 import type { VehiclesDetails, VendorDetails } from "@/types/users";
 import { authStore } from "@/store/authStore";
 import { useVendors } from "@/hooks/vendors";
@@ -19,7 +20,6 @@ function BookingModal({ isOpen, onClose }: BookingModalProps) {
   const [selectedVendor, setSelectedVendor] = useState<number | null>(null);
   const { data: services } = useServiceByVendorId(selectedVendor ?? 0);
 
-  const handleCreateBookingMutation = useCreateBooking();
   const [formData, setFormData] = useState({
     customerId: user.customerId,
     vehiclePlateNo: "",
@@ -30,11 +30,14 @@ function BookingModal({ isOpen, onClose }: BookingModalProps) {
     payment_method: ""
   });
 
+  const handleCreateBookingMutation = useCreateBooking();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
+    
     e.preventDefault();
     handleCreateBookingMutation.mutate({ ...formData });
     setFormData({
@@ -47,6 +50,7 @@ function BookingModal({ isOpen, onClose }: BookingModalProps) {
       payment_method: ""
     });
     onClose();
+    toast.success("Booking created successfully!");
   };
 
   if (!isOpen) return null;

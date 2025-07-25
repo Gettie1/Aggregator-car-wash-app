@@ -58,8 +58,8 @@ function SettingsPage() {
         <p className="text-sm text-gray-600">Manage your profile and credentials.</p>
         <div className="flex flex-wrap gap-4">
           <button
-            className="px-5 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
             onClick={() => navigate({ to: '/dashboard/dashboard/profile' })}
+            className="px-5 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
           >
             ✏️ Update Profile
           </button>
