@@ -1,36 +1,36 @@
 
 import React from 'react';
 // import { FaSignInAlt } from 'react-icons/fa';
-import { Bell, Menu, Search, User } from 'lucide-react';
+import { Bell, Search, User } from 'lucide-react';
 import { Link, useNavigate } from '@tanstack/react-router';
-import { useDashboardStore } from '@/store/dashboardStore';
+// import { useDashboardStore } from '@/store/dashboardStore';
 // import { useStore } from '@tanstack/react-form';
 // import { authStore } from '@/store/authStore';
 
 export const Header: React.FC = () => {
 
-  const { toggleSidebar, currentPage } = useDashboardStore();
+  // const { toggleSidebar, currentPage } = useDashboardStore();
 
-  const getPageTitle = () => {
-    switch (currentPage) {
-        case 'overview':
-            return 'Overview';
-        case 'bookings':
-            return 'Bookings';
-        case 'profiles':
-            return 'Profiles';
-        case 'vendors':
-            return 'Vendors';
-        case 'settings':
-            return 'Settings';
-        case 'services':
-            return 'Services';
-        case 'reviews':
-            return 'Reviews';
-        default:
-            return '';
-    }
-  };
+  // const getPageTitle = () => {
+  //   switch (currentPage) {
+  //       case 'overview':
+  //           return 'Overview';
+  //       case 'bookings':
+  //           return 'Bookings';
+  //       case 'profiles':
+  //           return 'Profiles';
+  //       case 'vendors':
+  //           return 'Vendors';
+  //       case 'settings':
+  //           return 'Settings';
+  //       case 'services':
+  //           return 'Services';
+  //       case 'reviews':
+  //           return 'Reviews';
+  //       default:
+  //           return '';
+  //   }
+  // };
   const navigate = useNavigate()
   return (
     <header className=" bg-white shadow-sm border-b px-6 py-4">

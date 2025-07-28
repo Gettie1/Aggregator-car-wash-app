@@ -11,8 +11,8 @@ function VendorDashboardOverview() {
   const { user } = authStore.state;
   const vendorId = user.vendorId;
   
-  const { data: vendorData } = useVendor(vendorId || '');
-  const { data: services } = useServiceByVendorId(vendorId || '');
+  const { data: vendorData } = useVendor(vendorId || 0);
+  const { data: services } = useServiceByVendorId(vendorId || 0);
   const { data: bookings } = useBookings();
   const { data: reviews } = useReviews();
 

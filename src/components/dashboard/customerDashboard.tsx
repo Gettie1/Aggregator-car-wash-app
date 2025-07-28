@@ -123,9 +123,7 @@ function CustomerDashboardOverview() {
                 <div>
                   <span className="block text-sm text-gray-500">Booking ID: {booking.id}</span>
                   <h3 className="font-semibold text-lg text-blue-800">
-                    {typeof booking.service === "string"
-                      ? booking.service
-                      : booking.service?.name || "N/A"}
+                    {booking.duration}
                   </h3>
                   <p className="text-sm text-gray-600">
                     {new Date(booking.scheduled_at).toLocaleString()}
