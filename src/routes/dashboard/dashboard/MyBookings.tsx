@@ -167,6 +167,15 @@ const serviceChartData = Object.entries(bookingsByService).map(
         </button>
       </div>
 
+      <div className="flex items-center justify-between mb-4">
+        <input
+          type="text"
+          placeholder="Search by service..."
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          className="border border-gray-300 rounded px-3 py-2 w-full max-w-xs"
+        />
+      </div>
       <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white p-4 shadow rounded">
           <h4 className="text-lg font-semibold mb-2">Bookings by Status</h4>
