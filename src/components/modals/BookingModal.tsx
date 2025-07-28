@@ -19,7 +19,7 @@ function BookingModal({ isOpen, onClose }: BookingModalProps) {
   const { data: vehicles } = useVehiclebyCustomerId(user.customerId ?? 0);
   const [selectedVendor, setSelectedVendor] = useState<number | null>(null);
   const { data: services } = useServiceByVendorId(selectedVendor ?? 0);
-
+  console.log('available services', services);  
   const [formData, setFormData] = useState({
     customerId: user.customerId,
     vehiclePlateNo: "",
@@ -123,7 +123,7 @@ function BookingModal({ isOpen, onClose }: BookingModalProps) {
               >
                 <option value="">Select Service</option>
                 {services && services.length > 0 ? (
-                  services.map((service: { id: string; name: string }) => (
+                  services.map((service: { id: number; name: string }) => (
                     <option key={service.id} value={service.name}>
                       {service.name}
                     </option>
