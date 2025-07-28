@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import type { Customer } from '@/types/users';
 import { useCustomers, useDeleteCustomerProfile } from '@/hooks/customers';
 import CustomerModal from '@/components/modals/CustomerModal';
-import { authStore } from '@/store/authStore';
+// import { authStore } from '@/store/authStore';
 
 export const Route = createFileRoute('/dashboard/dashboard/customers')({
   component: RouteComponent,

@@ -41,16 +41,16 @@ function VendorBookingsSection() {
     updateStatusMutation.mutate({ id: bookingId, status })
   }
   const createBookingMutation = useCreateBooking()
-  const handleCreateBooking = () => {
-    setFormData({
-      vendorName: '',
-      serviceName: '',
-      customerId: 0,
-      scheduled_at: '',
-      payment_method: 'credit_card',
-    })
-    setShowModal(true)
-  }
+  // const handleCreateBooking = () => {
+  //   setFormData({
+  //     vendorName: '',
+  //     serviceName: '',
+  //     customerId: 0,
+  //     scheduled_at: '',
+  //     payment_method: 'credit_card',
+  //   })
+  //   setShowModal(true)
+  // }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })

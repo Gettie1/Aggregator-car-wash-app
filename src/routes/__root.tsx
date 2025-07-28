@@ -4,7 +4,7 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 // import Navbar from '../components/Navbar.tsx'
 import { useEffect } from 'react'
 import { authActions } from '../store/authStore'
-import TanStackQueryLayout from '../integrations/tanstack-query/layout.tsx'
+// import TanStackQueryLayout from '../integrations/tanstack-query/layout.tsx'
 
 import type { QueryClient } from '@tanstack/react-query'
 import ToasterProvider from '@/components/ToasterProvider.tsx'

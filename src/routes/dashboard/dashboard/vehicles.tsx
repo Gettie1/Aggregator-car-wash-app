@@ -146,7 +146,7 @@ function RouteComponent() {
               dataKey="value"
               label
             >
-              {makeData.map((entry: any, index: number) => (
+              {makeData.map((index: number) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>

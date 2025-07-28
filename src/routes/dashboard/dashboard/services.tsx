@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useStore } from '@tanstack/react-form'
+// import { useStore } from '@tanstack/react-form'
 import { useMemo } from 'react'
 import {
   Bar,
@@ -11,17 +11,18 @@ import {
   YAxis,
 } from 'recharts'
 
-import { toast } from 'sonner'
+// import { toast } from 'sonner'
 import type { Services } from '@/types/users'
-import { authStore } from '@/store/authStore'
-import { useDeleteService, useServices } from '@/hooks/services'
+// import { authStore } from '@/store/authStore'
+import { useServices } from '@/hooks/services'
+// import { useDeleteService, useServices } from '@/hooks/services'
 
 export const Route = createFileRoute('/dashboard/dashboard/services')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const { user } = useStore(authStore)
+  // const { user } = useStore(authStore)
   const navigate = useNavigate()
   const { data: services, isLoading } = useServices()
   // const deleteServiceMutation = useDeleteService()
