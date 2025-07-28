@@ -36,8 +36,8 @@ const NavLinks = [
             { to: "/dashboard/dashboard/bookings", icon: CalendarCheck, title: "Bookings" },
             { to: "/dashboard/dashboard/MyServices", icon: Wrench, title: "Services" },
             { to: "/dashboard/dashboard/customers", icon: User, title: "Customers" },
-            { to: "/dashboard/dashboard/reviews", icon: Star, title: "Reviews" }
-        ]   
+            { to: "/dashboard/dashboard/MyReviews", icon: Star, title: "Reviews" }
+        ]
     },
     {
         label: "Customer",

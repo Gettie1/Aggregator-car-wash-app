@@ -1,13 +1,34 @@
+import { useState } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
+import { toast } from 'sonner';
 import type { Customer } from '@/types/users';
-import { useCustomers } from '@/hooks/customers';
+import { useCustomers, useDeleteCustomerProfile } from '@/hooks/customers';
+import CustomerModal from '@/components/modals/CustomerModal';
+import { authStore } from '@/store/authStore';
 
 export const Route = createFileRoute('/dashboard/dashboard/customers')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { data: customers, isLoading } = useCustomers();
+  const { data: customers, isLoading, refetch } = useCustomers();
+  const [isOpenCustomerModal, setIsOpenCustomerModal] = useState(false);
+  const deleteCustomerMutation = useDeleteCustomerProfile();
+
+  const handleDelete = (customerId: number) => {
+    if (!window.confirm('Are you sure you want to delete this customer?')) return;
+    deleteCustomerMutation.mutate(customerId, {
+      onSuccess: () => {
+        toast.success('Customer deleted successfully!');
+        refetch(); // Refetch customers after deletion
+      },
+      onError: (error) => {
+        toast.error(
+          error.message || 'Failed to delete customer. Please try again.'
+        );
+      },
+    });
+  };
 
   if (isLoading) {
     return (
@@ -31,14 +52,17 @@ function RouteComponent() {
   );
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-10">
+    <div className="gap-6 p-4">
       {/* Header + Analytics */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <p className="text-gray-500 text-2xl">Manage all customers in the system.</p>
-      <button className="mt-6 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+      <button 
+      onClick={() => setIsOpenCustomerModal(true)}
+      className="m-6 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
         + Customer
       </button>
+      <CustomerModal isOpen={isOpenCustomerModal} onClose={() => setIsOpenCustomerModal(false)} />
         </div>
         <div className="flex gap-4">
           <StatCard label="Total Customers" value={customers.length} />
@@ -91,7 +115,13 @@ function RouteComponent() {
             </button>
             <button
               className="mt-2 px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition"
-              onClick={() => alert(`Deleting ${customer.firstName} ${customer.lastName}`)}
+              onClick={() => {
+                if (customer.customer?.id !== undefined) {
+                  handleDelete(customer.customer.id);
+                } else {
+                  toast.error('Customer ID is missing.');
+                }
+              }}
             >
               Delete
             </button>

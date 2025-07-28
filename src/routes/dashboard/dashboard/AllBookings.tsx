@@ -50,11 +50,11 @@ function RouteComponent() {
   const pieColors = ['#FFBB28', '#00C49F', '#FF8042']
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8 mb-8">
         <div className="flex-1 flex flex-col items-center md:items-start">
           <h2 className="text-xl font-semibold mb-2 text-gray-800">Overview of the Booking Status</h2>
-          <PieChart width={340} height={240}>
+          <PieChart width={420} height={240}>
             <Pie
               data={pieData}
               cx="50%"

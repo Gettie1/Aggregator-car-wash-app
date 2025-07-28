@@ -12,6 +12,7 @@ export const getHeaders = () => {
   };
 }
 
+
 // create a new profile
 export const SignUp = async (data: registerData) => {
   const response = await fetch(url, {

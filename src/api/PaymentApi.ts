@@ -49,3 +49,19 @@ export const veryfyPayment = async (reference: string) => {
   })
   return response.data
 }
+export const getPayment = async (Id: string) => {
+  const response = await axios.get(`${url}/${Id}`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  return response.data
+}
+export const getPayments = async () => {
+  const response = await axios.get(`${url}`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  return response.data
+}

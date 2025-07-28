@@ -56,15 +56,6 @@ function DashboardLayout() {
           
       {/* Footer */}
       <Footer />
-      
-      {/* Chatbot Button - positioned above footer */}
-      {/* <button
-        onClick={() => setChatOpen(true)}
-        className="fixed right-12 bottom-12 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-colors z-50"
-        style={{ bottom: '120px' }}
-      >
-        💬
-      </button> */}
     </div>
   );
 }

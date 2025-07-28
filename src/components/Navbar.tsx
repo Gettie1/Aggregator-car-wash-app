@@ -4,12 +4,14 @@ export default function Navbar() {
   return (
     <header className="shadow-md sticky top-0 z-50 bg-white text-black">
       <nav className="flex items-center justify-between max-w-6xl mx-auto p-2">
-        <div className="flex items-center gap-1">
-          <span className="text-3xl text-blue-500">🚗</span>
-          <span className="text-2xl font-extrabold bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-600 bg-clip-text text-transparent drop-shadow">
+        <Link to="/" className="flex items-center gap-2 group">
+        <div className="flex items-center gap-2">
+           <span className="text-blue-500 border-blue-500 border bg-blue-400 rounded-full p-1">🚗</span>
+          <span className="text-2xl font-extrabold bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-600 bg-clip-text text-transparent drop-shadow group-hover:scale-105 transition-transform">
             CleanRide
           </span>
         </div>
+        </Link>
         <div className="flex items-center gap-4">
           <Link
             to="/"

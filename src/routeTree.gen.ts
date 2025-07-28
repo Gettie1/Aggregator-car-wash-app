@@ -15,7 +15,6 @@ import { Route as RegisterRouteImport } from './routes/register'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as ContactUsRouteImport } from './routes/contactUs'
 import { Route as AboutRouteImport } from './routes/about'
-import { Route as CreateAccountRouteImport } from './routes/CreateAccount'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardDashboardRouteImport } from './routes/dashboard/dashboard'
 import { Route as DashboardDashboardIndexRouteImport } from './routes/dashboard/dashboard/index'
@@ -29,6 +28,7 @@ import { Route as DashboardDashboardPaymentsRouteImport } from './routes/dashboa
 import { Route as DashboardDashboardCustomersRouteImport } from './routes/dashboard/dashboard/customers'
 import { Route as DashboardDashboardBookingsRouteImport } from './routes/dashboard/dashboard/bookings'
 import { Route as DashboardDashboardMyServicesRouteImport } from './routes/dashboard/dashboard/MyServices'
+import { Route as DashboardDashboardMyReviewsRouteImport } from './routes/dashboard/dashboard/MyReviews'
 import { Route as DashboardDashboardMyBookingsRouteImport } from './routes/dashboard/dashboard/MyBookings'
 import { Route as DashboardDashboardAllReviewsRouteImport } from './routes/dashboard/dashboard/AllReviews'
 import { Route as DashboardDashboardAllBookingsRouteImport } from './routes/dashboard/dashboard/AllBookings'
@@ -61,11 +61,6 @@ const ContactUsRoute = ContactUsRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CreateAccountRoute = CreateAccountRouteImport.update({
-  id: '/CreateAccount',
-  path: '/CreateAccount',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -143,6 +138,12 @@ const DashboardDashboardMyServicesRoute =
     path: '/MyServices',
     getParentRoute: () => DashboardDashboardRoute,
   } as any)
+const DashboardDashboardMyReviewsRoute =
+  DashboardDashboardMyReviewsRouteImport.update({
+    id: '/MyReviews',
+    path: '/MyReviews',
+    getParentRoute: () => DashboardDashboardRoute,
+  } as any)
 const DashboardDashboardMyBookingsRoute =
   DashboardDashboardMyBookingsRouteImport.update({
     id: '/MyBookings',
@@ -164,7 +165,6 @@ const DashboardDashboardAllBookingsRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/CreateAccount': typeof CreateAccountRoute
   '/about': typeof AboutRoute
   '/contactUs': typeof ContactUsRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -175,6 +175,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/dashboard/AllBookings': typeof DashboardDashboardAllBookingsRoute
   '/dashboard/dashboard/AllReviews': typeof DashboardDashboardAllReviewsRoute
   '/dashboard/dashboard/MyBookings': typeof DashboardDashboardMyBookingsRoute
+  '/dashboard/dashboard/MyReviews': typeof DashboardDashboardMyReviewsRoute
   '/dashboard/dashboard/MyServices': typeof DashboardDashboardMyServicesRoute
   '/dashboard/dashboard/bookings': typeof DashboardDashboardBookingsRoute
   '/dashboard/dashboard/customers': typeof DashboardDashboardCustomersRoute
@@ -189,7 +190,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/CreateAccount': typeof CreateAccountRoute
   '/about': typeof AboutRoute
   '/contactUs': typeof ContactUsRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -199,6 +199,7 @@ export interface FileRoutesByTo {
   '/dashboard/dashboard/AllBookings': typeof DashboardDashboardAllBookingsRoute
   '/dashboard/dashboard/AllReviews': typeof DashboardDashboardAllReviewsRoute
   '/dashboard/dashboard/MyBookings': typeof DashboardDashboardMyBookingsRoute
+  '/dashboard/dashboard/MyReviews': typeof DashboardDashboardMyReviewsRoute
   '/dashboard/dashboard/MyServices': typeof DashboardDashboardMyServicesRoute
   '/dashboard/dashboard/bookings': typeof DashboardDashboardBookingsRoute
   '/dashboard/dashboard/customers': typeof DashboardDashboardCustomersRoute
@@ -214,7 +215,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/CreateAccount': typeof CreateAccountRoute
   '/about': typeof AboutRoute
   '/contactUs': typeof ContactUsRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -225,6 +225,7 @@ export interface FileRoutesById {
   '/dashboard/dashboard/AllBookings': typeof DashboardDashboardAllBookingsRoute
   '/dashboard/dashboard/AllReviews': typeof DashboardDashboardAllReviewsRoute
   '/dashboard/dashboard/MyBookings': typeof DashboardDashboardMyBookingsRoute
+  '/dashboard/dashboard/MyReviews': typeof DashboardDashboardMyReviewsRoute
   '/dashboard/dashboard/MyServices': typeof DashboardDashboardMyServicesRoute
   '/dashboard/dashboard/bookings': typeof DashboardDashboardBookingsRoute
   '/dashboard/dashboard/customers': typeof DashboardDashboardCustomersRoute
@@ -241,7 +242,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/CreateAccount'
     | '/about'
     | '/contactUs'
     | '/privacy-policy'
@@ -252,6 +252,7 @@ export interface FileRouteTypes {
     | '/dashboard/dashboard/AllBookings'
     | '/dashboard/dashboard/AllReviews'
     | '/dashboard/dashboard/MyBookings'
+    | '/dashboard/dashboard/MyReviews'
     | '/dashboard/dashboard/MyServices'
     | '/dashboard/dashboard/bookings'
     | '/dashboard/dashboard/customers'
@@ -266,7 +267,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/CreateAccount'
     | '/about'
     | '/contactUs'
     | '/privacy-policy'
@@ -276,6 +276,7 @@ export interface FileRouteTypes {
     | '/dashboard/dashboard/AllBookings'
     | '/dashboard/dashboard/AllReviews'
     | '/dashboard/dashboard/MyBookings'
+    | '/dashboard/dashboard/MyReviews'
     | '/dashboard/dashboard/MyServices'
     | '/dashboard/dashboard/bookings'
     | '/dashboard/dashboard/customers'
@@ -290,7 +291,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/CreateAccount'
     | '/about'
     | '/contactUs'
     | '/privacy-policy'
@@ -301,6 +301,7 @@ export interface FileRouteTypes {
     | '/dashboard/dashboard/AllBookings'
     | '/dashboard/dashboard/AllReviews'
     | '/dashboard/dashboard/MyBookings'
+    | '/dashboard/dashboard/MyReviews'
     | '/dashboard/dashboard/MyServices'
     | '/dashboard/dashboard/bookings'
     | '/dashboard/dashboard/customers'
@@ -316,7 +317,6 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  CreateAccountRoute: typeof CreateAccountRoute
   AboutRoute: typeof AboutRoute
   ContactUsRoute: typeof ContactUsRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
@@ -368,13 +368,6 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/CreateAccount': {
-      id: '/CreateAccount'
-      path: '/CreateAccount'
-      fullPath: '/CreateAccount'
-      preLoaderRoute: typeof CreateAccountRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -468,6 +461,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardDashboardMyServicesRouteImport
       parentRoute: typeof DashboardDashboardRoute
     }
+    '/dashboard/dashboard/MyReviews': {
+      id: '/dashboard/dashboard/MyReviews'
+      path: '/MyReviews'
+      fullPath: '/dashboard/dashboard/MyReviews'
+      preLoaderRoute: typeof DashboardDashboardMyReviewsRouteImport
+      parentRoute: typeof DashboardDashboardRoute
+    }
     '/dashboard/dashboard/MyBookings': {
       id: '/dashboard/dashboard/MyBookings'
       path: '/MyBookings'
@@ -496,6 +496,7 @@ interface DashboardDashboardRouteChildren {
   DashboardDashboardAllBookingsRoute: typeof DashboardDashboardAllBookingsRoute
   DashboardDashboardAllReviewsRoute: typeof DashboardDashboardAllReviewsRoute
   DashboardDashboardMyBookingsRoute: typeof DashboardDashboardMyBookingsRoute
+  DashboardDashboardMyReviewsRoute: typeof DashboardDashboardMyReviewsRoute
   DashboardDashboardMyServicesRoute: typeof DashboardDashboardMyServicesRoute
   DashboardDashboardBookingsRoute: typeof DashboardDashboardBookingsRoute
   DashboardDashboardCustomersRoute: typeof DashboardDashboardCustomersRoute
@@ -513,6 +514,7 @@ const DashboardDashboardRouteChildren: DashboardDashboardRouteChildren = {
   DashboardDashboardAllBookingsRoute: DashboardDashboardAllBookingsRoute,
   DashboardDashboardAllReviewsRoute: DashboardDashboardAllReviewsRoute,
   DashboardDashboardMyBookingsRoute: DashboardDashboardMyBookingsRoute,
+  DashboardDashboardMyReviewsRoute: DashboardDashboardMyReviewsRoute,
   DashboardDashboardMyServicesRoute: DashboardDashboardMyServicesRoute,
   DashboardDashboardBookingsRoute: DashboardDashboardBookingsRoute,
   DashboardDashboardCustomersRoute: DashboardDashboardCustomersRoute,
@@ -531,7 +533,6 @@ const DashboardDashboardRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  CreateAccountRoute: CreateAccountRoute,
   AboutRoute: AboutRoute,
   ContactUsRoute: ContactUsRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,

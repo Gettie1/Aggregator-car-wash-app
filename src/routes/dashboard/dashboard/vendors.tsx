@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import React from 'react';
+// import React from 'react';
 import {
   Cell,
   Legend,
@@ -8,9 +8,12 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from 'recharts';
+import { useState } from 'react';
+import { toast } from 'sonner';
 import type { JSX } from 'react';
 import type { Vendor } from '@/types/users';
-import { useVendors } from '@/hooks/vendors';
+import { useDeleteVendorProfile, useVendors } from '@/hooks/vendors';
+import VendorModal from '@/components/modals/vendorModal';
 
 const COLORS = {
   active: '#34D399', // green
@@ -23,7 +26,29 @@ export const Route = createFileRoute('/dashboard/dashboard/vendors')({
 });
 
 function RouteComponent() {
-  const { data: vendors } = useVendors();
+  const { data: vendors, refetch } = useVendors();
+  const [isOpenVendorModal, setIsOpenVendorModal] = useState(false);
+  const deleteVendorProfile = useDeleteVendorProfile();
+  const handleDelete = (vendorId: number) => {
+     console.log('Deleting vendor with ID:', vendorId);
+  if (isNaN(vendorId)) {
+    console.error('Invalid vendor ID:', vendorId);
+    return toast.error('Invalid vendor ID');
+  }
+    if (!window.confirm('Are you sure you want to delete this vendor?')) return;
+    deleteVendorProfile.mutate(vendorId, {
+      onSuccess: () => {
+        toast.success('Vendor deleted successfully!');
+        refetch(); // Refetch vendors after deletion
+        // Optionally, you can refetch vendors here if needed
+      },
+      onError: (error) => {
+        toast.error(
+          error.message || 'Failed to delete vendor. Please try again.'
+        );
+      },
+    });
+  };
 
   if (!vendors) {
     return (
@@ -47,17 +72,18 @@ function RouteComponent() {
   ];
 
   return (
-    <div className="p-8 max-w-7xl mx-auto bg-gradient-to-br from-gray-50 to-white rounded-3xl shadow-2xl space-y-10">
+    <div className="">
       <h1 className="text-3xl font-extrabold text-gray-900 mb-2 tracking-tight flex items-center justify-between">
         <span className="inline-block bg-gradient-to-r from-blue-400 via-yellow-300 to-gray-300 bg-clip-text text-transparent">
           Manage All Vendors
         </span>
         <button
           className="ml-4 p-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-          onClick={() => window.location.reload()}
+          onClick={() => setIsOpenVendorModal(true)}
         >
           Add Vendor
         </button>
+        <VendorModal isOpen={isOpenVendorModal} onClose={() => setIsOpenVendorModal(false)} />
       </h1>
 
       {/* Analytics Summary */}
@@ -140,6 +166,16 @@ function RouteComponent() {
                 >
                   {vendor.status}
                 </span>
+                <div className="flex items-center justify-between mt-4">
+                  <button className="text-sm text-blue-600 hover:text-gray-700">
+                    Edit
+                  </button>
+                  <button 
+                    onClick={() => handleDelete(vendor.id)}
+                  className="text-sm text-red-500 hover:text-red-700">
+                    Delete
+                  </button>
+                </div>
               </div>
             </li>
           ))}

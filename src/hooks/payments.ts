@@ -1,7 +1,7 @@
 import { useNavigate } from "@tanstack/react-router";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { InitPaymentPayload } from "@/api/PaymentApi";
-import { initializePayment, veryfyPayment } from "@/api/PaymentApi";
+import { getPayment, getPayments, initializePayment, veryfyPayment } from "@/api/PaymentApi";
 
 export const useInitializePayment = () => {
   const queryClient = useQueryClient();
@@ -9,6 +9,7 @@ export const useInitializePayment = () => {
     mutationKey: ['initializePayment'],
     mutationFn: (payload: InitPaymentPayload) => initializePayment(payload),
     onSuccess: (data) => {
+      queryClient.setQueryData(['paymentIntent'], data);
     }
   });
 }
@@ -27,5 +28,21 @@ export const useVerifyPayment = () => {
       // Handle error during verification
       console.error('Payment verification failed:', error);
     }
+  });
+}
+export const usePayment = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationKey: ['payment'],
+    mutationFn: (Id: string) => getPayment(Id),
+    onSuccess: (data) => {
+      queryClient.setQueryData(['paymentIntent'], data);
+    }
+  });
+}
+export const usePayments = () => {
+  return useQuery({
+    queryKey: ['payments'],
+    queryFn: () => getPayments(),
   });
 }

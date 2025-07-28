@@ -71,7 +71,14 @@ function SigninComponent() {
     }
   })
   return (
-    <>
+   <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50"
+      style={{
+        backgroundImage: "url('/public/assets/cleanride1.jpg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
    
     <Navbar />
     <div
@@ -186,6 +193,6 @@ function SigninComponent() {
       </form>
     </div>
     <Footer />
-    </>
+    </div>
   )
 }

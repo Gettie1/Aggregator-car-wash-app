@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { toast } from 'sonner';
 import { useStore } from '@tanstack/react-form'
 import { authStore } from '@/store/authStore'
+import { uploadFile } from '@/hooks/upload' // adjust import if needed
 import { useCreateVehicle } from '@/hooks/vehicle'
 
 export interface VehiclesModalProps {
@@ -18,6 +19,7 @@ function VehiclesModal({ isOpen, onClose }: VehiclesModalProps) {
         make: '',
         color: '',
         year: '',
+        image: '',  // Changed to string for URL input
         customer_id: user.customerId
     })
     const createVehicleMutation = useCreateVehicle()
@@ -25,6 +27,23 @@ function VehiclesModal({ isOpen, onClose }: VehiclesModalProps) {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setVehicleData({ ...vehicleData, [e.target.name]: e.target.value })
     }
+
+const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0]
+  if (!file) return
+
+  try {
+    const imageUrl = await uploadFile(file)
+    console.log('Image uploaded successfully:', imageUrl)
+    setVehicleData((prev) => ({ ...prev, image: imageUrl }))
+    console.log('First image URL:', imageUrl)
+    toast.success('Image uploaded successfully!')
+  } catch (error) {
+    console.error('Image upload failed', error)
+    toast.error('Image upload failed.')
+  }
+}
+
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
@@ -40,7 +59,7 @@ function VehiclesModal({ isOpen, onClose }: VehiclesModalProps) {
         
         // Prepare data with year as integer
         const vehicleDataToSubmit = {
-            ...vehicleData,
+            ...vehicleData, 
             year: yearAsNumber  // Convert to integer
         }
         
@@ -53,6 +72,7 @@ function VehiclesModal({ isOpen, onClose }: VehiclesModalProps) {
             make: '',
             color: '',
             year: '',
+            image: '',  // Reset image to null
             customer_id: user.customerId
         })
         onClose()
@@ -119,6 +139,16 @@ function VehiclesModal({ isOpen, onClose }: VehiclesModalProps) {
                         style={styles.input}
                         placeholder="e.g., 2020"
                     />
+                    {/* add vehicle image */}
+                    <label htmlFor="image" style={styles.label}>Vehicle Image</label>
+                    <input
+                        type="file"
+                        id="image"
+                        name="image"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        style={styles.input}
+                    /> 
                     <button type="submit" style={styles.submitButton}>Add Vehicle</button>
                 </form>
             </div>

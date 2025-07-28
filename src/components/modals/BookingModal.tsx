@@ -25,9 +25,8 @@ function BookingModal({ isOpen, onClose }: BookingModalProps) {
     vehiclePlateNo: "",
     vendorName: "",
     serviceName: "",
-    location: "",
     scheduled_at: "",
-    payment_method: ""
+    payment_method: "cash", // Default payment method
   });
 
   const handleCreateBookingMutation = useCreateBooking();
@@ -45,9 +44,8 @@ function BookingModal({ isOpen, onClose }: BookingModalProps) {
       vehiclePlateNo: "",
       vendorName: "",
       serviceName: "",
-      location: "",
       scheduled_at: "",
-      payment_method: ""
+      payment_method: "cash",
     });
     onClose();
     toast.success("Booking created successfully!");
@@ -114,17 +112,6 @@ function BookingModal({ isOpen, onClose }: BookingModalProps) {
                   <option disabled>No vendors found</option>
                 )}
               </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
-              <input
-                type="text"
-                name="location"
-                value={formData.location}
-                onChange={handleChange}
-                placeholder="Enter Location"
-                className="block w-full p-2 border border-gray-300 rounded-lg"
-              />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Service Type</label>

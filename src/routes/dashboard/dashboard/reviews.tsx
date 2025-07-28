@@ -57,7 +57,7 @@ function RouteComponent() {
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">vendor Nme</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Booking ID</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vehicle ID</th>
+            {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vehicle ID</th> */}
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Comment</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created At</th>
@@ -70,7 +70,7 @@ function RouteComponent() {
               <td className="px-6 py-4 whitespace-nowrap">{review.id}</td>
               <td className="px-6 py-4 whitespace-nowrap">{review.vendor}</td>
               <td className="px-6 py-4 whitespace-nowrap">{review.service}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{review.vehicle}</td>
+              {/* <td className="px-6 py-4 whitespace-nowrap">{review.vehicle}</td> */}
               <td className="px-6 py-4 whitespace-nowrap">{review.rating}</td>
               <td className="px-6 py-4 whitespace-nowrap">{review.comment || 'No comment'}</td>
               <td className="px-6 py-4 whitespace-nowrap">{new Date(review.created_at).toLocaleDateString()}</td>
@@ -94,11 +94,11 @@ function RouteComponent() {
           className="bg-white  rounded-lg p-4 flex flex-col items-center space-x-4"
         >
           <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center text-xl font-bold text-blue-700">
-            {review.customer?.firstname ?? 'U'}
+            {review.customer?.firstName ?? 'U'}
             </div>
             <div>
               <p className="text-lg font-semibold">
-                {review.customer?.firstname} {review.customer?.lastname}
+                {review.customer?.firstName} {review.customer?.lastName}
               </p>
               <p className="text-sm text-gray-500">{review.customer?.email}</p>
               <p className="text-xs text-gray-400">ID: {review.customer_id}</p>

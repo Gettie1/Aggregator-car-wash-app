@@ -1,232 +1,299 @@
-import { useForm } from '@tanstack/react-form'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { Link, createFileRoute } from '@tanstack/react-router'
+import { useState } from 'react'
+import axios from 'axios'
 import { z } from 'zod'
-import { Role } from '@/types/auth'
-import { useRegister } from '@/hooks/auth'
+import { toast } from 'sonner'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 
-const formSchema = z.object({
+const baseSchema = z.object({
   firstName: z.string().min(1, 'First name is required').max(50, 'First name must be less than 50 characters'),
   lastName: z.string().min(1, 'Last name is required').max(50, 'Last name must be less than 50 characters'),
-  role: z.nativeEnum(Role, {
-    errorMap: () => ({ message: 'Role must be customer, vendor, or admin' }),
-  }), 
-  email: z.string().email('Invalid email address'),
+  email: z.string().email('Invalid email'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
 })
 
-export type FormSchema = z.infer<typeof formSchema>
-
-const validateField = <T,>(value:T, schema:z.ZodType<T>) =>{
-  const result = schema.safeParse(value)
-  if (!result.success) {
-    return result.error.issues[0].message|| 'validation error'
-  }
-  return undefined
-}
-
-export const Route = createFileRoute('/register')({
-  component: RegisterComponent,
+const vendorSchema = baseSchema.extend({
+  business_name: z.string().min(1, 'Business name is required'),
+  phone: z.string().min(1, 'Phone is required').max(10, 'Phone must be 10 digits'),
+  tax_id: z.string().min(1, 'Tax ID is required'),
+  address: z.string().min(1, 'Address is required'),
 })
 
-function RegisterComponent() {
-  const { mutate } = useRegister() // <-- Use the custom hook for registration
-  const router = useRouter() // <-- Use the router to navigate after successful registration
-  const form = useForm({
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      role: 'customer', 
-      password: '',
-    } as FormSchema,
-    onSubmit: ({ value }) => {
-         const mappedRole = value.role // 🔁 convert 'customer' → 'CUSTOMER'
+const customerSchema = baseSchema.extend({
+  address: z.string().min(1, 'Address is required'),
+  phone: z.string().min(1, 'Phone is required').max(10, 'Phone must be 10 digits'),
+})
 
-  mutate({ ...value, role: mappedRole }, {
-    onSuccess: () => {
-      router.navigate({ to: '/CreateAccount' })
-    },
-    onError: (err: any) => {
-      console.error('Registration failed:', err)
-    },
+// const adminSchema = baseSchema.extend({
+//   business_name: z.string().optional(),
+//   phone: z.string().optional(),
+//   tax_id: z.string().optional(),
+//   address: z.string().optional(),
+// })
+
+export const Route = createFileRoute('/register')({
+  component: RouteComponent,
+})
+
+function RouteComponent() {
+  const [activeForm, setActiveForm] = useState<'vendor' | 'customer'>('vendor')
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    business_name: '',
+    phone: '',
+    tax_id: '',
+    address: '',
   })
+  const [errors, setErrors] = useState<Record<string, string>>({})
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+    setErrors((prev) => ({ ...prev, [e.target.name]: '' }))
+  }
+
+  const getSchema = () => {
+    if (activeForm === 'vendor') return vendorSchema
+    // if (activeForm === 'customer') return customerSchema
+    // if (activeForm === 'admin') return adminSchema
+    return customerSchema // fallback to avoid undefined
+  }
+  // Remove 'admin' from the role selection
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const schema = getSchema()
+    const result = schema.safeParse(formData)
+    if (!result.success) {
+      const fieldErrors: Record<string, string> = {}
+      result.error.errors.forEach((err) => {
+        if (err.path[0]) fieldErrors[err.path[0] as string] = err.message
+      })
+      setErrors(fieldErrors)
+      toast.error('Please fix the errors in the form')
+      return
     }
-  })
+    try {
+      const profileRes = await axios.post('http://localhost:4001/profile', {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        password: formData.password,
+        role: activeForm,
+      })
+      const profileId = profileRes.data.id
+      if (activeForm === 'vendor') {
+        await axios.post('http://localhost:4001/vendors', {
+          profileId,
+          business_name: formData.business_name,
+          phone: formData.phone,
+          tax_id: formData.tax_id,
+          address: formData.address,
+          status: 'active',
+        })
+      } else {
+        await axios.post('http://localhost:4001/customer', {
+          profileId,
+          address: formData.address,
+          phone: formData.phone,
+        })
+      }
+      // No need to call an admin endpoint, as admin is already created via profile
+      toast.success(`Account created successfully!`)
+    } catch (err) {
+      console.error(err)
+      toast.error('Something went wrong ❌')
+    }
+  }
 
-  return <>
-    <Navbar />
-   <div className='flex min-h-screen items-center justify-center bg-gray-100 p-4'>
-    <form
-      onSubmit={(e) => {
-        e.preventDefault()
-        form.handleSubmit()
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50"
+      style={{
+        backgroundImage: "url('/public/assets/cleanride1.jpg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
       }}
-      className='w-full max-w-md space-y-6 bg-white p-8 rounded-lg shadow-lg'
     >
-      <h2 className='text-2xl font-bold text-center'>Sign Up</h2>
-      <form.Field 
-        name="firstName"
-        validators={{
-          onChange:({value})=> {
-            if(!value) return 'First name is required'
-          }
-        }}
-        >
-          {(field) => (
-            <div>
-              <label className='block text-sm font-medium text-gray-700'>First Name</label>
-              <div className='mt-1'>
-              <input
-                type='text'
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value as Role)}
-                onBlur={() => validateField(field.state.value, z.string().min(1, 'First name is required').max(50, 'First name must be less than 50 characters'))}
-                className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm'
-                placeholder='Enter your first name'
-              />
-            </div>
-            { field.state.meta.errors.length > 0 && (
-              <p className='mt-1 text-sm text-red-600'>
-                {field.state.meta.errors[0]}
-              </p>
-            )}
-            </div>
-          )}
-        </form.Field>
-
-      <form.Field 
-        name="lastName"
-        validators={{
-          onChange:({value})=> {
-            if(!value) return 'Last name is required'
-          }
-        }}
-        >
-          {(field) => (
-            <div>
-              <label className='block text-sm font-medium text-gray-700'>Last Name</label>
-              <div className='mt-1'>
-              <input
-                type='text'
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-                onBlur={() => validateField(field.state.value, z.string().min(1, 'Last name is required').max(50, 'Last name must be less than 50 characters'))}
-                className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm'
-                placeholder='Enter your last name'
-              />
-            </div>
-            { field.state.meta.errors.length > 0 && (
-              <p className='mt-1 text-sm text-red-600'>
-                {field.state.meta.errors[0]}
-              </p>
-            )}
-            </div>
-          )}
-        </form.Field>
-      <form.Field
-        name="email"
-        validators={{
-          onChange: ({ value }) => {
-            if (!value) return 'Email is required'
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Invalid email address'
-          },
-          onBlur: ({ value }) => validateField(value, z.string().email('Invalid email address')),
-        }}
-      >
-        {(field) => (
-          <div>
-            <label className='block text-sm font-medium text-gray-700'>Email</label>
-            <div className='mt-1'>
-              <input
-                type='email'
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-                className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm'
-                placeholder='Enter your email'
-              />
-            </div>
-            {field.state.meta.errors.length > 0 && (
-              <p className='mt-1 text-sm text-red-600'>
-                {field.state.meta.errors[0]}
-              </p>
-            )}
-          </div>
-        )}
-      </form.Field>
-      <form.Field
-        name="role"
-        validators={{}}
-      >
-        {(field) => (
-          <div>
-            <label className='block text-sm font-medium text-gray-700'>Role</label>
-            <div className='mt-1'>
-              <select
-                value={field.state.value}
-                onChange={(e) => field.handleChange( e.target.value as Role)}
-                className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm'
+      <Navbar />
+      <div className="flex justify-center items-center min-h-[80vh] m-4">
+        <div className="w-full max-w-lg bg-white/95 rounded-2xl shadow-2xl p-10 border border-blue-100">
+          <h2 className="text-3xl font-bold text-center text-blue-700 mb-2 tracking-tight">Create an Account</h2>
+          <p className="text-center text-gray-500 mb-8">Register as a Vendor, Customer</p>
+          <div className="flex justify-center gap-4 mb-8">
+            {['vendor', 'customer'].map((role) => (
+              <button
+                key={role}
+                className={`px-5 py-2 rounded-full font-semibold transition-all duration-200 shadow-sm border
+                  ${activeForm === role
+                    ? 'bg-blue-600 text-white border-blue-600 scale-105'
+                    : 'bg-white text-blue-700 border-blue-300 hover:bg-blue-50'
+                  }`}
+                onClick={() => {
+                  setActiveForm(role as 'vendor' | 'customer')
+                  setErrors({})
+                }}
+                type="button"
               >
-                <option value='customer'>customer</option>
-                <option value='vendor'>vendor</option>
-                <option value='admin'>admin</option>
-              </select>
-            </div>
-            {field.state.meta.errors.length > 0 && (
-              <p className='mt-1 text-sm text-red-600'>
-                {field.state.meta.errors[0]}
-              </p>
-            )}
+                {role.charAt(0).toUpperCase() + role.slice(1)}
+              </button>
+            ))}
           </div>
-        )}
-      </form.Field>
-      <form.Field
-        name="password"
-        validators={{
-          onChange: ({ value }) => {
-            if (!value) return 'Password is required'
-            if (value.length < 6) return 'Must be at least 6 characters'
-          },
-          onBlur: ({ value }) => validateField(value, z.string().min(6, 'Password must be at least 6 characters')),
-        }}
-      >
-        {(field) => (
-          <div>
-            <label className='block text-sm font-medium text-gray-700'>Password</label>
-            <div className='mt-1'>
+          <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+            <div className="flex gap-4">
+              <div className="w-1/2">
+                <label className="block text-gray-700 font-medium mb-1">First Name</label>
+                <input
+                  className="w-full p-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
+                  placeholder="First Name"
+                  name="firstName"
+                  onChange={handleChange}
+                  value={formData.firstName}
+                  required
+                />
+                {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
+              </div>
+              <div className="w-1/2">
+                <label className="block text-gray-700 font-medium mb-1">Last Name</label>
+                <input
+                  className="w-full p-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
+                  placeholder="Last Name"
+                  name="lastName"
+                  onChange={handleChange}
+                  value={formData.lastName}
+                  required
+                />
+                {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
+              </div>
+            </div>
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">Email</label>
               <input
-                type='password'
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-                className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm'
-                placeholder='••••••••'
+                className="w-full p-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
+                placeholder="Email"
+                name="email"
+                type="email"
+                onChange={handleChange}
+                value={formData.email}
+                required
               />
+              {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
             </div>
-            {field.state.meta.errors.length > 0 && (
-              <p className='mt-1 text-sm text-red-600'>
-                {field.state.meta.errors[0]}
-              </p>
+            <div>
+              <label className="block text-gray-700 font-medium mb-1">Password</label>
+              <input
+                className="w-full p-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
+                placeholder="Password"
+                name="password"
+                type="password"
+                onChange={handleChange}
+                value={formData.password}
+                required
+              />
+              {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+            </div>
+            {activeForm === 'vendor' && (
+              <>
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">Business Name</label>
+                  <input
+                    className="w-full p-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
+                    placeholder="Business Name"
+                    name="business_name"
+                    onChange={handleChange}
+                    value={formData.business_name}
+                    required
+                  />
+                  {errors.business_name && <p className="text-red-500 text-xs mt-1">{errors.business_name}</p>}
+                </div>
+                <div className="flex gap-4">
+                  <div className="w-1/2">
+                    <label className="block text-gray-700 font-medium mb-1">Business Tax ID</label>
+                    <input
+                      className="w-full p-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
+                      placeholder="Business Tax ID"
+                      name="tax_id"
+                      onChange={handleChange}
+                      value={formData.tax_id}
+                      required
+                    />
+                    {errors.tax_id && <p className="text-red-500 text-xs mt-1">{errors.tax_id}</p>}
+                  </div>
+                  <div className="w-1/2">
+                    <label className="block text-gray-700 font-medium mb-1">Phone Number</label>
+                    <input
+                      className="w-full p-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
+                      placeholder="Phone Number"
+                      name="phone"
+                      onChange={handleChange}
+                      value={formData.phone}
+                      required
+                    />
+                    {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">Business Address</label>
+                  <input
+                    className="w-full p-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
+                    placeholder="Business Address"
+                    name="address"
+                    onChange={handleChange}
+                    value={formData.address}
+                    required
+                  />
+                  {errors.address && <p className="text-red-500 text-xs mt-1">{errors.address}</p>}
+                </div>
+              </>
             )}
-          </div>
-        )}
-      </form.Field>
-      <button
-        type='submit'
-        className='w-full bg-green-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2'
-      >
-        Sign Up
-      </button>
-      <p className='text-center text-sm text-gray-600'>
-        Already have an account?{' '}
-        <a href="/signin" className='text-green-600 hover:text-green-700'>
-          Sign In
-        </a>
-      </p>
-    </form>
-            
-        
-  </div>
-  <Footer/>
-  </>
+            {activeForm === 'customer' && (
+              <>
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">Address</label>
+                  <input
+                    className="w-full p-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
+                    placeholder="Address"
+                    name="address"
+                    onChange={handleChange}
+                    value={formData.address}
+                    required
+                  />
+                  {errors.address && <p className="text-red-500 text-xs mt-1">{errors.address}</p>}
+                </div>
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">Phone Number</label>
+                  <input
+                    className="w-full p-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
+                    placeholder="Phone Number"
+                    name="phone"
+                    onChange={handleChange}
+                    value={formData.phone}
+                    required
+                  />
+                  {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+                </div>
+              </>
+            )}
+            <button
+              type="submit"
+              className="w-full bg-gradient-to-r from-blue-600 to-green-500 text-white font-bold py-2 rounded-lg shadow-lg hover:from-blue-700 hover:to-green-600 transition-all text-lg mt-2"
+            >
+              Register
+            </button>
+            <p className="text-center text-gray-500 text-sm mt-4">
+              Already have an account?{' '}
+              <Link to="/signin" className="text-blue-500 hover:underline">
+                Log in
+              </Link>
+            </p>
+          </form>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  )
 }
+
+export default RouteComponent

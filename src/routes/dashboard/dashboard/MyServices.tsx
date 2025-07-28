@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import type { Services } from '@/types/users'
-import { useCreateService, useServiceByVendorId } from '@/hooks/services'
+import { useCreateService, useDeleteService, useServiceByVendorId } from '@/hooks/services'
 import { authStore } from '@/store/authStore'
 
 export const Route = createFileRoute('/dashboard/dashboard/MyServices')({
@@ -15,6 +15,18 @@ function RouteComponent() {
   const [showModal, setShowModal] = useState(false)
   const { data: services, isLoading } = useServiceByVendorId(user.vendorId ?? 0)
   const addServiceMutation = useCreateService()
+  const deleteServiceMutation = useDeleteService()
+  const handleDelete = (serviceId: number) => {
+    deleteServiceMutation.mutate(serviceId, {
+      onSuccess: () => {
+        toast.success('Service deleted successfully!')
+      },
+      onError: (error) => {
+        toast.error(`Failed to delete service: ${error.message}`)
+      },
+    })
+  }
+
 
   const [formData, setFormData] = useState({
     name: '',
@@ -60,6 +72,14 @@ function RouteComponent() {
             <div className="text-sm text-gray-600 space-y-1">
               <p><strong>💰 Price:</strong> ${service.price}</p>
               <p><strong>⏱️ Duration:</strong> {service.duration} mins</p>
+            </div>
+            <div className="flex justify-between m-1 items-center gap-2 font-bold ">
+            <button className="mt-4 w-full text-blue-600 py-2 rounded-lg hover:bg-blue-700 transition">
+              Edit
+            </button>
+            <button onClick={() => handleDelete(service.id)}
+              className="mt-4 w-full text-red-600 py-2 rounded-lg  hover:bg-red-700 transition"
+              >Delete</button>
             </div>
           </div>
         ))}

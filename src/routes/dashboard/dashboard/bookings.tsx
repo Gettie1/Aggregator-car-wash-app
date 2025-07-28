@@ -9,6 +9,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { toast } from 'sonner';
 import { useState } from 'react';
 import type { Bookings } from '@/types/users'
 import { useBookingsByVendorId, useCreateBooking, useUpdateBookingStatus } from '@/hooks/bookings'
@@ -22,14 +23,10 @@ function VendorBookingsSection() {
   const { user } = useStore(authStore)
   const [showModal, setShowModal] = useState(false)
   const [formData, setFormData] = useState({
-    customerId: '',
+    customerId: 0,
     vendorName: '',
-    vehiclePlateNo: '',
     serviceName: '',
-    location: '',
     scheduled_at: '',
-    status: '',
-    payment_status: '',
     payment_method: '',
   })
   
@@ -47,13 +44,9 @@ function VendorBookingsSection() {
   const handleCreateBooking = () => {
     setFormData({
       vendorName: '',
-      vehiclePlateNo: '',
       serviceName: '',
-      location: '',
-      customerId: '',
+      customerId: 0,
       scheduled_at: '',
-      status: 'pending',
-      payment_status: 'unpaid',
       payment_method: 'credit_card',
     })
     setShowModal(true)
@@ -66,8 +59,11 @@ function VendorBookingsSection() {
     e.preventDefault()
     createBookingMutation.mutate({
       ...formData,
+      customerId: Number(formData.customerId), // Ensure customerId is a number
       // vendorId: user.vendorId, // Ensure vendorId is included
+
     })
+    toast.success('Booking created successfully!')
     // Add your booking creation logic here
     console.log('Booking data submitted:', formData)
     setShowModal(false)
@@ -99,7 +95,7 @@ function VendorBookingsSection() {
         <button
           onClick={() => setShowModal(true)}
          className="bg-blue-500 text-white px-4 py-2 rounded shadow">
-          + Add Booking
+          + Booking
         </button>
       </div>
       <p>Loading bookings...</p>
@@ -115,7 +111,7 @@ if (!bookings || bookings.length === 0) {
         <button
           onClick={() => setShowModal(true)}
          className="bg-blue-500 text-white px-4 py-2 rounded shadow">
-          + Add Booking
+          + Booking
         </button>
       {showModal && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
@@ -168,17 +164,6 @@ if (!bookings || bookings.length === 0) {
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
-                <input
-                  type="text"
-                  name="location"
-                  value={formData.location}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded px-3 py-2"
-                  required
-                />
-              </div>
-              <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Scheduled Time</label>
                 <input
                   type="datetime-local"
@@ -189,31 +174,7 @@ if (!bookings || bookings.length === 0) {
                   required
                 />
               </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                <select
-                  name="status"
-                  value={formData.status}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded px-3 py-2"
-                >
-                  <option value="pending">Pending</option>
-                  <option value="confirmed">Confirmed</option>
-                  <option value="cancelled">Cancelled</option>
-                </select>
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Payment Status</label>
-                <select
-                  name="payment_status"
-                  value={formData.payment_status}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded px-3 py-2"
-                >
-                  <option value="paid">Paid</option>
-                  <option value="unpaid">Unpaid</option>
-                </select>
-              </div>
+             
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Payment Method</label>
                 <select
@@ -223,7 +184,7 @@ if (!bookings || bookings.length === 0) {
                   className="w-full border border-gray-300 rounded px-3 py-2"
                 >
                   <option value="credit_card">Credit Card</option>
-                  <option value="debit_card">Debit Card</option>
+                  <option value="mobile_money">Mobile Money</option>
                   <option value="cash">Cash</option>
                 </select>
               </div>
@@ -266,12 +227,90 @@ const statusChartData = Object.entries(statusCounts).map(([status, count]) => ({
       <div className="flex items-center justify-between mb-4">
         <h1 className='text-2xl font-bold'>Bookings</h1>
         <button
-          onClick={handleCreateBooking}
+          onClick={() => setShowModal(true)}
           className="bg-blue-500 text-white px-4 py-2 rounded shadow"
         >
-          + Add Booking
+          + Booking
         </button>
       </div>
+      {showModal && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4">Add Booking</h2>
+            <form onSubmit={handleSubmit}>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Customer Id</label>
+                <input
+                  type="text"
+                  name="customerId"
+                  value={formData.customerId}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded px-3 py-2"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Vendor Name</label>
+                <input
+                  type="text"
+                  name="vendorName"
+                  value={formData.vendorName}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded px-3 py-2"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Service</label>
+                <input
+                  type="text"
+                  name="serviceName"
+                  value={formData.serviceName}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded px-3 py-2"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Scheduled Time</label>
+                <input
+                  type="datetime-local"
+                  name="scheduled_at"
+                  value={formData.scheduled_at}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded px-3 py-2"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Payment Method</label>
+                <select
+                  name="payment_method"
+                  value={formData.payment_method}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded px-3 py-2"
+                >
+                  <option value="credit_card">Credit Card</option>
+                  <option value="mobile_money">Mobile Money</option>
+                  <option value="cash">Cash</option>
+                </select>
+              </div>
+              <button
+                type="submit"
+                className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200"
+              >
+                Add Booking
+              </button>
+            </form>
+            <button
+              onClick={() => setShowModal(false)}
+              className="mt-4 w-full text-gray-600 hover:text-gray-800"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
       {/* <h1 className='text-2xl font-bold mb-4'>Bookings</h1> */}
       <div className="bg-white p-6 rounded shadow mb-8">
       <h2 className="text-lg font-semibold mb-4">Bookings by Status</h2>

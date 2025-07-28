@@ -11,19 +11,16 @@ export type Customer = {
       updated_at: string | null
     } | null
 }
-
-// export interface Customers {
-//   id: number
-//   firstName: string
-//   lastName: string
-//   email: string
-//   password: string
-//   role: 'customer'
-//   hashedRefreshToken?: string
-//   created_at: string
-//   updated_at: string
-//   customer: CustomerDetails
-// }
+export interface Profile {
+  id: number
+  firstName: string
+  lastName: string
+  email: string
+  image: string | null
+  phone: string | null
+  created_at: string | null
+  updated_at: string | null
+}
 
 export interface Vendors {
   id: number
@@ -66,6 +63,7 @@ export interface VendorDetails {
 }
 export interface VendorResponse {}
 export interface VehiclesDetails {
+  image: string | null
   customer_id: number
   id: number
   make: string
@@ -99,8 +97,8 @@ export type Reviews = {
   created_at: string
   customer?: {
     id: number
-    firstname: string
-    lastname: string
+    firstName: string
+    lastName: string
     email: string
     phone?: string
   }
@@ -150,4 +148,11 @@ export type Services = {
     id:number
   }
 }
-  
+export type Payments = {
+  payment_id: number
+  payment_status: string
+  payment_method: string
+  paystack_reference: string
+  payment_date: string
+  amount: number
+}

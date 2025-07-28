@@ -33,7 +33,7 @@ export const Header: React.FC = () => {
   };
   const navigate = useNavigate()
   return (
-    <header className="bg-white shadow-sm border-b px-6 py-4">
+    <header className=" bg-white shadow-sm border-b px-6 py-4">
       <div className="flex items-center justify-between"> 
         <div className="flex items-center justify-between gap-7">
           <h1 className="text-2xl font-extrabold flex items-center gap-2 mr-6">

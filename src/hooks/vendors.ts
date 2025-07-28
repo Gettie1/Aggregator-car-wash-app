@@ -1,5 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 import { createVendor, deleteVendor, getVendor, getVendors, updateVendor } from "@/api/vendorApi";
+import { getHeaders } from "@/api/profileApi";
+
+const url = 'http://localhost:4001';
 
 export const useVendors = () => {
     return useQuery({
@@ -56,3 +60,64 @@ export const useDeleteVendor = () => {
         }
     });
 }
+
+export const useCreateVendorProfile = () => {
+     return useMutation({
+    mutationFn: async (formData: {
+      firstName: string
+      lastName: string
+      email: string
+      password: string
+      business_name: string
+      phone: string
+      tax_id: string
+      address: string
+      status: string
+    }) => {
+      // 1. Create profile
+      const profileRes = await axios.post(`${url}/profile`, {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        password: formData.password,
+        role: 'vendor',
+      })
+
+      const profileId = profileRes.data.id
+
+      // 2. Create vendor using profileId
+      const vendorRes = await axios.post(`${url}/vendors`, {
+        profileId,
+        business_name: formData.business_name,
+        phone: formData.phone,
+        tax_id: formData.tax_id,
+        address: formData.address,
+        status: 'active',
+      })
+
+      return vendorRes.data
+    },
+  })
+}
+export const useDeleteVendorProfile = () => {
+    const queryClient = useQueryClient();
+return useMutation({
+  mutationFn: async (vendorId: number) => {
+    const headers = getHeaders();
+    console.log('Headers being sent:', headers)
+
+    // First delete the vendor
+    
+    // Then delete the profile
+    const vendorRes = await axios.get(`${url}/vendors/${vendorId}`, { headers })
+    const profileId = vendorRes.data.profile?.id
+    
+    await axios.delete(`${url}/vendors/${vendorId}`, { headers })
+    await axios.delete(`${url}/profile/${profileId}`, { headers })
+  },
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ['vendors'] });
+    // toast.success('Vendor profile deleted successfully');
+  }
+})
+    }

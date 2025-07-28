@@ -1,14 +1,15 @@
 import { useState } from 'react'
 import { toast } from 'react-hot-toast'
-import { useCreateVendorProfile } from '@/hooks/vendors'
+import { useCreateCustomerProfile, useCustomers } from '@/hooks/customers'
 
-export interface VendorModalProps {
+export interface CustomerModalProps {
   isOpen: boolean
   onClose: () => void
 }
 
-export function VendorModal({ isOpen, onClose }: VendorModalProps) {
-  const mutation = useCreateVendorProfile()
+export function CustomerModal({ isOpen, onClose }: CustomerModalProps) {
+  const mutation = useCreateCustomerProfile()
+  const { refetch } = useCustomers()
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -16,10 +17,7 @@ export function VendorModal({ isOpen, onClose }: VendorModalProps) {
     email: '',
     password: '',
     phone: '',
-    business_name: '',
-    tax_id: '',
     address: '',
-    status: 'active'
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,19 +28,23 @@ export function VendorModal({ isOpen, onClose }: VendorModalProps) {
     e.preventDefault()
     mutation.mutate(formData, {
       onSuccess: () => {
-        toast.success('Vendor profile created successfully!')
         setFormData({
           firstName: '',
           lastName: '',
           email: '',
           password: '',
           phone: '',
-          business_name: '',
-          tax_id: '',
           address: '',
-          status: 'active',
         })
-        onClose()
+        toast.success('Customer profile created successfully!')
+        refetch(); // Refetch customers after creation
+        // Delay closing to allow toast to show
+        setTimeout(onClose, 500)
+      },
+      onError: (error: any) => {
+        toast.error(
+          error?.message || 'Failed to create customer profile. Please try again.'
+        )
       }
     })
   }
@@ -50,9 +52,9 @@ export function VendorModal({ isOpen, onClose }: VendorModalProps) {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-60 bg-transparent">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-40">
       <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md mx-auto">
-        <h2 className="text-lg font-semibold mb-4">Create Vendor Profile</h2>
+        <h2 className="text-lg font-semibold mb-4">Create New Customer</h2>
         <form onSubmit={handleSubmit} className="space-y-3">
           {[
             { label: 'First Name', name: 'firstName', type: 'text' },
@@ -60,10 +62,7 @@ export function VendorModal({ isOpen, onClose }: VendorModalProps) {
             { label: 'Email', name: 'email', type: 'email' },
             { label: 'Password', name: 'password', type: 'password' },
             { label: 'Phone Number', name: 'phone', type: 'text' },
-            { label: 'Business Name', name: 'business_name', type: 'text' },
-            { label: 'Tax ID', name: 'tax_id', type: 'text' },
             { label: 'Address', name: 'address', type: 'text' },
-            { label: 'Status', name: 'status', type: 'text' }
           ].map((field) => (
             <div key={field.name}>
               <label className="block text-sm font-medium text-gray-700">
@@ -74,7 +73,6 @@ export function VendorModal({ isOpen, onClose }: VendorModalProps) {
                 name={field.name}
                 value={(formData as any)[field.name]}
                 onChange={handleChange}
-                // placeholder={field.label}
                 required
                 className="mt-1 block w-full p-1 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm"
               />
@@ -101,4 +99,4 @@ export function VendorModal({ isOpen, onClose }: VendorModalProps) {
   )
 }
 
-export default VendorModal
+export default CustomerModal
