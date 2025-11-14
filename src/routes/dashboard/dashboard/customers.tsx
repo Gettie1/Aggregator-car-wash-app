@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
 import { toast } from 'sonner';
 import type { Customer } from '@/types/users';
-import { useCustomers, useDeleteCustomerProfile } from '@/hooks/customers';
+import { useCustomers, useDeleteCustomerProfile, useEditCustomerProfile } from '@/hooks/customers';
 import CustomerModal from '@/components/modals/CustomerModal';
+import EditCustomerModal from '@/components/modals/EditCustomerModal';
 // import { authStore } from '@/store/authStore';
 
 export const Route = createFileRoute('/dashboard/dashboard/customers')({
@@ -13,8 +14,42 @@ export const Route = createFileRoute('/dashboard/dashboard/customers')({
 function RouteComponent() {
   const { data: customers, isLoading, refetch } = useCustomers();
   const [isOpenCustomerModal, setIsOpenCustomerModal] = useState(false);
+  const [isOpenEditCustomerModal, setIsOpenEditCustomerModal] = useState(false);
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const deleteCustomerMutation = useDeleteCustomerProfile();
+  const updateCustomerMutation = useEditCustomerProfile();
 
+  
+  const handleEditClick = (customer: Customer) => {
+    setSelectedCustomer(customer);
+    setIsOpenEditCustomerModal(true);
+  };
+
+  const handleSaveEdit = (updatedCustomer: Customer) => {
+    if (!selectedCustomer?.customer?.id) return;
+
+    updateCustomerMutation.mutate(
+      {
+        customerId: selectedCustomer.customer.id,
+        firstName: updatedCustomer.firstName,
+        lastName: updatedCustomer.lastName,
+        email: updatedCustomer.email,
+        phone: updatedCustomer.customer?.phone ?? '',
+        address: updatedCustomer.customer?.address ?? ''
+      },
+      {
+        onSuccess: () => {
+          toast.success('Customer updated successfully!');
+          setIsOpenEditCustomerModal(false);
+          setSelectedCustomer(null);
+          refetch(); // Refresh the customer list
+        },
+        onError: (error) => {
+          toast.error(error.message || 'Failed to update customer. Please try again.');
+        },
+      }
+    );
+  };
   const handleDelete = (customerId: number) => {
     if (!window.confirm('Are you sure you want to delete this customer?')) return;
     deleteCustomerMutation.mutate(customerId, {
@@ -48,7 +83,7 @@ function RouteComponent() {
   }
 
   const validCustomers = customers.filter(
-    (c: Customer) => c.customer?.address && c.customer.phone_number
+    (c: Customer) => c.customer?.address && c.customer.phone
   );
 
   return (
@@ -56,13 +91,19 @@ function RouteComponent() {
       {/* Header + Analytics */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <p className="text-gray-500 text-2xl">Manage all customers in the system.</p>
+          <p className="text-gray-500 text-2xl">Manage your customers.</p>
       <button 
       onClick={() => setIsOpenCustomerModal(true)}
       className="m-6 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
         + Customer
       </button>
       <CustomerModal isOpen={isOpenCustomerModal} onClose={() => setIsOpenCustomerModal(false)} />
+      <EditCustomerModal
+        isOpen={isOpenEditCustomerModal}
+        onClose={() => setIsOpenEditCustomerModal(false)}
+        customer={selectedCustomer}
+        onSave={handleSaveEdit}
+      />
         </div>
         <div className="flex gap-4">
           <StatCard label="Total Customers" value={customers.length} />
@@ -97,19 +138,14 @@ function RouteComponent() {
             />
             <DetailItem
               label="Phone"
-              value={customer.customer?.phone_number ?? undefined}
+              value={customer.customer?.phone ?? undefined}
               icon="phone"
             />
             <div className='gap-2 flex flex-row justify-between items-center'>
-            <button
-              className="mt-4 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-              onClick={() => alert(`Viewing details for ${customer.firstName} ${customer.lastName}`)}
-            >
-              Details
-            </button>
+            {/*  */}
             <button 
               className="mt-2 px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition"
-              onClick={() => alert(`Editing ${customer.firstName} ${customer.lastName}`)}
+              onClick={() => handleEditClick(customer)}
             >
               Edit
             </button>

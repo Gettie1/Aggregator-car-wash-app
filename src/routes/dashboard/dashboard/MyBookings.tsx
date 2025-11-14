@@ -22,7 +22,7 @@ import { authStore } from '@/store/authStore'
 import BookingModal from '@/components/modals/BookingModal'
 import { useInitializePayment, useVerifyPayment } from '@/hooks/payments'
 import { PaymentMethod } from '@/api/PaymentApi'
-import { useCustomer } from '@/hooks/customers'
+// import { useCustomer } from '@/hooks/customers'
 
 export const Route = createFileRoute('/dashboard/dashboard/MyBookings')({
   component: RouteComponent,
@@ -33,7 +33,7 @@ function RouteComponent() {
   const {user} = useStore(authStore)
   const [showBookingModal, setShowBookingModal] = useState(false)
   const { data: bookings, isLoading } = useBookingsByCustomerId(user.customerId ? Number(user.customerId) : 0)
-  const { data: customers } = useCustomer(user.customerId ? Number(user.customerId) : 0)
+  // const { data: customers } = useCustomer(user.customerId ? Number(user.customerId) : 0)
   console.log('user', user)
   const {mutateAsync: paymentMutation} = useInitializePayment()
   const {mutateAsync: verifyPayment} = useVerifyPayment()
@@ -61,7 +61,6 @@ email: user.email,
 amount: Number(price),
 first_name: user.firstname,
 last_name: user.lastname,
-phone_number: customers?.customer?.phone_number || '',
 booking_id: bookingId,
 payment_method: PaymentMethod.CARD,
 }
@@ -74,7 +73,6 @@ payment_method: PaymentMethod.CARD,
         amount: Number(price),
         first_name: user.firstname,
         last_name: user.lastname,
-        phone_number: customers?.customer?.phone_number || '',
         booking_id: bookingId,
         payment_method: PaymentMethod.CARD,
       })

@@ -1,6 +1,6 @@
 import { getHeaders } from "./profileApi";
 
-const url = 'http://localhost:4001/reviews';
+const url =import.meta.env.VITE_API_URL + '/reviews' || 'http://localhost:4001/reviews';
 
 export const getReviews = async () => {
     const response = await fetch(`${url}`, {

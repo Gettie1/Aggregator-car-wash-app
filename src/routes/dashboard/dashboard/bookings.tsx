@@ -98,9 +98,12 @@ function VendorBookingsSection() {
           + Booking
         </button>
       </div>
-      <p>Loading bookings...</p>
+      <div className="flex items-center justify-center h-64 text-blue-600">
+        <span className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></span>
+        <span className="ml-4 text-lg">Loading bookings...</span>
+      </div>
     </div>
-  )
+  );
 }
 
 if (!bookings || bookings.length === 0) {
@@ -140,18 +143,6 @@ if (!bookings || bookings.length === 0) {
                   required
                 />
               </div>
-{/*       
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Vehicle</label>
-                <input
-                  type="text"
-                  name="vehiclePlateNo"
-                  value={formData.vehiclePlateNo}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded px-3 py-2"
-                  required
-                /> */}
-              {/* </div> */}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Service</label>
                 <input

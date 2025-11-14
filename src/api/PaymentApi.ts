@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const url = `http://localhost:4001/payments`;
+const url = import.meta.env.VITE_API_URL + '/payments' || 'http://localhost:4001/payments';
 
 export enum PaymentMethod {
   CASH = 'cash',
@@ -13,7 +13,7 @@ export interface InitPaymentPayload {
   amount: number
   first_name: string
   last_name: string
-  phone_number: string
+  // phone_number: string
   booking_id: number
   payment_method: PaymentMethod
 }

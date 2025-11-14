@@ -75,7 +75,7 @@ console.log(chartData)
     }
     return (
         <div>
-            <h1 className="text-2xl font-bold">Reviews from different Customers</h1>
+            <h1 className="text-2xl font-bold">Manage Reviews</h1>
             <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">

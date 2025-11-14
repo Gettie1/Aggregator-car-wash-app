@@ -1,6 +1,6 @@
 import type { Customer } from "@/types/users";
 
-const url = 'http://localhost:4001/customer';
+const url= import.meta.env.VITE_API_URL + '/customer' || 'http://localhost:4001/customer';
 
 export const getCustomers = async () => {
     const response = await fetch(`${url}`, {

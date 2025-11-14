@@ -1,7 +1,7 @@
 import type { registerData } from "@/types/auth";
 import { authStore } from "@/store/authStore";
 
-const url = 'http://localhost:4001/profile';
+const url = import.meta.env.VITE_API_URL + '/profile' || 'http://localhost:4001/profile';
 
 
 export const getHeaders = () => {
@@ -80,6 +80,18 @@ export const getProfile = async (id: number) => {
   const jsonData = await response.json();
   if (!response.ok) {
     throw new Error(jsonData.message || 'Failed to request account deletion');
+  }
+  return jsonData;
+}
+ export const forgotPassword = async (email: string, newPassword: string) => {
+  const response = await fetch(`${url}/forgot-password`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify({ email, newPassword }),
+  });
+  const jsonData = await response.json();
+  if (!response.ok) {
+    throw new Error(jsonData.message || 'Failed to reset password');
   }
   return jsonData;
 }

@@ -19,14 +19,14 @@ function LandingPage() {
         >
           <div className="relative z-10 max-w-2xl mx-auto">
             <h1 className="text-5xl md:text-6xl font-extrabold mb-6 text-white drop-shadow-lg">
-              Premium Car Wash <span className="text-yellow-300">Services</span> at Your Doorstep
+              Premium Car Wash <span className="text-yellow-600">Services</span> at Your Doorstep
             </h1>
             <p className="text-xl md:text-2xl text-blue-100 mb-10 font-medium drop-shadow">
               Book your car or bike wash online. Fast, convenient, and eco-friendly.
             </p>
             <div className="flex flex-col md:flex-row gap-4 justify-center">
               <Link
-                to="/signin"
+                to="/register"
                 className="px-8 py-3 bg-yellow-400 text-blue-900 rounded-full font-bold shadow-lg hover:bg-yellow-300 transition text-lg"
               >
                 Get Started

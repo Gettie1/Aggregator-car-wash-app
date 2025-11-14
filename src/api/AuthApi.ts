@@ -1,7 +1,7 @@
 import { getHeaders } from "./profileApi";
 import type { LoginData, registerData } from "@/types/auth";
 
-const url = 'http://localhost:4001';
+const url = import.meta.env.VITE_API_URL || 'http://localhost:4001';
 
 export const login = async (data: LoginData) => {
   const response = await fetch(`${url}/auth/signin`, {

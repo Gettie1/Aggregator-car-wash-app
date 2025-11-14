@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { SignUp, deleteProfile, getProfile, getProfiles, requestDeleteAccount, updateProfile } from "@/api/profileApi";
+import { SignUp, deleteProfile, forgotPassword, getProfile, getProfiles, requestDeleteAccount, updateProfile } from "@/api/profileApi";
 
 export const useProfiles = () => {
     return useQuery({
@@ -68,4 +68,13 @@ export const useRequestDelete = () => {
         },
     });
 }
-
+export const useChangePassword = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationKey: ['changePassword'],
+        mutationFn: ({ email, newPassword }: { email: string; newPassword: string }) => forgotPassword(email, newPassword),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['profiles'] });
+        },
+    });
+}

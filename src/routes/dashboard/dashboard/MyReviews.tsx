@@ -45,7 +45,7 @@ function RouteComponent() {
 
   for (const review of reviews) {
     const serviceName = review.service?.name ?? 'Unknown';
-    if (!serviceRatings[serviceName]) {
+    if (!(serviceName in serviceRatings)) {
       serviceRatings[serviceName] = { service: serviceName, total: 0, count: 0 };
     }
     serviceRatings[serviceName].total += review.rating;
@@ -62,7 +62,26 @@ function RouteComponent() {
 
 
   if (isLoading) {
-    return <div className="text-gray-600 text-center py-10">Loading reviews...</div>;
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[40vh] text-gray-500">
+        <div className="loader mb-2"></div>
+        <span>Loading reviews...</span>
+        <style>{`
+          .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            animation: spin 1s linear infinite;
+          }
+          @keyframes spin {
+            0% { transform: rotate(0deg);}
+            100% { transform: rotate(360deg);}
+          }
+        `}</style>
+      </div>
+    );
   }
 
   return (

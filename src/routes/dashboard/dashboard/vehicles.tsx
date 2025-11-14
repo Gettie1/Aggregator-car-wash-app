@@ -76,7 +76,6 @@ function RouteComponent() {
               <th className="py-3 px-6 text-left font-semibold text-gray-900 border-b">License Plate</th>
               <th className="py-3 px-6 text-left font-semibold text-gray-900 border-b">Model</th>
               <th className="py-3 px-6 text-left font-semibold text-gray-900 border-b">Make</th>
-              <th className="py-3 px-6 text-left font-semibold text-gray-900 border-b">Edit</th>
               <th className="py-3 px-6 text-left font-semibold text-gray-900 border-b">Delete</th>
             </tr>
           </thead>
@@ -103,14 +102,6 @@ function RouteComponent() {
                   <td className="py-3 px-6 border-b">{vehicle.license_plate}</td>
                   <td className="py-3 px-6 border-b">{vehicle.model}</td>
                   <td className="py-3 px-6 border-b">{vehicle.make}</td>
-                  <td className="py-3 px-6 border-b">
-                    <button
-                      onClick={() => setShowModal(true)}
-                      className="text-blue-600 hover:text-blue-800 font-bold"
-                    >
-                      Edit
-                    </button>
-                  </td>
                   <td className="py-3 px-6 border-b">
                     <button
                       onClick={() => handleDelete(Number(vehicle.id))}
@@ -146,7 +137,7 @@ function RouteComponent() {
               dataKey="value"
               label
             >
-              {makeData.map((index: number) => (
+              {makeData.map((_: any, index: number) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>

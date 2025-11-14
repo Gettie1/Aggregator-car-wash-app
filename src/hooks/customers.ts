@@ -115,3 +115,44 @@ export const useDeleteCustomerProfile = () => {
     }
   });
 }
+export const useEditCustomerProfile = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (data: {
+      customerId: number;
+      firstName: string;
+      lastName: string;
+      email: string;
+      phone: string;
+      address: string;
+    }) => {
+      const headers = getHeaders();
+
+      // 1. Get existing customer to find profileId
+      const customerRes = await axios.get(`${url}/customer/${data.customerId}`, {
+        headers,
+      });
+      const profileId = customerRes.data.profile?.id;
+      // 2. Update profile
+      await axios.patch(`${url}/profile/${profileId}`, {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+      }, {
+        headers,
+      });
+      // 3. Update customer
+      const customerResUpdated = await axios.patch(`${url}/customer/${data.customerId}`, {
+        phone: data.phone,
+        address: data.address,
+      }, {
+        headers,
+      });
+      return customerResUpdated.data;
+    },
+    onSuccess: () => {
+      // Optionally, you can invalidate the customers query to refetch the list
+      queryClient.invalidateQueries({ queryKey: ['customers'] });
+    }
+  });
+}

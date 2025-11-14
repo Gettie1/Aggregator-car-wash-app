@@ -3,10 +3,11 @@ export type Customer = {
     firstName: string
     lastName: string
     email: string
+    // phone?: string
     customer: {
       id: number
       address: string | null
-      phone_number: string | null
+      phone: string | null
       created_at: string | null
       updated_at: string | null
     } | null
@@ -17,7 +18,6 @@ export interface Profile {
   lastName: string
   email: string
   image: string | null
-  phone: string | null
   created_at: string | null
   updated_at: string | null
 }

@@ -1,6 +1,6 @@
 import { getHeaders } from "./profileApi";
 
-const url = 'http://localhost:4001';
+const url = import.meta.env.VITE_API_URL || 'http://localhost:4001';
 
 export const getVendors = async () => {
     const response = await fetch(`${url}/vendors`, {
