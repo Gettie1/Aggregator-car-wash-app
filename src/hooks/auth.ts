@@ -41,8 +41,3 @@ export const useRegister = () => {
         }
     )
 }
-// export const useProfile = () => {
-//     return useQuery({
-//         queryfn: getProfile,
-//     })
-// }

@@ -1,9 +1,8 @@
 import { getHeaders } from "./profileApi";
-
-const url = import.meta.env.VITE_API_URL + '/services' || 'http://localhost:4001/services';
+import {url} from "./AuthApi";
 
 export const getServices = async () => {
-    const response = await fetch(`${url}`, {
+    const response = await fetch(`${url}/services`, {
         method: 'GET',
         headers: getHeaders(),
     });
@@ -14,7 +13,7 @@ export const getServices = async () => {
     return jsonData;
 };
 export const getService = async (id: number) => {
-    const response = await fetch(`${url}/${id}`, {
+    const response = await fetch(`${url}/services/${id}`, {
         method: 'GET',
         headers: getHeaders(),
     });
@@ -25,7 +24,7 @@ export const getService = async (id: number) => {
     return jsonData;
 };
 export const createService = async (data: any) => {
-    const response = await fetch(`${url}`, {
+    const response = await fetch(`${url}/services`, {
         method: 'POST',
         headers: getHeaders(),
         body: JSON.stringify(data),
@@ -37,7 +36,7 @@ export const createService = async (data: any) => {
     return jsonData;
 };
 export const updateService = async (id: number, data: any) => {
-    const response = await fetch(`${url}/${id}`, {
+    const response = await fetch(`${url}/services/${id}`, {
         method: 'PUT',
         headers: getHeaders(),
         body: JSON.stringify(data),
@@ -49,7 +48,7 @@ export const updateService = async (id: number, data: any) => {
     return jsonData;
 };
 export const deleteService = async (id: number) => {
-    const response = await fetch(`${url}/${id}`, {
+    const response = await fetch(`${url}/services/${id}`, {
         method: 'DELETE',
         headers: getHeaders(),
     });
@@ -59,7 +58,7 @@ export const deleteService = async (id: number) => {
     return { message: 'Service deleted successfully' };
 };
 export const getServiceByVendor = async (vendorId: number) => {
-    const response = await fetch(`${url}/vendor/${vendorId}`, {
+    const response = await fetch(`${url}/services/vendor/${vendorId}`, {
         method: 'GET',
         headers:getHeaders(),
     });

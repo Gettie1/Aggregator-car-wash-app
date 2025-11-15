@@ -1,9 +1,8 @@
 import { getHeaders } from "./profileApi";
-
-const url = import.meta.env.VITE_API_URL + '/vehicles' || 'http://localhost:4001/vehicles';
+import {url} from "./AuthApi";
 
 export const getVehicles = async () => {
-    const response = await fetch(`${url}`, {
+    const response = await fetch(`${url}/vehicles`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -17,7 +16,7 @@ export const getVehicles = async () => {
 };
 
 export const getVehicle = async (id: number) => {
-  const response = await fetch(`${url}/${id}`, {
+  const response = await fetch(`${url}/vehicles/${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -32,7 +31,7 @@ export const getVehicle = async (id: number) => {
 export const getVehiclesByCustomerId = async (customerId: number) => {
   console.log('🔍 Fetching vehicles for customerId:', customerId);
   
-  const apiUrl = `${url}?customerId=${customerId}`;
+  const apiUrl = `${url}/vehicles?customerId=${customerId}`;
   console.log('🔍 API URL:', apiUrl);
   
   // Don't send Authorization header since vehicles endpoints don't require auth
@@ -96,7 +95,7 @@ function filterVehicles(jsonData: Array<any>, customerId: number) {
   return filteredVehicles;
 }
 export const createVehicle = async (data: any) => {
-  const response = await fetch(`${url}`, {
+  const response = await fetch(`${url}/vehicles`, {
     method: 'POST',
     headers: getHeaders(),
     body: JSON.stringify(data),
@@ -109,7 +108,7 @@ export const createVehicle = async (data: any) => {
 };
 
 export const updateVehicle = async (id: number, data: any) => {
-  const response = await fetch(`${url}/${id}`, {
+  const response = await fetch(`${url}/vehicles/${id}`, {
     method: 'PUT',
     headers: getHeaders(),
     body: JSON.stringify(data),
@@ -122,7 +121,7 @@ export const updateVehicle = async (id: number, data: any) => {
 };
 
 export const deleteVehicle = async (id: number) => {
-  const response = await fetch(`${url}/${id}`, {
+  const response = await fetch(`${url}/vehicles/${id}`, {
     method: 'DELETE',
     headers: getHeaders(), 
   });

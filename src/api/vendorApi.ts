@@ -1,6 +1,5 @@
 import { getHeaders } from "./profileApi";
-
-const url = import.meta.env.VITE_API_URL || 'http://localhost:4001';
+import {url} from "./AuthApi";
 
 export const getVendors = async () => {
     const response = await fetch(`${url}/vendors`, {

@@ -1,9 +1,8 @@
+import { url } from "./AuthApi";
 import type { Customer } from "@/types/users";
 
-const url= import.meta.env.VITE_API_URL + '/customer' || 'http://localhost:4001/customer';
-
 export const getCustomers = async () => {
-    const response = await fetch(`${url}`, {
+    const response = await fetch(`${url}/customer`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -16,7 +15,7 @@ export const getCustomers = async () => {
     return jsonData;
 };
 export const getCustomer = async (id: number): Promise<Customer> => {
-    const response = await fetch(`${url}/${id}`, {
+    const response = await fetch(`${url}/customer/${id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -29,7 +28,7 @@ export const getCustomer = async (id: number): Promise<Customer> => {
     return jsonData;
 };
 export const createCustomer = async (data: any) => {
-    const response = await fetch(`${url}`, {
+    const response = await fetch(`${url}/customer`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -43,7 +42,7 @@ export const createCustomer = async (data: any) => {
     return jsonData;
 };
 export const updateCustomer = async (id: number, data: any) => {
-    const response = await fetch(`${url}/${id}`, {
+    const response = await fetch(`${url}/customer/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -57,7 +56,7 @@ export const updateCustomer = async (id: number, data: any) => {
     return jsonData;
 };
 export const deleteCustomer = async (id: number) => {
-    const response = await fetch(`${url}/${id}`, {
+    const response = await fetch(`${url}/customer/${id}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',

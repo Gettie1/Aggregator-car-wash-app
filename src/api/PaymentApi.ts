@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-const url = import.meta.env.VITE_API_URL + '/payments' || 'http://localhost:4001/payments';
+import { url } from './AuthApi';  
 
 export enum PaymentMethod {
   CASH = 'cash',
@@ -33,7 +32,7 @@ interface InitPaymentResponse {
 }
 
 export const initializePayment = async (payload: InitPaymentPayload) => {
-  const response = await axios.post<InitPaymentResponse>(`${url}/initialize`, payload, {
+  const response = await axios.post<InitPaymentResponse>(`${url}/payments/initialize`, payload, {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -42,7 +41,7 @@ export const initializePayment = async (payload: InitPaymentPayload) => {
 }
 
 export const veryfyPayment = async (reference: string) => {
-  const response = await axios.get(`${url}/verify/${reference}`, {
+  const response = await axios.get(`${url}/payments/verify/${reference}`, {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -50,7 +49,7 @@ export const veryfyPayment = async (reference: string) => {
   return response.data
 }
 export const getPayment = async (Id: string) => {
-  const response = await axios.get(`${url}/${Id}`, {
+  const response = await axios.get(`${url}/payments/${Id}`, {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -58,7 +57,7 @@ export const getPayment = async (Id: string) => {
   return response.data
 }
 export const getPayments = async () => {
-  const response = await axios.get(`${url}`, {
+  const response = await axios.get(`${url}/payments`, {
     headers: {
       'Content-Type': 'application/json',
     },

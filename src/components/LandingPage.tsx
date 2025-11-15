@@ -4,6 +4,8 @@ import Footer from "./Footer";
 
 function LandingPage() {
   const navigate = useNavigate();
+  console.log("API URL:", import.meta.env.VITE_API_URL);
+
   return (
     <div className="bg-gradient-to-b from-blue-50 via-white to-gray-100 min-h-screen flex flex-col">
       <Navbar />

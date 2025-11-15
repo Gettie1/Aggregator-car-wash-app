@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { toast } from 'sonner'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import { url } from '@/api/AuthApi';
 
 const baseSchema = z.object({
   firstName: z.string().min(1, 'First name is required').max(50, 'First name must be less than 50 characters'),
@@ -76,7 +77,7 @@ function RouteComponent() {
       return
     }
     try {
-      const profileRes = await axios.post('http://localhost:4001/profile', {
+      const profileRes = await axios.post(`${url}/profile`, {
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
@@ -85,7 +86,7 @@ function RouteComponent() {
       })
       const profileId = profileRes.data.id
       if (activeForm === 'vendor') {
-        await axios.post('http://localhost:4001/vendors', {
+        await axios.post(`${url}/vendors`, {
           profileId,
           business_name: formData.business_name,
           phone: formData.phone,
@@ -94,7 +95,7 @@ function RouteComponent() {
           status: 'active',
         })
       } else {
-        await axios.post('http://localhost:4001/customer', {
+        await axios.post(`${url}/customer`, {
           profileId,
           address: formData.address,
           phone: formData.phone,

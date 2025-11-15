@@ -1,9 +1,8 @@
 import { getHeaders } from "./profileApi";
-
-const url =import.meta.env.VITE_API_URL + '/reviews' || 'http://localhost:4001/reviews';
+import {url} from "./AuthApi";
 
 export const getReviews = async () => {
-    const response = await fetch(`${url}`, {
+    const response = await fetch(`${url}/reviews`, {
         method: 'GET',
         headers: getHeaders(),
     });
@@ -14,7 +13,7 @@ export const getReviews = async () => {
     return jsonData;
 };
 export const getReview = async (id: number) => {
-    const response = await fetch(`${url}/${id}`, {
+    const response = await fetch(`${url}/reviews/${id}`, {
         method: 'GET',
         headers: getHeaders(),
     });
@@ -25,7 +24,7 @@ export const getReview = async (id: number) => {
     return jsonData;
 };
 export const createReview = async (data: any) => {
-    const response = await fetch(`${url}`, {
+    const response = await fetch(`${url}/reviews`, {
         method: 'POST',
         headers: getHeaders(),
         body: JSON.stringify(data),
@@ -37,7 +36,7 @@ export const createReview = async (data: any) => {
     return jsonData;
 };
 export const updateReview = async (id: number, data: any) => {
-    const response = await fetch(`${url}/${id}`, {
+    const response = await fetch(`${url}/reviews/${id}`, {
         method: 'PUT',
         headers: getHeaders(),
         body: JSON.stringify(data),
@@ -49,7 +48,7 @@ export const updateReview = async (id: number, data: any) => {
     return jsonData;
 };
 export const deleteReview = async (id: number) => {
-    const response = await fetch(`${url}/${id}`, {
+    const response = await fetch(`${url}/reviews/${id}`, {
         method: 'DELETE',
         headers: getHeaders(),
     });
@@ -59,7 +58,7 @@ export const deleteReview = async (id: number) => {
     return { success: true };
 };
 export const getReviewsByVehicleId = async (vehicleId: number) => {
-    const response = await fetch(`${url}/vehicle/${vehicleId}`, {
+    const response = await fetch(`${url}/reviews/vehicle/${vehicleId}`, {
         method: 'GET',
         headers: getHeaders(),
     });
@@ -70,7 +69,7 @@ export const getReviewsByVehicleId = async (vehicleId: number) => {
     return jsonData;
 };
 export const getReviewsByCustomerId = async (customerId: number) => {
-    const response = await fetch(`${url}/customer/${customerId}`, {
+    const response = await fetch(`${url}/reviews/customer/${customerId}`, {
         method: 'GET',
         headers: getHeaders(),
     });
@@ -81,7 +80,7 @@ export const getReviewsByCustomerId = async (customerId: number) => {
     return jsonData;
 };
 export const getReviewsByVendorId = async (vendorId: number) => {
-    const response = await fetch(`${url}/vendor/${vendorId}`, {
+    const response = await fetch(`${url}/reviews/vendor/${vendorId}`, {
         method: 'GET',
         headers: getHeaders(),
     });
@@ -92,7 +91,7 @@ export const getReviewsByVendorId = async (vendorId: number) => {
     return jsonData;
 };
 export const getReviewsByBookingId = async (bookingId: number) => {
-    const response = await fetch(`${url}/booking/${bookingId}`, {
+    const response = await fetch(`${url}/reviews/booking/${bookingId}`, {
         method: 'GET',
         headers: getHeaders(),
     });
@@ -103,7 +102,7 @@ export const getReviewsByBookingId = async (bookingId: number) => {
     return jsonData;
 };
 export const getReviewsByServiceId = async (serviceId: number) => {
-    const response = await fetch(`${url}/service/${serviceId}`, {
+    const response = await fetch(`${url}/reviews/service/${serviceId}`, {
         method: 'GET',
         headers: getHeaders(),
     });

@@ -1,31 +1,38 @@
-import { getHeaders } from "./profileApi";
+// import { getHeaders } from "./profileApi";
 import type { LoginData, registerData } from "@/types/auth";
 
-const url = import.meta.env.VITE_API_URL || 'http://localhost:4001';
+export const url = import.meta.env.VITE_API_URL;
 
 export const login = async (data: LoginData) => {
   const response = await fetch(`${url}/auth/signin`, {
     method: 'POST',
-    headers: getHeaders(),
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(data),
   });
+   const jsonData = await response.json();
+
   if (!response.ok) {
-    throw new Error('Login failed');
+    throw new Error(jsonData.message || "Login failed");
   }
-  const jsonData = await response.json();
+
   return jsonData;
-}
+};
 
 export const register = async (data: registerData) => {
   const response = await fetch(`${url}/profile`, {
     method: 'POST',
-    headers: getHeaders(),
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(data),
   });
+   const jsonData = await response.json();
+
   if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || 'Registration failed');
+    throw new Error(jsonData.message || "Registration failed");
   }
-  const jsonData = await response.json();
+
   return jsonData;
-}
+};

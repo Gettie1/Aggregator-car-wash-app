@@ -1,13 +1,14 @@
 import { get } from "lodash"
 import { toast } from "sonner"
+import { url } from "@/api/AuthApi"
 
-const url='http://localhost:4001/images/upload'
+const uploadUrl = `${url}/images/upload`
 
 export const uploadFile = async (file: File):Promise<string> => {
   const formData = new FormData()
   formData.append('file', file)
 
-  const response = await fetch(url, {
+  const response = await fetch(uploadUrl, {
     method: 'POST',
     body: formData,
   })
@@ -15,7 +16,7 @@ export const uploadFile = async (file: File):Promise<string> => {
   if (!response.ok) {
     const errorText = await response.text()
     const msg = get(JSON.parse(errorText), 'message', 'File upload failed')
-    toast.error('File upload error:', msg)
+    toast.error(`File upload error: ${msg}`)
     throw new Error('File upload failed')
   }
 

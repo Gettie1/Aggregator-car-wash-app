@@ -2,8 +2,8 @@ import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createCustomer, deleteCustomer, getCustomer, getCustomers, updateCustomer } from "@/api/CustomerApi";
 import { getHeaders } from "@/api/profileApi";
+import { url } from "@/api/AuthApi";
 
-const url = 'http://localhost:4001';
 export const useCustomers = () => {
     return useQuery({
         queryKey: ['customers'],

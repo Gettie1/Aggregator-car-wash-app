@@ -2,8 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { createVendor, deleteVendor, getVendor, getVendors, updateVendor } from "@/api/vendorApi";
 import { getHeaders } from "@/api/profileApi";
-
-const url = 'http://localhost:4001';
+import { url } from "@/api/AuthApi";
 
 export const useVendors = () => {
     return useQuery({

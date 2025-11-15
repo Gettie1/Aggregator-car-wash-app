@@ -1,9 +1,8 @@
 import { getHeaders } from "./profileApi";
-
-const url= import.meta.env.VITE_API_URL + '/bookings' || 'http://localhost:4001/bookings';
+import {url} from "./AuthApi";
 
 export const getBookings = async () => {
-    const response = await fetch(`${url}`, {
+    const response = await fetch(`${url}/bookings`, {
         method: 'GET',
         headers: getHeaders(),
     });
@@ -14,7 +13,7 @@ export const getBookings = async () => {
     return jsonData;
 };
 export const getBooking = async (id: number) => {
-    const response = await fetch(`${url}/${id}`, {
+    const response = await fetch(`${url}/bookings/${id}`, {
         method: 'GET',
         headers: getHeaders(),
     });
@@ -25,7 +24,7 @@ export const getBooking = async (id: number) => {
     return jsonData;
 };
 export const createBooking = async (data: any) => {
-    const response = await fetch(`${url}`, {
+    const response = await fetch(`${url}/bookings`, {
         method: 'POST',
         headers: getHeaders(),
         body: JSON.stringify(data),
@@ -37,7 +36,7 @@ export const createBooking = async (data: any) => {
     return jsonData;
 };
 export const updateBooking = async (id: number, data: any) => {
-    const response = await fetch(`${url}/${id}`, {
+    const response = await fetch(`${url}/bookings/${id}`, {
         method: 'PUT',
         headers: getHeaders(),
         body: JSON.stringify(data),
@@ -49,7 +48,7 @@ export const updateBooking = async (id: number, data: any) => {
     return jsonData;
 };
 export const deleteBooking = async (id: number) => {
-    const response = await fetch(`${url}/${id}`, {
+    const response = await fetch(`${url}/bookings/${id}`, {
         method: 'DELETE',
         headers: getHeaders(),
     });
@@ -59,7 +58,7 @@ export const deleteBooking = async (id: number) => {
     return { message: 'Booking deleted successfully' };
 };
 export const getBookingsByCustomerId = async (customerId: number) => {
-    const response = await fetch(`${url}/customer/${customerId}`, {
+    const response = await fetch(`${url}/bookings/customer/${customerId}`, {
         method: 'GET',
         headers: getHeaders(),
     });
@@ -70,7 +69,7 @@ export const getBookingsByCustomerId = async (customerId: number) => {
     return jsonData;
 };
 export const getBookingsByVendorId = async (vendorId: number) => {
-    const response = await fetch(`${url}/vendor/${vendorId}`, {
+    const response = await fetch(`${url}/bookings/vendor/${vendorId}`, {
         method: 'GET',
         headers: getHeaders(),
     });
@@ -82,7 +81,7 @@ export const getBookingsByVendorId = async (vendorId: number) => {
 };
 
 export const getUpdateBookingStatus = async (id: number, status: string) => {
-    const response = await fetch(`${url}/${id}/status`, {
+    const response = await fetch(`${url}/bookings/${id}/status`, {
         method: 'PATCH',
         headers: getHeaders(),
         body: JSON.stringify({ status }),

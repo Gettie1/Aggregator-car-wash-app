@@ -1,8 +1,6 @@
+import { url } from "./AuthApi";
 import type { registerData } from "@/types/auth";
 import { authStore } from "@/store/authStore";
-
-const url = import.meta.env.VITE_API_URL + '/profile' || 'http://localhost:4001/profile';
-
 
 export const getHeaders = () => {
   const token = authStore.state.accessToken;
@@ -15,7 +13,7 @@ export const getHeaders = () => {
 
 // create a new profile
 export const SignUp = async (data: registerData) => {
-  const response = await fetch(url, {
+  const response = await fetch(`${url}/profile`, {
     method: 'POST',
     headers: getHeaders(),
     body: JSON.stringify(data),
@@ -27,7 +25,7 @@ export const SignUp = async (data: registerData) => {
   
 }
 export const getProfiles = async () => {
-  const response = await fetch(url, {
+  const response = await fetch(`${url}/profile`, {
     method: 'GET',
     headers: getHeaders(),
   });
@@ -38,7 +36,7 @@ export const getProfiles = async () => {
   return jsonData;
 }
 export const getProfile = async (id: number) => {
-  const response = await fetch(`${url}/${id}`, {
+  const response = await fetch(`${url}/profile/${id}`, {
     method: 'GET',
     headers: getHeaders(),
   });
@@ -49,7 +47,7 @@ export const getProfile = async (id: number) => {
   return jsonData;
 }
  export const updateProfile = async (id: number, data: any) => {
-  const response = await fetch(`${url}/${id}`, {
+  const response = await fetch(`${url}/profile/${id}`, {
     method: 'PATCH',
     headers:getHeaders(),
     body: JSON.stringify(data),
@@ -61,7 +59,7 @@ export const getProfile = async (id: number) => {
   return jsonData;  
 }
  export const deleteProfile = async (id: number, soft?: boolean, permanent?: boolean) => {
-  const response = await fetch(`${url}/${id}`, {
+  const response = await fetch(`${url}/profile/${id}`, {
     method: 'DELETE',
     headers: getHeaders(),
     body: JSON.stringify({ soft, permanent }),
@@ -73,7 +71,7 @@ export const getProfile = async (id: number) => {
   return jsonData;
 }
  export const requestDeleteAccount = async (id: number) => {
-  const response = await fetch(`${url}/request-delete/${id}`, {
+  const response = await fetch(`${url}/profile/request-delete/${id}`, {
     method: 'POST',
     headers: getHeaders(),
   });
@@ -84,7 +82,7 @@ export const getProfile = async (id: number) => {
   return jsonData;
 }
  export const forgotPassword = async (email: string, newPassword: string) => {
-  const response = await fetch(`${url}/forgot-password`, {
+  const response = await fetch(`${url}/profile/forgot-password`, {
     method: 'POST',
     headers: getHeaders(),
     body: JSON.stringify({ email, newPassword }),
